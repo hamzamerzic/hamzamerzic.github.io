@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Mesh Cleaner
-description: Clean and process 3D mesh files for use in physics-based robotics simulation environments
+description: Clean and process 3D mesh files for use in physics-based simulation environments
 img: assets/img/objects.png
 permalink: /mesh_cleaner/
 importance: 1
@@ -21,7 +21,6 @@ category: fun
 
 <label for="massInput"><strong>Mass (kg):</strong></label><br>
 <input type="number" id="massInput" step="0.1" value="1.0" min="0.01" required /><br><br>
-
   <details>
     <summary style="cursor:pointer; font-weight:bold;">Advanced options</summary>
     <label>
@@ -31,7 +30,7 @@ category: fun
     </label><br>
     <label>
       <input type="checkbox" id="useConvexHull">
-      Generate convex hull if mesh is not watertight
+      Generate convex hull of the mesh
       <br><small style="opacity: 0.75;">(Useful for models with holes or open surfaces.)</small>
     </label><br>
   </details>
@@ -115,7 +114,7 @@ async function uploadFile() {
 
 input[type="file"],
 input[type="number"],
-button {
+#uploadForm button {
   font-size: 1em;
   padding: 0.5em;
   margin-top: 0.3em;
@@ -123,7 +122,7 @@ button {
   box-sizing: border-box;
 }
 
-button {
+#uploadForm button {
   background-color: #12b075;
   border: none;
   border-radius: 5px;
@@ -131,7 +130,7 @@ button {
   margin-top: 1em;
 }
 
-button:hover {
+#uploadForm button:hover {
   background-color: #0e8d5d;
 }
 
@@ -145,9 +144,18 @@ pre {
 #downloadLink {
   display: inline-block;
   margin-top: 1em;
-  padding: 0.6em 1em;
+  padding: 0.5em;
+  width: 100%;
+  box-sizing: border-box;
   background-color: #12b075;
-  text-decoration: none;
   border-radius: 5px;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#downloadLink:hover {
+  background-color: #0e8d5d;
 }
 </style>
