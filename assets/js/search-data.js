@@ -25,12 +25,17 @@ ninja.data = [{
           },
         },{id: "nav-projects",
           title: "projects",
-          description: "A growing collection of your cool projects.",
+          description: "",
           section: "Navigation",
           handler: () => {
             window.location.href = "/projects/";
           },
-        },{id: "projects-mesh-cleaner",
+        },{id: "projects-3d-model-viewer",
+          title: '3D Model Viewer',
+          description: "Visualize 3D models directly in your browser",
+          section: "Projects",handler: () => {
+              window.location.href = "/3d-viz/";
+            },},{id: "projects-mesh-cleaner",
           title: 'Mesh Cleaner',
           description: "Clean and process 3D mesh files for use in physics-based simulation environments",
           section: "Projects",handler: () => {
