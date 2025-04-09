@@ -8,7 +8,6 @@ importance: 2
 category: fun
 ---
 
-<h1>3D Model Viewer</h1>
 <p>Upload a 3D model file (<code>.dae</code>, <code>.obj</code>, <code>.stl</code>) to visualize it.</p>
 
 <!-- Upload Form -->
@@ -16,7 +15,8 @@ category: fun
   <label for="fileUpload"><strong>Select 3D model (.dae, .obj, .stl):</strong></label><br>
   <input type="file" id="fileUpload" accept=".dae,.obj,.stl" /><br><br>
 
-  <button type="button" id="loadExample">👁️ Preview Example Model</button>
+<button type="button" id="loadExample">👁️ Preview Example Model</button>
+
 </form>
 
 <p style="margin-top: 1em;">

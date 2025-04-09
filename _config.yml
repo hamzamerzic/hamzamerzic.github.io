@@ -179,6 +179,7 @@ exclude:
   - readme_preview/
   - vendor
   - venv/
+  - services/
 keep_files:
   - CNAME
   - .nojekyll

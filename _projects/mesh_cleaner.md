@@ -8,7 +8,6 @@ importance: 1
 category: fun
 ---
 
-<h2>Mesh Cleaner</h2>
 <p>
   Mesh Cleaner is a tool that cleans 3D mesh files and computes their geometric properties such as volume, center of mass, and moments of inertia. The idea behind this project was to automate the tedious process of preparing 3D models for use in Gazebo—as explained in the <a href="https://classic.gazebosim.org/tutorials?tut=inertia" target="_blank">classic Gazebo tutorial</a>.
 </p>
@@ -19,8 +18,8 @@ category: fun
   <label for="fileInput"><strong>Select 3D model:</strong></label><br>
   <input type="file" id="fileInput" accept=".stl,.obj,.dae" required /><br><br>
 
-  <label for="massInput"><strong>Mass (kg):</strong></label><br>
-  <input type="number" id="massInput" step="0.1" value="1.0" min="0.01" required /><br><br>
+<label for="massInput"><strong>Mass (kg):</strong></label><br>
+<input type="number" id="massInput" step="0.1" value="1.0" min="0.01" required /><br><br>
 
   <details>
     <summary style="cursor:pointer; font-weight:bold;">Advanced options</summary>
@@ -37,7 +36,8 @@ category: fun
   </details>
   <br>
 
-  <button type="button" onclick="uploadFile()">🚀 Upload & Clean</button>
+<button type="button" onclick="uploadFile()">🚀 Upload & Clean</button>
+
 </form>
 
 <hr>
