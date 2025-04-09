@@ -48,27 +48,10 @@ def clean_mesh(
     ms.apply_filter("meshing_repair_non_manifold_edges")
     ms.apply_filter("compute_normal_per_face")
     ms.apply_filter("compute_normal_per_vertex")
-    ms.apply_filter(
-        "compute_matrix_from_scaling_or_normalization", axisx=100.0, uniformflag=True
-    )
-    ms.apply_filter("apply_matrix_freeze")
 
     if use_convex_hull:
         ms.generate_convex_hull()
         geo = ms.get_geometric_measures()
-
-    geo = ms.get_geometric_measures()
-
-    if "inertia_tensor" not in geo:
-        if verbose:
-            print("[INFO] Mesh not watertight — generating convex hull")
-        cleaned_size = os.path.getsize(dae_file)
-        return (
-            f"Mesh is not 'watertight'.\n"
-            f"Original size: {original_size / 1024:.2f} KB\n"
-            f"Cleaned size: {cleaned_size / 1024:.2f} KB\n",
-            dae_file,
-        )
 
     # Save mesh to file
     # Vertex normals are used for lighting/shading in rendering engines (e.g., Gazebo, Blender, etc.).
@@ -83,6 +66,21 @@ def clean_mesh(
     )
 
     cleaned_size = os.path.getsize(dae_file)
+
+    ms.apply_filter(
+        "compute_matrix_from_scaling_or_normalization", axisx=100.0, uniformflag=True
+    )
+    geo = ms.get_geometric_measures()
+
+    if "inertia_tensor" not in geo:
+        if verbose:
+            print("[INFO] Mesh not watertight")
+        return (
+            f"Mesh is not 'watertight'.\n"
+            f"Original size: {original_size / 1024:.2f} KB\n"
+            f"Cleaned size: {cleaned_size / 1024:.2f} KB\n",
+            dae_file,
+        )
 
     if verbose:
         print(f"[INFO] Cleaned face count: {ms.current_mesh().face_number()}")
