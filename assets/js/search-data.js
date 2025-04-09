@@ -32,7 +32,7 @@ ninja.data = [{
           },
         },{id: "projects-mesh-cleaner",
           title: 'Mesh Cleaner',
-          description: "Clean and process 3D mesh files for use in physics-based robotics simulation environments",
+          description: "Clean and process 3D mesh files for use in physics-based simulation environments",
           section: "Projects",handler: () => {
               window.location.href = "/mesh_cleaner/";
             },},{
