@@ -23,6 +23,11 @@ category: fun
   Don’t have a file? <a href="{{ '/assets/3d/abb_irb52_7_120.dae' | relative_url }}" download>Download an example</a>.
 </p>
 
+<!-- Define global URL -->
+<script>
+  const EXAMPLE_MODEL_URL = "{{ '/assets/3d/abb_irb52_7_120.dae' | relative_url }}";
+</script>
+
 <!-- 3D Container -->
 <div id="container" style="height: 60vh; position: relative;">
   <div id="loading" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none;">
@@ -93,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Example model button
   document.getElementById("loadExample").addEventListener("click", () => {
     loadingElem.style.display = "block";
-    fetch("{{ '/assets/3d/abb_irb52_7_120.dae' | relative_url }}")
+    fetch(EXAMPLE_MODEL_URL)
       .then(res => {
         if (!res.ok) throw new Error("Failed to fetch example");
         return res.text();

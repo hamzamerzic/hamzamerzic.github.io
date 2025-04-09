@@ -18,6 +18,6 @@ In a past life, I was deep in the world of robotics. I earned a Bachelor's degre
 
 Along the way, I worked as a teaching and research assistant and spent time at [Rapyuta Robotics](https://www.rapyuta-robotics.com/), where I developed navigation algorithms and worked on autonomous warehouse robots and end-to-end drone autonomy.
 
-I'm passionate about strengthening the scientific community in Bosnia and Herzegovina and the broader region. I co-founded the [Association for the Advancement of Science and Technology (ANNT)](https://annt.ba/) to connect Bosnian talent around the world and work together on impactful contributions in the region.
+I'm passionate about strengthening the scientific community in Bosnia and Herzegovina and the broader region. I co-founded the [Association for the Advancement of Science and Technology (ANNT)](https://annt.ba/) to help connect and mobilize Bosnian talent worldwid.
 
 I'm also part of the organizing committee for the [Eastern European Machine Learning Summer School](https://www.eeml.eu) (EEML 2025) in Sarajevo.
