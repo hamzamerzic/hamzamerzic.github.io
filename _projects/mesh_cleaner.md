@@ -21,6 +21,7 @@ category: fun
 
 <label for="massInput"><strong>Mass (kg):</strong></label><br>
 <input type="number" id="massInput" step="0.1" value="1.0" min="0.01" required /><br><br>
+
   <details>
     <summary style="cursor:pointer; font-weight:bold;">Advanced options</summary>
     <label>
