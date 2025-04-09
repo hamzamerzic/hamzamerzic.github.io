@@ -30,8 +30,8 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "projects-3d-model-viewer",
-          title: '3D Model Viewer',
+        },{id: "projects-model-viewer",
+          title: 'Model Viewer',
           description: "Visualize 3D models directly in your browser",
           section: "Projects",handler: () => {
               window.location.href = "/3d-viz/";
