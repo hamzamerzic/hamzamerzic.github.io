@@ -51,7 +51,6 @@ def clean_mesh(
 
     if use_convex_hull:
         ms.generate_convex_hull()
-        geo = ms.get_geometric_measures()
 
     # Save mesh to file
     # Vertex normals are used for lighting/shading in rendering engines (e.g., Gazebo, Blender, etc.).

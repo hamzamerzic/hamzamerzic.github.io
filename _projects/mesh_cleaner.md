@@ -14,45 +14,86 @@ category: fun
 
 <p>Supported file formats: <strong>.stl, .obj, .dae</strong> (max size: 20MB)</p>
 
-<form id="uploadForm">
-  <label for="fileInput"><strong>Select 3D model:</strong></label><br>
-  <input type="file" id="fileInput" accept=".stl,.obj,.dae" required /><br><br>
+<form id="uploadForm" onsubmit="event.preventDefault(); uploadFile();">
+  <label for="fileInput"><strong>Select or drop a 3D model:</strong></label>
+  <div id="dropArea">
+    <input type="file" id="fileInput" accept=".stl,.obj,.dae" required hidden />
+    <div id="dropText">📂 Drop file here or click to browse</div>
+  </div>
+  <br>
 
-<label for="massInput"><strong>Mass (kg):</strong></label><br>
-<input type="number" id="massInput" step="0.1" value="1.0" min="0.01" required /><br><br>
+<label for="massInput"><strong>Mass (kg):</strong></label>
+<input type="number" id="massInput" step="any" value="1.0" min="0.001" required />
+<br><br>
 
   <details>
-    <summary style="cursor:pointer; font-weight:bold;">Advanced options</summary>
+    <summary><strong>Advanced options</strong></summary>
     <label>
-      <input type="checkbox" id="saveNormals">
-      Save vertex normals in output mesh
-      <br><small style="opacity: 0.75;">(This may help with some rendering tools, but increases file size. Not always necessary.)</small>
+      <input type="checkbox" id="saveNormals" />
+      Save vertex normals
+      <br><small style="opacity: 0.75;">(May help with rendering, but increases file size.)</small>
     </label><br>
     <label>
-      <input type="checkbox" id="useConvexHull">
-      Generate convex hull of the mesh
+      <input type="checkbox" id="useConvexHull" />
+      Generate convex hull
       <br><small style="opacity: 0.75;">(Useful for models with holes or open surfaces.)</small>
-    </label><br>
+    </label>
   </details>
   <br>
 
-<button type="button" onclick="uploadFile()">🚀 Upload & Clean</button>
+<button type="submit">🚀 Upload & Clean</button>
 
 </form>
 
-<hr>
+<hr />
 <p><strong>Results:</strong></p>
-<p id="usageTip" style="display:none; margin-top: 1em;">
-  <em>The XML snippet below (inside <code>&lt;inertial&gt;</code>) can be directly used in URDF or SDF robot model files, for example when simulating in Gazebo or ROS-based environments.</em>
+<p id="usageTip" style="display:none;">
+  <em>The XML snippet below (inside <code>&lt;inertial&gt;</code>) can be used in URDF/SDF robot model files.</em>
 </p>
 <pre id="response">Waiting for upload...</pre>
 <a id="downloadLink" style="display:none;" download>⬇ Download Cleaned Mesh</a>
 <a id="view3DLink" style="display:none;" target="_blank">🔍 View in 3D Viewer</a>
 
 <script>
-async function uploadFile() {
+document.addEventListener("DOMContentLoaded", () => {
+  const dropArea = document.getElementById("dropArea");
   const fileInput = document.getElementById("fileInput");
-  const file = fileInput.files[0];
+  const dropText = document.getElementById("dropText");
+
+  const updateDropText = () => {
+    if (fileInput.files.length > 0) {
+      dropText.textContent = `📁 Selected: ${fileInput.files[0].name}`;
+    } else {
+      dropText.textContent = "📂 Drop file here or click to browse";
+    }
+  };
+
+  dropArea.addEventListener("click", () => fileInput.click());
+
+  ["dragenter", "dragover"].forEach(event =>
+    dropArea.addEventListener(event, e => {
+      e.preventDefault();
+      dropArea.classList.add("highlight");
+    })
+  );
+
+  ["dragleave", "drop"].forEach(event =>
+    dropArea.addEventListener(event, e => {
+      e.preventDefault();
+      dropArea.classList.remove("highlight");
+    })
+  );
+
+  dropArea.addEventListener("drop", e => {
+    fileInput.files = e.dataTransfer.files;
+    updateDropText();
+  });
+
+  fileInput.addEventListener("change", updateDropText);
+});
+
+async function uploadFile() {
+  const file = document.getElementById("fileInput").files[0];
   const mass = document.getElementById("massInput").value;
   const saveNormals = document.getElementById("saveNormals").checked;
   const useConvexHull = document.getElementById("useConvexHull").checked;
@@ -61,20 +102,14 @@ async function uploadFile() {
   const viewLinkEl = document.getElementById("view3DLink");
   const usageTip = document.getElementById("usageTip");
 
-  if (!file) {
-    alert("Please select a file.");
-    return;
-  }
-
-  if (file.size > 20 * 1024 * 1024) {
-    alert("File size must be under 20MB.");
-    return;
-  }
+  if (!file) return alert("Please select a file.");
+  if (file.size > 20 * 1024 * 1024) return alert("File size must be under 20MB.");
+  const validExtensions = ['.stl', '.obj', '.dae'];
+  if (!validExtensions.some(ext => file.name.toLowerCase().endsWith(ext)))
+    return alert("Unsupported file format. Please upload a .stl, .obj, or .dae file.");
 
   responseEl.textContent = "⏳ Uploading and processing...";
-  usageTip.style.display = "none";
-  linkEl.style.display = "none";
-  viewLinkEl.style.display = "none";
+  usageTip.style.display = linkEl.style.display = viewLinkEl.style.display = "none";
 
   const formData = new FormData();
   formData.append("file", file);
@@ -82,16 +117,20 @@ async function uploadFile() {
   formData.append("save_normals", saveNormals);
   formData.append("use_convex_hull", useConvexHull);
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
+
   try {
     const res = await fetch("https://mesh-cleaner-692118822266.europe-west1.run.app/upload", {
       method: "POST",
       body: formData,
+      signal: controller.signal
     });
-
+    clearTimeout(timeoutId);
     const data = await res.json();
 
     if (!res.ok) {
-      responseEl.textContent = "❌ Error: " + data.error;
+      responseEl.textContent = "❌ Error: " + (data.error || "Unknown error.");
       return;
     }
 
@@ -102,11 +141,10 @@ async function uploadFile() {
     linkEl.href = cleanedMeshURL;
     linkEl.style.display = "inline";
 
-    // Add the 3D viewer link
     viewLinkEl.href = `/3d-viz/?file=${encodeURIComponent(cleanedMeshURL)}`;
     viewLinkEl.style.display = "inline";
   } catch (err) {
-    responseEl.textContent = "❌ Upload failed: " + err.message;
+    responseEl.textContent = "❌ Upload failed: " + (err.name === "AbortError" ? "Timeout" : err.message);
   }
 }
 </script>
@@ -114,39 +152,62 @@ async function uploadFile() {
 <style>
 #uploadForm {
   padding: 1em;
-  border: 1px solid;
-  border-radius: 8px;
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 12px;
   max-width: 500px;
 }
 
-input[type="file"],
 input[type="number"],
 #uploadForm button {
-  font-size: 1em;
+  font-size: 1.1em;
   padding: 0.5em;
   margin-top: 0.3em;
   width: 100%;
   box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: var(--input-bg, #fff);
+  color: black;
 }
 
 #uploadForm button {
   background-color: #12b075;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
   margin-top: 1em;
   color: white;
+  transition: background 0.2s ease;
 }
 
 #uploadForm button:hover {
   background-color: #0e8d5d;
 }
 
+#dropArea {
+  border: 2px dashed #bbb;
+  padding: 1.5em;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+#dropArea.highlight {
+  background: #e0ffe8;
+}
+
+#dropText {
+  font-size: 0.95em;
+  color: inherit;
+}
+
 pre {
   padding: 1em;
-  max-width: 100%;
   white-space: pre-wrap;
   word-wrap: break-word;
+  background: #eee;
+  border-radius: 8px;
 }
 
 #downloadLink,
@@ -157,11 +218,12 @@ pre {
   width: 100%;
   box-sizing: border-box;
   background-color: #12b075;
-  border-radius: 5px;
+  border-radius: 8px;
   color: white;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 
 #downloadLink:hover,

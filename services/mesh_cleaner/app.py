@@ -18,6 +18,7 @@ def upload():
     f = request.files["file"]
     mass = float(request.form.get("mass", 1.0))
     save_normals = request.form.get("save_normals", "false").lower() == "true"
+    use_convex_hull = request.form.get("use_convex_hull", "false").lower() == "true"
 
     filename = str(uuid.uuid4()) + "_" + f.filename
     input_path = os.path.join(UPLOAD_FOLDER, filename)
@@ -25,7 +26,7 @@ def upload():
 
     try:
         output_text, cleaned_path = clean_mesh(
-            input_path, mass, output_dir=RESULT_FOLDER, save_normals=save_normals
+            input_path, mass, output_dir=RESULT_FOLDER, save_normals=save_normals, use_convex_hull=use_convex_hull
         )
         return jsonify(
             {
