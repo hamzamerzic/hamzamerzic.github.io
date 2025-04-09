@@ -19,8 +19,8 @@ category: fun
   <label for="fileInput"><strong>Select 3D model:</strong></label><br>
   <input type="file" id="fileInput" accept=".stl,.obj,.dae" required /><br><br>
 
-<label for="massInput"><strong>Mass (kg):</strong></label><br>
-<input type="number" id="massInput" step="0.1" value="1.0" min="0.01" required /><br><br>
+  <label for="massInput"><strong>Mass (kg):</strong></label><br>
+  <input type="number" id="massInput" step="0.1" value="1.0" min="0.01" required /><br><br>
 
   <details>
     <summary style="cursor:pointer; font-weight:bold;">Advanced options</summary>
@@ -37,8 +37,7 @@ category: fun
   </details>
   <br>
 
-<button type="button" onclick="uploadFile()">🚀 Upload & Clean</button>
-
+  <button type="button" onclick="uploadFile()">🚀 Upload & Clean</button>
 </form>
 
 <hr>
@@ -48,6 +47,7 @@ category: fun
 </p>
 <pre id="response">Waiting for upload...</pre>
 <a id="downloadLink" style="display:none;" download>⬇ Download Cleaned Mesh</a>
+<a id="view3DLink" style="display:none;" target="_blank">🔍 View in 3D Viewer</a>
 
 <script>
 async function uploadFile() {
@@ -58,6 +58,7 @@ async function uploadFile() {
   const useConvexHull = document.getElementById("useConvexHull").checked;
   const responseEl = document.getElementById("response");
   const linkEl = document.getElementById("downloadLink");
+  const viewLinkEl = document.getElementById("view3DLink");
   const usageTip = document.getElementById("usageTip");
 
   if (!file) {
@@ -73,6 +74,7 @@ async function uploadFile() {
   responseEl.textContent = "⏳ Uploading and processing...";
   usageTip.style.display = "none";
   linkEl.style.display = "none";
+  viewLinkEl.style.display = "none";
 
   const formData = new FormData();
   formData.append("file", file);
@@ -96,9 +98,13 @@ async function uploadFile() {
     responseEl.textContent = data.metrics;
     usageTip.style.display = "block";
 
-    responseEl.textContent = data.metrics;
-    linkEl.href = `https://mesh-cleaner-692118822266.europe-west1.run.app${data.download_url}`;
+    const cleanedMeshURL = `https://mesh-cleaner-692118822266.europe-west1.run.app${data.download_url}`;
+    linkEl.href = cleanedMeshURL;
     linkEl.style.display = "inline";
+
+    // Add the 3D viewer link
+    viewLinkEl.href = `/3d-viz/?file=${encodeURIComponent(cleanedMeshURL)}`;
+    viewLinkEl.style.display = "inline";
   } catch (err) {
     responseEl.textContent = "❌ Upload failed: " + err.message;
   }
@@ -129,6 +135,7 @@ input[type="number"],
   border-radius: 5px;
   cursor: pointer;
   margin-top: 1em;
+  color: white;
 }
 
 #uploadForm button:hover {
@@ -142,7 +149,8 @@ pre {
   word-wrap: break-word;
 }
 
-#downloadLink {
+#downloadLink,
+#view3DLink {
   display: inline-block;
   margin-top: 1em;
   padding: 0.5em;
@@ -156,7 +164,8 @@ pre {
   cursor: pointer;
 }
 
-#downloadLink:hover {
+#downloadLink:hover,
+#view3DLink:hover {
   background-color: #0e8d5d;
 }
 </style>
