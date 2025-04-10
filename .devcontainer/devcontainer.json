@@ -6,20 +6,26 @@
 
   // Features to add to the dev container. More info: https://containers.dev/features.
   "features": {
+    // --- Existing features ---
     "ghcr.io/rocker-org/devcontainer-features/apt-packages:1": {
       "packages": "build-essential,imagemagick,inotify-tools,jupyter-nbconvert,procps,ruby-full,zlib1g-dev"
     },
-    "ghcr.io/devcontainers-contrib/features/prettier:1": {}
+    "ghcr.io/devcontainers-contrib/features/prettier:1": {},
+    // +++ Added Docker feature +++
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
   },
 
-  // Optionally: run jekyll serve automatically on container entering using the Docker entrypoint
+  // +++ Added Docker socket mount +++
+  // This allows the container to use the host's Docker daemon
+  "mounts": ["source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"],
+
+  // --- Existing configurations ---
   "postAttachCommand": "./bin/entry_point.sh",
 
   "customizations": {
     "vscode": {
       "extensions": ["esbenp.prettier-vscode", "sissel.shopify-liquid", "yzhang.markdown-all-in-one"],
       "settings": {
-        // use prettier code formatter as default formatter
         "editor.defaultFormatter": "esbenp.prettier-vscode",
         "prettier.configPath": ".prettierrc",
         "editor.formatOnSave": true
@@ -27,5 +33,5 @@
     }
   },
 
-  "remoteUser": "vscode"
+  "remoteUser": "vscode" // This is good, allows running docker commands as non-root
 }
