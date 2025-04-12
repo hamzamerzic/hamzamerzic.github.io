@@ -14,19 +14,19 @@ category: fun
 
 <p>Supported file formats: <strong>.urdf, .dae</strong> (max size: 20MB)</p>
 
-<form id="uploadForm" onsubmit="event.preventDefault(); uploadFile();">
+<form id="uploadForm" class="ikfast-form" onsubmit="event.preventDefault(); uploadFile();">
   <label for="fileInput"><strong>Select or drop a robot model:</strong></label>
-  <div id="dropArea">
+  <div id="dropArea" class="ikfast-drop">
     <input type="file" id="fileInput" accept=".urdf,.dae" required hidden />
     <div id="dropText">📂 Drop file here or click to browse</div>
   </div>
   <br>
-  <button type="submit">🔍 Analyze Robot Links</button>
+  <button class="ikfast-button" type="submit">🔍 Analyze Robot Links</button>
 </form>
 
 <hr />
 <p><strong>Link Info:</strong></p>
-<pre id="ikfast-link-info">Waiting for upload...</pre>
+<pre id="ikfast-link-info" class="ikfast-pre">Waiting for upload...</pre>
 
 <div id="ikfastFormContainer" style="display:none;">
   <hr />
@@ -35,7 +35,7 @@ category: fun
     Provide parameters for the solver generation below. Refer to the <a href="http://openrave.org/docs/latest_stable/openravepy/ikfast/" target="_blank">IKFast docs</a> for info about free indices and solver types.
   </p>
 
-  <form id="ikfastForm" onsubmit="event.preventDefault(); generateSolver();">
+  <form id="ikfastForm" class="ikfast-form" onsubmit="event.preventDefault(); generateSolver();">
     <label for="baselink"><strong>Base link index:</strong></label>
     <input type="text" id="baselink" required />
 
@@ -62,7 +62,7 @@ category: fun
     </select>
 
     <br><br>
-    <button type="submit">⚙️ Generate Solver</button>
+    <button class="ikfast-button" type="submit">⚙️ Generate Solver</button>
 
   </form>
 </div>
@@ -212,18 +212,16 @@ async function generateSolver() {
 </script>
 
 <style>
-#uploadForm,
-#ikfastForm {
+.ikfast-form {
   padding: 1em;
   border: 1px solid var(--border-color, #ccc);
   border-radius: 12px;
   max-width: 500px;
 }
 
-input[type="text"],
-select,
-#uploadForm button,
-#ikfastForm button {
+.ikfast-form input,
+.ikfast-form select,
+.ikfast-button {
   font-size: 1em;
   padding: 0.5em;
   margin-top: 0.4em;
@@ -233,7 +231,7 @@ select,
   border-radius: 6px;
 }
 
-button {
+.ikfast-button {
   background-color: #12b075;
   color: white;
   cursor: pointer;
@@ -243,11 +241,11 @@ button {
   margin-top: 1em;
 }
 
-button:hover {
+.ikfast-button:hover {
   background-color: #0e8d5d;
 }
 
-#dropArea {
+.ikfast-drop {
   border: 2px dashed #bbb;
   padding: 1.5em;
   text-align: center;
@@ -256,15 +254,11 @@ button:hover {
   transition: background 0.3s ease;
 }
 
-#dropArea.highlight {
+.ikfast-drop.highlight {
   background: #e0ffe8;
 }
 
-#dropText {
-  font-size: 0.95em;
-}
-
-pre.ikfast-pre {
+.ikfast-pre {
   padding: 1em;
   white-space: pre-wrap;
   word-wrap: break-word;
