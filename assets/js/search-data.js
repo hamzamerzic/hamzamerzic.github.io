@@ -35,6 +35,11 @@ ninja.data = [{
           description: "Visualize 3D models directly in your browser",
           section: "Projects",handler: () => {
               window.location.href = "/3d-viz/";
+            },},{id: "projects-ikfast",
+          title: 'IKFast',
+          description: "Generate OpenRAVE-compatible IK solvers from your robot model",
+          section: "Projects",handler: () => {
+              window.location.href = "/ikfast/";
             },},{id: "projects-mesh-cleaner",
           title: 'Mesh Cleaner',
           description: "Clean and process 3D mesh files for use in physics-based simulation environments",
