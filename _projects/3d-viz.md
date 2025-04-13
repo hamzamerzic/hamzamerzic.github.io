@@ -2,7 +2,7 @@
 layout: page
 title: Model Viewer
 description: Visualize 3D models directly in your browser
-img: assets/img/abb_irb_52.png
+img: assets/img/ur5.png
 permalink: /3d-viz/
 importance: 2
 category: fun
