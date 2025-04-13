@@ -30,7 +30,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "projects-model-viewer",
+        },{id: "post-website-migration",
+        
+          title: "Website migration",
+        
+        description: "Migrating my old Wordpress website",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/website-migration/";
+          
+        },
+      },{id: "projects-model-viewer",
           title: 'Model Viewer',
           description: "Visualize 3D models directly in your browser",
           section: "Projects",handler: () => {
