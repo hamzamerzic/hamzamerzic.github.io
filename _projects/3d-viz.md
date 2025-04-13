@@ -10,10 +10,6 @@ category: fun
 
 <p>Upload a 3D model file (<code>.dae</code>, <code>.obj</code>, <code>.stl</code>) to visualize it, or drag and drop it into the viewer below.</p>
 
-<script>
-  const EXAMPLE_MODEL_URL = "{{ '/assets/3d/abb_irb52_7_120.dae' | relative_url }}";
-</script>
-
 <div id="container" style="height: 60vh; position: relative; border: 2px dashed #ccc; border-radius: 10px; display: flex; align-items: center; justify-content: center;">
   <button id="resetViewer" style="position: absolute; top: 10px; right: 10px; z-index: 3; border: none; padding: 0.4em 0.8em; border-radius: 4px; cursor: pointer;">Reset</button>
   <div id="fileDropOverlay" style="position: absolute; width: 100%; height: 100%; z-index: 2; cursor: pointer;"></div>
@@ -94,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("loadExample").onclick = () => {
     hidePrompt();
     loadingElem.style.display = "block";
-    fetch(EXAMPLE_MODEL_URL)
+    fetch({{ '/assets/3d/abb_irb52_7_120.dae' | relative_url }})
       .then(res => res.text())
       .then(data => loadModel(data, "dae"))
       .catch(() => loadingElem.textContent = "Failed to load example model.");
