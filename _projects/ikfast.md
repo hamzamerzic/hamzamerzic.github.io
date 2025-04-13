@@ -1,7 +1,7 @@
 ---
 layout: page
-title: IKFast
-description: Generate OpenRAVE-compatible IK solvers from your robot model
+title: IKFast Generator
+description: Generate analytic Inverse Kinematics solvers based on OpenRAVE's IKFast
 img: assets/img/inverse_kinematics.png
 permalink: /ikfast/
 importance: 3
@@ -9,7 +9,7 @@ category: fun
 ---
 
 <p>
-  <strong>IKFast Generator</strong> lets you extract robot link info and generate blazing-fast inverse kinematics solvers using <a href="http://openrave.org/docs/latest_stable/openravepy/ikfast/" target="_blank">OpenRAVE's IKFast</a> plugin. Start by uploading a <code>.dae</code> file of your robot model.
+  <strong>IKFast Generator</strong> is a tool that creates blazing-fast analytic inverse kinematics solvers for your robot, powered by <a href="http://openrave.org/docs/latest_stable/openravepy/ikfast/" target="_blank">OpenRAVE's IKFast</a>. Simply upload a <code>.dae</code> file of your robot, extract its kinematic structure, and generate a C++ solver ready for integration.
 </p>
 
 <p>Supported file format: <strong>.dae</strong> (max size: 20MB)</p>
