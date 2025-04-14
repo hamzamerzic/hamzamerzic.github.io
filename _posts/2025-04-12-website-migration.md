@@ -61,7 +61,6 @@ For nostalgia, I decided to keep a little album of what the old site looked like
   }
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <div id="oldSiteCarousel" class="carousel slide carousel-fade mb-4" data-bs-ride="carousel">
