@@ -46,32 +46,51 @@ For nostalgia, I decided to keep a little album of what the old site looked like
 .carousel-wrapper:hover .carousel-control-next {
   opacity: 1;
 }
+
+.carousel-inner {
+  transition: transform 0.6s ease;
+}
 </style>
 
 <div class="carousel-wrapper">
-  <div id="oldSiteCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="5000">
+  <div id="oldSiteCarousel"
+       class="carousel slide mb-4"
+       data-bs-ride="carousel"
+       data-bs-interval="5000"
+       data-bs-touch="true"
+       data-bs-keyboard="true">
+
     <div class="carousel-inner">
-
       <div class="carousel-item active">
-        <img src="{{ '/assets/img/old-site-blog.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site blog">
+        <img src="{{ '/assets/img/old-site-blog.png' | relative_url }}"
+             class="d-block w-100 rounded shadow-sm"
+             alt="Old site blog"
+             loading="lazy">
       </div>
-
       <div class="carousel-item">
-        <img src="{{ '/assets/img/old-site-home.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site home">
+        <img src="{{ '/assets/img/old-site-home.png' | relative_url }}"
+             class="d-block w-100 rounded shadow-sm"
+             alt="Old site home"
+             loading="lazy">
       </div>
-
       <div class="carousel-item">
-        <img src="{{ '/assets/img/old-site-tools.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site tools">
+        <img src="{{ '/assets/img/old-site-tools.png' | relative_url }}"
+             class="d-block w-100 rounded shadow-sm"
+             alt="Old site tools"
+             loading="lazy">
       </div>
-
       <div class="carousel-item">
-        <img src="{{ '/assets/img/old-site-mesh-cleaner.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site mesh cleaner">
+        <img src="{{ '/assets/img/old-site-mesh-cleaner.png' | relative_url }}"
+             class="d-block w-100 rounded shadow-sm"
+             alt="Old site mesh cleaner"
+             loading="lazy">
       </div>
-
       <div class="carousel-item">
-        <img src="{{ '/assets/img/old-site-ikfast.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site ikfast">
+        <img src="{{ '/assets/img/old-site-ikfast.png' | relative_url }}"
+             class="d-block w-100 rounded shadow-sm"
+             alt="Old site ikfast"
+             loading="lazy">
       </div>
-
     </div>
 
     <!-- Controls -->
@@ -84,11 +103,21 @@ For nostalgia, I decided to keep a little album of what the old site looked like
       <span class="visually-hidden">Next</span>
     </button>
 
+    <!-- Indicators -->
+    <div class="carousel-indicators mt-2">
+      {% for i in (0..4) %}
+        <button type="button"
+                data-bs-target="#oldSiteCarousel"
+                data-bs-slide-to="{{ i }}"
+                {% if i == 0 %}class="active" aria-current="true"{% endif %}
+                aria-label="Slide {{ i | plus: 1 }}"></button>
+      {% endfor %}
+    </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <div class="caption mt-2">
-  A peek at the OG website. A little janky. A little beautiful.
+  A peek at the OG website.
 </div>
