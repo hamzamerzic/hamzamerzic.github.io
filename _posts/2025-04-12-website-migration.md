@@ -1,9 +1,9 @@
 ---
 layout: post
-title: Migration Successful!
+title: Migration successful!
 date: 2025-04-12 15:00:00
 description: Goodbye Wordpress!
-img: assets/img/old-page-landing.png
+thumbnail: assets/img/old-site-blog.png
 categories: general
 giscus_comments: true
 related_posts: false
@@ -35,88 +35,92 @@ If you're still using any of these today — thank you. I hope the migration wen
 
 For nostalgia, I decided to keep a little album of what the old site looked like:
 
+<!-- Swiper styles -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+<!-- Custom styling -->
 <style>
-.carousel-wrapper .carousel-control-prev,
-.carousel-wrapper .carousel-control-next {
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  .swiper {
+    max-width: 720px;
+    margin: 2rem auto;
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+
+  .swiper-slide img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    border-radius: 0; /* Remove radius from inner images */
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  }
+
+.swiper-button-prev {
+    color: var(--global-theme-color);
 }
 
-.carousel-wrapper:hover .carousel-control-prev,
-.carousel-wrapper:hover .carousel-control-next {
-  opacity: 1;
+.swiper-button-next {
+    color: var(--global-theme-color);
 }
 
-.carousel-inner {
-  transition: transform 0.6s ease;
+.swiper-pagination-bullet {
+  background: var(--global-theme-color);
 }
 </style>
 
-<div class="carousel-wrapper">
-  <div id="oldSiteCarousel"
-       class="carousel slide mb-4"
-       data-bs-ride="carousel"
-       data-bs-interval="5000"
-       data-bs-touch="true"
-       data-bs-keyboard="true">
+<!-- Swiper container -->
+<div class="swiper mySwiper">
+  <div class="swiper-wrapper">
 
-    <div class="carousel-inner">
-      <div class="carousel-item active">
-        <img src="{{ '/assets/img/old-site-blog.png' | relative_url }}"
-             class="d-block w-100 rounded shadow-sm"
-             alt="Old site blog"
-             loading="lazy">
-      </div>
-      <div class="carousel-item">
-        <img src="{{ '/assets/img/old-site-home.png' | relative_url }}"
-             class="d-block w-100 rounded shadow-sm"
-             alt="Old site home"
-             loading="lazy">
-      </div>
-      <div class="carousel-item">
-        <img src="{{ '/assets/img/old-site-tools.png' | relative_url }}"
-             class="d-block w-100 rounded shadow-sm"
-             alt="Old site tools"
-             loading="lazy">
-      </div>
-      <div class="carousel-item">
-        <img src="{{ '/assets/img/old-site-mesh-cleaner.png' | relative_url }}"
-             class="d-block w-100 rounded shadow-sm"
-             alt="Old site mesh cleaner"
-             loading="lazy">
-      </div>
-      <div class="carousel-item">
-        <img src="{{ '/assets/img/old-site-ikfast.png' | relative_url }}"
-             class="d-block w-100 rounded shadow-sm"
-             alt="Old site ikfast"
-             loading="lazy">
-      </div>
+    <div class="swiper-slide">
+      <img src="{{ '/assets/img/old-site-blog.png' | relative_url }}" alt="Old site blog" />
     </div>
 
-    <!-- Controls -->
-    <button class="carousel-control-prev" type="button" data-bs-target="#oldSiteCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#oldSiteCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
-
-    <!-- Indicators -->
-    <div class="carousel-indicators mt-2">
-      {% for i in (0..4) %}
-        <button type="button"
-                data-bs-target="#oldSiteCarousel"
-                data-bs-slide-to="{{ i }}"
-                {% if i == 0 %}class="active" aria-current="true"{% endif %}
-                aria-label="Slide {{ i | plus: 1 }}"></button>
-      {% endfor %}
+    <div class="swiper-slide">
+      <img src="{{ '/assets/img/old-site-home.png' | relative_url }}" alt="Old site home" />
     </div>
+
+    <div class="swiper-slide">
+      <img src="{{ '/assets/img/old-site-tools.png' | relative_url }}" alt="Old site tools" />
+    </div>
+
+    <div class="swiper-slide">
+      <img src="{{ '/assets/img/old-site-mesh-cleaner.png' | relative_url }}" alt="Old site mesh cleaner" />
+    </div>
+
+    <div class="swiper-slide">
+      <img src="{{ '/assets/img/old-site-ikfast.png' | relative_url }}" alt="Old site ikfast" />
+    </div>
+
   </div>
+
+  <!-- Navigation & pagination -->
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-pagination"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Swiper script -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script>
+  const swiper = new Swiper('.mySwiper', {
+    loop: true,
+    autoplay: {
+      delay: 5000,
+      disableOnInteraction: false,
+    },
+    spaceBetween: 16,
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+</script>
 
 <div class="caption mt-2">
   A peek at the OG website.

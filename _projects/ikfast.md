@@ -27,7 +27,7 @@ giscus_comments: true
 
 <details style="margin-top: 1.5em;">
   <summary><strong>📁 Don’t have a file? Use an example</strong></summary>
-  <div style="margin-top: 1em; display: flex; gap: 1em; flex-wrap: wrap;">
+  <div style="display: flex; gap: 1em; flex-wrap: wrap;">
     <a href="{{ '/assets/3d/abb_irb52_7_120.dae' | relative_url }}" download>
       <button type="button" class="ikfast-button">⬇️ Download Example</button>
     </a>
@@ -109,8 +109,8 @@ giscus_comments: true
 </details>
 
 <p style="margin-top: 2em;">
-  ✨ This tool was modernized as part of a recent <a href="https://hamzamerzic.info/blog/2025/website-migration/">website migration</a> from my old WordPress days.<br />
-  If you notice any regressions or bugs, please reach out—I’d love to hear from you.
+  ✨ This tool was <a href="https://hamzamerzic.info/blog/2025/website-migration/">modernized</a> from my earlier WordPress setup.<br />
+  If you notice any regressions or bugs, please reach out or comment below—I’d love to hear from you.
 </p>
 
 <script>
