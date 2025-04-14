@@ -56,8 +56,8 @@ giscus_comments: true
 <a id="view3DLink" style="display:none;" target="_blank">🔍 View in 3D Viewer</a>
 
 <p style="margin-top: 2em;">
-  ✨ This tool was modernized as part of a recent <a href="https://hamzamerzic.info/blog/2025/website-migration/">website migration</a> from my old WordPress days.<br />
-  If you notice any regressions or bugs, please reach out—I’d love to hear from you.
+  ✨ This tool was <a href="https://hamzamerzic.info/blog/2025/website-migration/">modernized</a> from my earlier WordPress setup.<br />
+  If you notice any regressions or bugs, please reach out or comment below—I’d love to hear from you.
 </p>
 
 <script>
