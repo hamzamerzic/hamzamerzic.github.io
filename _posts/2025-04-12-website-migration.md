@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Migration Successful: Goodbye, WordPress!"
+title: Migration Successful!
 date: 2025-04-12 15:00:00
-description: journey to modernize an old website
+description: Goodbye Wordpress!
 img: assets/img/old-page-landing.png
 categories: general
 giscus_comments: true
@@ -36,68 +36,58 @@ If you're still using any of these today — thank you. I hope the migration wen
 For nostalgia, I decided to keep a little album of what the old site looked like:
 
 <style>
-  .masonry-gallery {
-    column-count: 2;
-    column-gap: 1rem;
-  }
+.carousel-wrapper .carousel-control-prev,
+.carousel-wrapper .carousel-control-next {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-  @media (min-width: 768px) {
-    .masonry-gallery {
-      column-count: 3;
-    }
-  }
-
-  .masonry-gallery a {
-    display: inline-block;
-    margin-bottom: 1rem;
-    width: 100%;
-  }
-
-  .masonry-gallery img {
-    width: 100%;
-    height: auto;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
+.carousel-wrapper:hover .carousel-control-prev,
+.carousel-wrapper:hover .carousel-control-next {
+  opacity: 1;
+}
 </style>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<div class="carousel-wrapper">
+  <div id="oldSiteCarousel" class="carousel slide mb-4" data-bs-ride="carousel" data-bs-interval="5000">
+    <div class="carousel-inner">
 
-<div id="oldSiteCarousel" class="carousel slide carousel-fade mb-4" data-bs-ride="carousel">
-  <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{{ '/assets/img/old-site-blog.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site blog">
+      </div>
 
-    <div class="carousel-item active">
-      <img src="{{ '/assets/img/old-site-blog.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site blog">
+      <div class="carousel-item">
+        <img src="{{ '/assets/img/old-site-home.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site home">
+      </div>
+
+      <div class="carousel-item">
+        <img src="{{ '/assets/img/old-site-tools.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site tools">
+      </div>
+
+      <div class="carousel-item">
+        <img src="{{ '/assets/img/old-site-mesh-cleaner.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site mesh cleaner">
+      </div>
+
+      <div class="carousel-item">
+        <img src="{{ '/assets/img/old-site-ikfast.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site ikfast">
+      </div>
+
     </div>
 
-    <div class="carousel-item">
-      <img src="{{ '/assets/img/old-site-home.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site home">
-    </div>
-
-    <div class="carousel-item">
-      <img src="{{ '/assets/img/old-site-tools.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site tools">
-    </div>
-
-    <div class="carousel-item">
-      <img src="{{ '/assets/img/old-site-mesh-cleaner.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site mesh cleaner">
-    </div>
-
-    <div class="carousel-item">
-      <img src="{{ '/assets/img/old-site-ikfast.png' | relative_url }}" class="d-block w-100 rounded shadow-sm" alt="Old site ikfast">
-    </div>
+    <!-- Controls -->
+    <button class="carousel-control-prev" type="button" data-bs-target="#oldSiteCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#oldSiteCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
 
   </div>
-
-  <button class="carousel-control-prev" type="button" data-bs-target="#oldSiteCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Previous</span>
-  </button>
-
-  <button class="carousel-control-next" type="button" data-bs-target="#oldSiteCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="visually-hidden">Next</span>
-  </button>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <div class="caption mt-2">
   A peek at the OG website. A little janky. A little beautiful.

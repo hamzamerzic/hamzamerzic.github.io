@@ -30,7 +30,7 @@ category: fun
 <div style="margin-top: 1em;">
   <p>Don’t have a file?</p>
   <div style="display: flex; gap: 1em; flex-wrap: wrap;">
-    <a href="EXAMPLE_MODEL_URL" download>
+    <a href="{{ '/assets/3d/abb_irb52_7_120.dae' | relative_url }}" download>
       <button type="button" class="action-btn">⬇️ Download Example</button>
     </a>
     <button type="button" id="loadExample" class="action-btn">👁️ Preview Example</button>
