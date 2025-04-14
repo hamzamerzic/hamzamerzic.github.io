@@ -6,6 +6,7 @@ img: assets/img/inverse_kinematics.png
 permalink: /ikfast/
 importance: 3
 category: fun
+giscus_comments: true
 ---
 
 <p>
@@ -106,6 +107,11 @@ category: fun
     --savefile /data/ikfast_output.cpp
 </pre>
 </details>
+
+<p style="margin-top: 2em;">
+  ✨ This tool was modernized as part of a recent <a href="https://hamzamerzic.info/blog/2025/website-migration/">website migration</a> from my old WordPress days.<br />
+  If you notice any regressions or bugs, please reach out—I’d love to hear from you.
+</p>
 
 <script>
 async function uploadFile() {
