@@ -32,7 +32,7 @@ ninja.data = [{
           },
         },{id: "post-migration-successful",
         
-          title: "Migration Successful!",
+          title: "Migration successful!",
         
         description: "Goodbye Wordpress!",
         section: "Posts",
