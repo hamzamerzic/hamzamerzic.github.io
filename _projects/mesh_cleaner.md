@@ -6,6 +6,7 @@ img: assets/img/objects.png
 permalink: /mesh_cleaner/
 importance: 1
 category: fun
+giscus_comments: true
 ---
 
 <p>
@@ -53,6 +54,11 @@ category: fun
 <pre id="response">Waiting for upload...</pre>
 <a id="downloadLink" style="display:none;" download>⬇ Download Cleaned Mesh</a>
 <a id="view3DLink" style="display:none;" target="_blank">🔍 View in 3D Viewer</a>
+
+<p style="margin-top: 2em;">
+  ✨ This tool was modernized as part of a recent <a href="https://hamzamerzic.info/blog/2025/website-migration/">website migration</a> from my old WordPress days.<br />
+  If you notice any regressions or bugs, please reach out—I’d love to hear from you.
+</p>
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
