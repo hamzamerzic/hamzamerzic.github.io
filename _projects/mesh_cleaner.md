@@ -13,7 +13,7 @@ giscus_comments: true
   Mesh Cleaner is a tool that cleans 3D mesh files and computes their geometric properties such as volume, center of mass, and moments of inertia. The idea behind this project was to automate the tedious process of preparing 3D models for use in Gazebo—as explained in the <a href="https://classic.gazebosim.org/tutorials?tut=inertia" target="_blank">classic Gazebo tutorial</a>.
 </p>
 
-<p>Supported file formats: <strong>.stl, .obj, .dae</strong> (max size: 20MB)</p>
+<p>Supported file formats: <strong>.stl, .obj, .dae</strong> (max size: 100MB)</p>
 
 <form id="uploadForm" onsubmit="event.preventDefault(); uploadFile();">
   <label for="fileInput"><strong>Select or drop a 3D model:</strong></label>
@@ -61,9 +61,6 @@ giscus_comments: true
 </p>
 
 <script>
-const GATEWAY_URL = "https://website-services-gateway-8tydod4q.ew.gateway.dev/mesh_cleaner";
-const API_KEY = "AIzaSyBAJ-PR0czip01hgVbP1DNB0jnmzPA20OA";
-
 document.addEventListener("DOMContentLoaded", () => {
   const dropArea = document.getElementById("dropArea");
   const fileInput = document.getElementById("fileInput");
@@ -107,7 +104,7 @@ async function uploadFile() {
   const usageTip = document.getElementById("usageTip");
 
   if (!file) return alert("Please select a file.");
-  if (file.size > 20 * 1024 * 1024) return alert("File size must be under 20MB.");
+  if (file.size > 100 * 1024 * 1024) return alert("File size must be under 100MB.");
   const validExtensions = ['.stl', '.obj', '.dae'];
   if (!validExtensions.some(ext => file.name.toLowerCase().endsWith(ext)))
     return alert("Unsupported file format. Please upload a .stl, .obj, or .dae file.");
@@ -122,34 +119,35 @@ async function uploadFile() {
   formData.append("use_convex_hull", useConvexHull);
 
   try {
-    const res = await fetch(`${GATEWAY_URL}?key=${API_KEY}`, {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+    const res = await fetch("https://mesh-cleaner-692118822266.europe-west1.run.app/upload", {
       method: "POST",
-      body: formData
+      body: formData,
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
 
-    if (res.status === 429) {
-      responseEl.textContent = "🚫 Rate limit hit. Please wait and try again.";
-      return;
-    }
-
-    const data = await res.json();
-
+    const contentType = res.headers.get("content-type") || "";
     if (!res.ok) {
       responseEl.textContent = "❌ Error: " + (data.error || "Unknown error.");
       return;
     }
 
+    const data = await res.json();
+
     responseEl.textContent = data.metrics;
     usageTip.style.display = "block";
 
-    const cleanedMeshURL = `${GATEWAY_URL.replace("/mesh_cleaner", "")}${data.download_url}`;
+    const cleanedMeshURL = `https://mesh-cleaner-692118822266.europe-west1.run.app${data.download_url}`;
     linkEl.href = cleanedMeshURL;
     linkEl.style.display = "inline";
 
     viewLinkEl.href = `/3d-viz/?file=${encodeURIComponent(cleanedMeshURL)}`;
     viewLinkEl.style.display = "inline";
   } catch (err) {
-    responseEl.textContent = "❌ Upload failed: " + err.message;
+    responseEl.textContent = "❌ Upload failed: " + (err.name === "AbortError" ? "Timeout" : err.message);
   }
 }
 </script>

@@ -13,7 +13,7 @@ giscus_comments: true
   <strong>IKFast Generator</strong> is a tool that creates blazing-fast analytic inverse kinematics solvers for your robot, powered by <a href="http://openrave.org/docs/latest_stable/openravepy/ikfast/" target="_blank">OpenRAVE's IKFast</a>. Simply upload a <code>.dae</code> file of your robot, extract its kinematic structure, and generate a C++ solver ready for integration.
 </p>
 
-<p>Supported file format: <strong>.dae</strong> (max size: 20MB)</p>
+<p>Supported file format: <strong>.dae</strong> (max size: 100MB)</p>
 
 <form id="uploadForm" class="ikfast-form" onsubmit="event.preventDefault(); uploadFile();">
   <label for="fileInput"><strong>Select or drop a robot model (.dae):</strong></label>
@@ -114,15 +114,12 @@ giscus_comments: true
 </p>
 
 <script>
-const GATEWAY = "https://website-services-gateway-8tydod4q.ew.gateway.dev";
-const API_KEY = "AIzaSyBAJ-PR0czip01hgVbP1DNB0jnmzPA20OA";
-
 async function uploadFile() {
   const file = document.getElementById("fileInput").files[0];
   const responseEl = document.getElementById("ikfast-link-info");
 
   if (!file) return alert("Please select a file.");
-  if (file.size > 20 * 1024 * 1024) return alert("File size must be under 20MB.");
+  if (file.size > 100 * 1024 * 1024) return alert("File size must be under 100MB.");
   if (!file.name.toLowerCase().endsWith(".dae")) return alert("Only .dae files are supported.");
 
   document.getElementById("ikfast-results").style.display = "block";
@@ -132,7 +129,7 @@ async function uploadFile() {
   formData.append("file", file);
 
   try {
-    const res = await fetch(`${GATEWAY}/robot_link_info?key=${API_KEY}`, {
+    const res = await fetch("https://robot-link-info-692118822266.europe-west1.run.app/robot_link_info", {
       method: "POST",
       body: formData
     });
@@ -171,7 +168,7 @@ async function generateSolver() {
   formData.append("freeindices", document.getElementById("freeindices").value);
 
   try {
-    const res = await fetch(`${GATEWAY}/generate_solver?key=${API_KEY}`, {
+    const res = await fetch("https://ikfast-solver-692118822266.europe-west1.run.app/generate_solver", {
       method: "POST",
       body: formData
     });

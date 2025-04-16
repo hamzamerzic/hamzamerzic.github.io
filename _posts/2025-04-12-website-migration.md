@@ -55,12 +55,16 @@ For nostalgia, I decided to keep a little album of what the old site looked like
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   }
 
-.swiper-button-prev {
-    color: var(--global-theme-color);
+.swiper-button-prev,
+.swiper-button-next {
+  color: var(--global-theme-color);
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
 }
 
-.swiper-button-next {
-    color: var(--global-theme-color);
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+  opacity: 1;
 }
 
 .swiper-pagination-bullet {
