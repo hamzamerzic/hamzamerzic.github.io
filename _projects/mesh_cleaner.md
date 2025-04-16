@@ -61,40 +61,37 @@ giscus_comments: true
 </p>
 
 <script>
+const GATEWAY_URL = "https://website-services-gateway-8tydod4q.ew.gateway.dev/mesh_cleaner";
+const API_KEY = "AIzaSyBAJ-PR0czip01hgVbP1DNB0jnmzPA20OA";
+
 document.addEventListener("DOMContentLoaded", () => {
   const dropArea = document.getElementById("dropArea");
   const fileInput = document.getElementById("fileInput");
   const dropText = document.getElementById("dropText");
 
   const updateDropText = () => {
-    if (fileInput.files.length > 0) {
-      dropText.textContent = `📁 Selected: ${fileInput.files[0].name}`;
-    } else {
-      dropText.textContent = "📂 Drop file here or click to browse";
-    }
+    dropText.textContent = fileInput.files.length > 0
+      ? `📁 Selected: ${fileInput.files[0].name}`
+      : "📂 Drop file here or click to browse";
   };
 
   dropArea.addEventListener("click", () => fileInput.click());
-
   ["dragenter", "dragover"].forEach(event =>
     dropArea.addEventListener(event, e => {
       e.preventDefault();
       dropArea.classList.add("highlight");
     })
   );
-
   ["dragleave", "drop"].forEach(event =>
     dropArea.addEventListener(event, e => {
       e.preventDefault();
       dropArea.classList.remove("highlight");
     })
   );
-
   dropArea.addEventListener("drop", e => {
     fileInput.files = e.dataTransfer.files;
     updateDropText();
   });
-
   fileInput.addEventListener("change", updateDropText);
 });
 
@@ -103,6 +100,7 @@ async function uploadFile() {
   const mass = document.getElementById("massInput").value;
   const saveNormals = document.getElementById("saveNormals").checked;
   const useConvexHull = document.getElementById("useConvexHull").checked;
+
   const responseEl = document.getElementById("response");
   const linkEl = document.getElementById("downloadLink");
   const viewLinkEl = document.getElementById("view3DLink");
@@ -123,16 +121,17 @@ async function uploadFile() {
   formData.append("save_normals", saveNormals);
   formData.append("use_convex_hull", useConvexHull);
 
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 30000);
-
   try {
-    const res = await fetch("https://mesh-cleaner-692118822266.europe-west1.run.app/upload", {
+    const res = await fetch(`${GATEWAY_URL}?key=${API_KEY}`, {
       method: "POST",
-      body: formData,
-      signal: controller.signal
+      body: formData
     });
-    clearTimeout(timeoutId);
+
+    if (res.status === 429) {
+      responseEl.textContent = "🚫 Rate limit hit. Please wait and try again.";
+      return;
+    }
+
     const data = await res.json();
 
     if (!res.ok) {
@@ -143,14 +142,14 @@ async function uploadFile() {
     responseEl.textContent = data.metrics;
     usageTip.style.display = "block";
 
-    const cleanedMeshURL = `https://mesh-cleaner-692118822266.europe-west1.run.app${data.download_url}`;
+    const cleanedMeshURL = `${GATEWAY_URL.replace("/mesh_cleaner", "")}${data.download_url}`;
     linkEl.href = cleanedMeshURL;
     linkEl.style.display = "inline";
 
     viewLinkEl.href = `/3d-viz/?file=${encodeURIComponent(cleanedMeshURL)}`;
     viewLinkEl.style.display = "inline";
   } catch (err) {
-    responseEl.textContent = "❌ Upload failed: " + (err.name === "AbortError" ? "Timeout" : err.message);
+    responseEl.textContent = "❌ Upload failed: " + err.message;
   }
 }
 </script>

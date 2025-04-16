@@ -114,6 +114,9 @@ giscus_comments: true
 </p>
 
 <script>
+const GATEWAY = "https://website-services-gateway-8tydod4q.ew.gateway.dev";
+const API_KEY = "AIzaSyBAJ-PR0czip01hgVbP1DNB0jnmzPA20OA";
+
 async function uploadFile() {
   const file = document.getElementById("fileInput").files[0];
   const responseEl = document.getElementById("ikfast-link-info");
@@ -129,10 +132,15 @@ async function uploadFile() {
   formData.append("file", file);
 
   try {
-    const res = await fetch("https://robot-link-info-692118822266.europe-west1.run.app/robot_link_info", {
+    const res = await fetch(`${GATEWAY}/robot_link_info?key=${API_KEY}`, {
       method: "POST",
       body: formData
     });
+
+    if (res.status === 429) {
+      responseEl.textContent = "🚫 Rate limit hit. Please wait and try again shortly.";
+      return;
+    }
 
     const text = await res.text();
     responseEl.textContent = res.ok ? text : "❌ Error: " + text;
@@ -163,10 +171,15 @@ async function generateSolver() {
   formData.append("freeindices", document.getElementById("freeindices").value);
 
   try {
-    const res = await fetch("https://ikfast-solver-692118822266.europe-west1.run.app/generate_solver", {
+    const res = await fetch(`${GATEWAY}/generate_solver?key=${API_KEY}`, {
       method: "POST",
       body: formData
     });
+
+    if (res.status === 429) {
+      solverLogEl.textContent = "🚫 Rate limit hit. Please try again later.";
+      return;
+    }
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder("utf-8");
