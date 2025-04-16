@@ -52,16 +52,16 @@ giscus_comments: true
     </p>
 
     <form id="ikfastForm" class="ikfast-form" onsubmit="event.preventDefault(); generateSolver();">
-      <label for="baselink"><strong>Base link index:</strong></label>
+      <label for="baselink">Base link index:</label>
       <input type="text" id="baselink" required />
 
-      <label for="eelink"><strong>End effector link index:</strong></label>
+      <label for="eelink">End effector link index:</label>
       <input type="text" id="eelink" required />
 
-      <label for="freeindices"><strong>Free indices (comma-separated):</strong></label>
+      <label for="freeindices">Free indices (comma-separated):</label>
       <input type="text" id="freeindices" placeholder="e.g. 0,3,5" />
 
-      <label for="solver"><strong>Solver type:</strong></label>
+      <label for="solver">Solver type:</label>
       <select id="solver" required>
         <option value="transform6d">Transform6D</option>
         <option value="rotation3d">Rotation3D</option>
@@ -77,10 +77,8 @@ giscus_comments: true
         <option value="translationzaxisangle4d">TranslationZAxisAngle4D</option>
       </select>
 
-      <br><br>
       <button class="ikfast-button" type="submit">⚙️ Generate Solver</button>
     </form>
-
   </div>
 
   <div id="ikfast-solver-output" style="display:none;">
@@ -94,7 +92,7 @@ giscus_comments: true
 <details style="margin-top: 2em;">
   <summary><strong>🐟 Prefer to run it yourself? Click here to learn to fish:</strong></summary>
   <p style="margin-top: 1em;">
-    To try it locally, first <strong>download the example file above</strong> (or use your own). Then run this command in your terminal:
+    To try it locally, first <strong>download the example file above</strong> (or use your own). Then run this command in your terminal (assuming you have <a href="https://www.docker.com/">Docker</a> set up):
   </p>
   <pre class="ikfast-pre">docker run --rm \\
   -v $(pwd):/data \\
@@ -109,7 +107,7 @@ giscus_comments: true
 </details>
 
 <p style="margin-top: 2em;">
-  ✨ This tool was <a href="https://hamzamerzic.info/blog/2025/website-migration/">modernized</a> from my earlier WordPress setup.<br />
+  ✨ This tool was <a href="https://hamzamerzic.info/blog/2025/website-migration/">modernized</a> from my earlier WordPress website.<br />
   If you notice any regressions or bugs, please reach out or comment below—I’d love to hear from you.
 </p>
 
@@ -134,11 +132,6 @@ async function uploadFile() {
       body: formData
     });
 
-    if (res.status === 429) {
-      responseEl.textContent = "🚫 Rate limit hit. Please wait and try again shortly.";
-      return;
-    }
-
     const text = await res.text();
     responseEl.textContent = res.ok ? text : "❌ Error: " + text;
 
@@ -151,6 +144,13 @@ async function uploadFile() {
 }
 
 async function generateSolver() {
+  const baselink = document.getElementById("baselink").value.trim();
+  const eelink = document.getElementById("eelink").value.trim();
+  if (baselink === "" || eelink === "") {
+    alert("Please provide both base link and end effector link indices.");
+    return;
+  }
+
   const solverLogEl = document.getElementById("ikfast-solver-log");
   const downloadLink = document.getElementById("downloadSolverLink");
   const solverOutputBlock = document.getElementById("ikfast-solver-output");
@@ -163,8 +163,8 @@ async function generateSolver() {
   const formData = new FormData();
   formData.append("file", file);
   formData.append("solver", document.getElementById("solver").value);
-  formData.append("baselink", document.getElementById("baselink").value);
-  formData.append("eelink", document.getElementById("eelink").value);
+  formData.append("baselink", baselink);
+  formData.append("eelink", eelink);
   formData.append("freeindices", document.getElementById("freeindices").value);
 
   try {
@@ -172,11 +172,6 @@ async function generateSolver() {
       method: "POST",
       body: formData
     });
-
-    if (res.status === 429) {
-      solverLogEl.textContent = "🚫 Rate limit hit. Please try again later.";
-      return;
-    }
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder("utf-8");
@@ -262,12 +257,17 @@ document.addEventListener("DOMContentLoaded", () => {
   max-width: 500px;
 }
 
+.ikfast-form label {
+  margin-top: 1em;
+  display: block;
+  font-weight: bold;
+}
+
 .ikfast-form input,
-.ikfast-form select,
-.ikfast-button {
+.ikfast-form select {
   font-size: 1em;
   padding: 0.5em;
-  margin-top: 0.4em;
+  margin-bottom: 0.8em;
   width: 100%;
   box-sizing: border-box;
   border: 1px solid #ccc;
@@ -282,6 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
   border-radius: 8px;
   transition: background 0.2s ease;
   margin-top: 1em;
+  padding: 0.6em;
 }
 
 .ikfast-button:hover {

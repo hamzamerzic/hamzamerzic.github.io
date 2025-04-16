@@ -3,7 +3,7 @@ layout: post
 title: Migration successful!
 date: 2025-04-12 15:00:00
 description: Goodbye Wordpress!
-thumbnail: assets/img/old-site-blog.png
+thumbnail: assets/img/eagle-nebula.jpg
 categories: general
 giscus_comments: true
 related_posts: false
