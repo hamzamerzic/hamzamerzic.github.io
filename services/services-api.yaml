@@ -52,10 +52,26 @@ paths:
     post:
       operationId: meshCleaner
       x-google-backend:
-        address: https://mesh-cleaner-692118822266.europe-west1.run.app/clean_mesh
+        address: https://mesh-cleaner-692118822266.europe-west1.run.app/upload
       x-google-quota:
         metricCosts:
           request_count: 1
       responses:
         "200":
           description: "Mesh cleaned"
+  /mesh_cleaner/download/{filename}:
+    get:
+      operationId: downloadFile
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: https://mesh-cleaner-692118822266.europe-west1.run.app/download/{filename}
+      x-google-quota:
+        metricCosts:
+          request_count: 1
+      responses:
+        "200":
+          description: "Returns the cleaned mesh file"
