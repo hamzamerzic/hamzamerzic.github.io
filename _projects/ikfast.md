@@ -79,6 +79,7 @@ giscus_comments: true
 
       <button class="ikfast-button" type="submit">⚙️ Generate Solver</button>
     </form>
+
   </div>
 
   <div id="ikfast-solver-output" style="display:none;">
