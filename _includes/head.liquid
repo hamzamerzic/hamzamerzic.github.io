@@ -1,32 +1,3 @@
-<!-- preload Bootstrap CSS -->
-<link
-  rel="preload"
-  href="{{ '/assets/css/bootstrap.min.css' | relative_url | bust_file_cache }}"
-  as="style"
-  onload="this.rel='stylesheet'"
->
-<noscript>
-  <link rel="stylesheet" href="{{ '/assets/css/bootstrap.min.css' | relative_url | bust_file_cache }}">
-</noscript>
-
-<!-- preload MDB CSS -->
-<link
-  rel="preload"
-  href="{{ site.third_party_libraries.mdb.url.css }}"
-  as="style"
-  onload="this.rel='stylesheet'"
-  integrity="{{ site.third_party_libraries.mdb.integrity.css }}"
-  crossorigin="anonymous"
->
-<noscript>
-  <link
-    rel="stylesheet"
-    href="{{ site.third_party_libraries.mdb.url.css }}"
-    integrity="{{ site.third_party_libraries.mdb.integrity.css }}"
-    crossorigin="anonymous"
-  >
-</noscript>
-
 <!-- preload Google Fonts -->
 <link
   rel="preload"
@@ -43,26 +14,6 @@
   >
 </noscript>
 
-<!-- preload main.css -->
-<link
-  rel="preload"
-  href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}"
-  as="style"
-  onload="this.rel='stylesheet'"
->
-<noscript>
-  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
-</noscript>
-
-<!-- preload profile picture for LCP -->
-<link
-  rel="preload"
-  as="image"
-  href="https://hamzamerzic.info/assets/img/prof_pic-800.webp"
-  imagesrcset="https://hamzamerzic.info/assets/img/prof_pic-800.webp 800w"
-  imagesizes="100vw"
->
-
 <!-- reserve space for navbar while fonts load -->
 <style>
   .navbar-nav.ml-auto.flex-nowrap {
@@ -75,6 +26,15 @@
 
 <!-- Metadata, OpenGraph and Schema.org -->
 {% include metadata.liquid %}
+
+<!-- Bootstrap & MDB -->
+<link rel="stylesheet" href="{{ '/assets/css/bootstrap.min.css' | relative_url | bust_file_cache }}">
+<link
+  rel="stylesheet"
+  href="{{ site.third_party_libraries.mdb.url.css }}"
+  integrity="{{ site.third_party_libraries.mdb.integrity.css }}"
+  crossorigin="anonymous"
+>
 
 {% if page.pretty_table %}
   <!-- Bootstrap Table -->
@@ -96,6 +56,7 @@
   defer
   rel="stylesheet"
   href="{{ '/assets/css/jekyll-pygments-themes-github.css' | relative_url | bust_file_cache }}"
+  media=""
   id="highlight_theme_light"
 >
 
@@ -103,6 +64,8 @@
   <!-- Sidebar Table of Contents -->
   <link defer href="{{ '/assets/css/bootstrap-toc.min.css' | relative_url | bust_file_cache }}" rel="stylesheet">
 {% endif %}
+
+<!-- Styles -->
 
 {% if page.pseudocode %}
   <!-- pseudocode -->
@@ -123,7 +86,7 @@
 {% elsif site.icon != blank %}
   <link rel="shortcut icon" href="{{ site.icon | prepend: '/assets/img/' | relative_url | bust_file_cache}}">
 {% endif %}
-
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url | bust_css_cache }}">
 <link rel="canonical" href="{{ page.url | replace:'index.html','' | absolute_url }}">
 
 <!-- Dark Mode -->
@@ -153,7 +116,7 @@
 {% endif %}
 
 {% if page.code_diff %}
-  <!-- diff2html themes -->
+  <!-- diff2html -->
   <link
     defer
     rel="stylesheet"
@@ -202,7 +165,12 @@
   {% endif %}
   {% if page.images.photoswipe %}
     <!-- Photoswipe -->
-    <link defer rel="stylesheet" href="{{ site.third_party_libraries.photoswipe.url.css }}" crossorigin="anonymous">
+    <link
+      defer
+      rel="stylesheet"
+      href="{{ site.third_party_libraries.photoswipe.url.css }}"
+      crossorigin="anonymous"
+    >
   {% endif %}
   {% if page.images.slider %}
     <!-- Image slider -->
@@ -237,5 +205,5 @@
 {% endif %}
 
 {% if page.tikzjax %}
-  <link defer rel="stylesheet" href="https://tikzjax.com/v1/fonts.css">
+  <link defer rel="stylesheet" type="text/css" href="https://tikzjax.com/v1/fonts.css">
 {% endif %}
