@@ -1,3 +1,29 @@
+<!-- preload Google Fonts -->
+<link
+  rel="preload"
+  href="{{ site.third_party_libraries.google_fonts.url.fonts }}"
+  as="style"
+  onload="this.rel='stylesheet'"
+  crossorigin="anonymous"
+>
+<noscript>
+  <link
+    rel="stylesheet"
+    href="{{ site.third_party_libraries.google_fonts.url.fonts }}"
+    crossorigin="anonymous"
+  >
+</noscript>
+
+<!-- reserve space for navbar while fonts load -->
+<style>
+  .navbar-nav.ml-auto.flex-nowrap {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    min-width: 340px;
+  }
+</style>
+
 <!-- Metadata, OpenGraph and Schema.org -->
 {% include metadata.liquid %}
 
@@ -24,12 +50,6 @@
 <!-- Fonts & Icons -->
 <link defer rel="stylesheet" href="{{ '/assets/css/academicons.min.css' | relative_url | bust_file_cache }}">
 <link defer rel="stylesheet" href="{{ '/assets/css/scholar-icons.css' | relative_url | bust_file_cache }}">
-<link
-  defer
-  rel="stylesheet"
-  type="text/css"
-  href="{{ site.third_party_libraries.google_fonts.url.fonts }}"
->
 
 <!-- Code Syntax Highlighting -->
 <link
