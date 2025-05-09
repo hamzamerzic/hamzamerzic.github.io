@@ -179,7 +179,7 @@ pagination:
 </div>
 
   <div class="col-sm-3">
-    <a href="{{ post.url | relative_url }}" class="thumbnail-link">
+    <a href="{{ post.url | relative_url }}" class="thumbnail-link d-block h-100">
       <img
         class="card-img"
         src="{{ post.thumbnail | relative_url }}"
