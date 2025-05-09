@@ -160,12 +160,6 @@ html[data-theme-setting="light"] {
   }
 }
 
-// light-mode shadow
 .thumbnail-link img {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-// dark-mode shadow
-html[data-theme="dark"] .thumbnail-link img {
-  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15);
+  box-shadow: -2px 2px 12px rgba(0, 0, 0, 0.5);
 }
