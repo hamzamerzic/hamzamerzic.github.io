@@ -145,3 +145,27 @@ html[data-theme-setting="light"] {
     display: block;
   }
 }
+
+/* Thumbnail links with adaptive shadow */
+.thumbnail-link {
+  display: block;
+
+  img {
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+}
+
+// light-mode shadow
+.thumbnail-link img {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+// dark-mode shadow
+html[data-theme="dark"] .thumbnail-link img {
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15);
+}
