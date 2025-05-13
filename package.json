@@ -1,6 +1,15 @@
 {
+  "scripts": {
+    "build:css": "postcss _site/assets/css/main.css --config . --replace && postcss _site/assets/css/bootstrap.min.css --config . --replace",
+    "build": "jekyll build && npm run build:css"
+  },
   "devDependencies": {
     "@shopify/prettier-plugin-liquid": "^1.9.0",
-    "prettier": "3.1.1"
+    "autoprefixer": "^10.4.21",
+    "glob-all": "^3.3.1",
+    "postcss": "^8.5.3",
+    "postcss-cli": "^11.0.1",
+    "prettier": "3.1.1",
+    "purgecss": "^7.0.2"
   }
 }
