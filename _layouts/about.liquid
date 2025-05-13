@@ -17,7 +17,7 @@ layout: default
 
     <div class="profile-wrapper">
       <!-- Image and social section -->
-      <div class="profile float-left">
+      <div class="profile">
         <div class="image-wrapper">
           {% if page.profile.image %}
             {% assign profile_image_path = page.profile.image | prepend: 'assets/img/' %}
@@ -86,7 +86,7 @@ layout: default
     flex: 0 0 auto;
     max-width: 30%;
     text-align: center;
-    gap: 2rem;
+    margin-right: 1rem;
   }
 
   .image-wrapper {
@@ -119,6 +119,7 @@ layout: default
   .text-container {
     flex: 1;
     margin-left: 1rem;
+    margin-right: 1rem;
     padding-left: 2rem;
     border-left: 1px solid var(--global-divider-color);
   }
