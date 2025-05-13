@@ -371,7 +371,8 @@ enable_openpanel_analytics: false # enables Openpanel analytics (https://openpan
 enable_google_verification: true # enables google site verification
 enable_bing_verification: false # enables bing site verification
 enable_masonry: true # enables automatic project cards arrangement
-enable_math: true # enables math typesetting (uses MathJax)
+# Below was deleted and changed to page.has_math (instead of site.enable_math) to avoid loading MathJax everywhere
+# enable_math: true # enables math typesetting (uses MathJax)
 enable_tooltips: false # enables automatic tooltip links generated for each section titles on pages and posts
 enable_darkmode: true # enables switching between light/dark modes
 enable_navbar_social: false # enables displaying social links in the navbar on the about page

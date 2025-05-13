@@ -1,13 +1,15 @@
 <!-- jQuery -->
 <script
+  defer
   src="{{ site.third_party_libraries.jquery.url.js }}"
   integrity="{{ site.third_party_libraries.jquery.integrity.js }}"
   crossorigin="anonymous"
 ></script>
 
 <!-- Bootsrap & MDB scripts -->
-<script src="{{ '/assets/js/bootstrap.bundle.min.js' | relative_url }}"></script>
+<script defer src="{{ '/assets/js/bootstrap.bundle.min.js' | relative_url }}"></script>
 <script
+  defer
   src="{{ site.third_party_libraries.mdb.url.js }}"
   integrity="{{ site.third_party_libraries.mdb.integrity.js }}"
   crossorigin="anonymous"
@@ -195,7 +197,7 @@
   <script async src="https://badge.dimensions.ai/badge.js"></script>
 {% endif %}
 
-{% if site.enable_math %}
+{% if page.has_math %}
   <!-- MathJax -->
   <script
     defer
