@@ -4,6 +4,7 @@
     "build": "jekyll build && npm run build:css"
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^7.0.2",
     "@shopify/prettier-plugin-liquid": "^1.9.0",
     "autoprefixer": "^10.4.21",
     "glob-all": "^3.3.1",
