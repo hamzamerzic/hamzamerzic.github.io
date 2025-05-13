@@ -5,7 +5,7 @@ description: Clean and process 3D mesh files for use in physics-based simulation
 img: assets/img/objects.png
 permalink: /mesh_cleaner/
 importance: 1
-category: fun
+category: robotics
 giscus_comments: true
 ---
 

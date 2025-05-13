@@ -5,7 +5,7 @@ description: Generate analytic Inverse Kinematics solvers based on OpenRAVE's IK
 img: assets/img/inverse_kinematics.png
 permalink: /ikfast/
 importance: 3
-category: fun
+category: robotics
 giscus_comments: true
 ---
 

@@ -26,7 +26,10 @@ layout: default
             {% else %}
               {% assign profile_image_class = 'img-fluid z-depth-1 rounded' %}
             {% endif %}
-            {% capture sizes %}(min-width: {{  site.max_width }}) }}) {{ site.max_width | minus: 30 | times: 0.3}}px, (min-width: 576px) 30vw, 95vw{% endcapture %}
+            {%- assign max_width_val = site.max_width | default: '930px' | remove: 'px' | plus: 0 -%}
+            {%- assign profile_img_desktop_width = max_width_val | minus: 30 | times: 0.3 | round -%}
+            {%- comment %} For mobile (max-width: 575px), profile div is 80vw {%- endcomment %}
+            {% capture sizes %}(min-width: {{ max_width_val }}px) {{ profile_img_desktop_width }}px, (min-width: 576px) 30vw, 80vw{% endcapture %}
             {% include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=page.profile.image cache_bust=true width="480" height="480" %}
           {% endif %}
         </div>
