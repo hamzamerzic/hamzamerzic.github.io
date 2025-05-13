@@ -5,7 +5,7 @@ description: Visualize 3D models and robots directly in your browser
 img: assets/img/ur5.png
 permalink: /3d-viz/
 importance: 2
-category: fun
+category: robotics
 ---
 
 <p>Upload a 3D model file (<code>.dae</code>, <code>.obj</code>, <code>.stl</code>) to visualize it, or drag and drop it into the viewer below.</p>

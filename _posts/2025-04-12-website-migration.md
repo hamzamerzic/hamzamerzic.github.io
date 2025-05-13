@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Migration Successful!
+title: Migration successful!
 date: 2025-04-12 15:00:00
 description: Goodbye WordPress!
 thumbnail: assets/img/eagle-nebula.jpg
 categories: general
-giscus_comments: true
+giscus_comments: false
 related_posts: false
 ---
 
@@ -15,21 +15,21 @@ So I Dockerized those tools and exposed them via [WordPress](https://wordpress.o
 
 Fast forward eight years.
 
-The site still works, and in hindsight, using Docker was a great decision. I was surprised to find that over fifty people a month still use these tools.
+The site still works, and, to my surprise, over fifty people a month still use these tools.
 
-I knew it was time to give the site some attention—but I didn’t want to disrupt existing users.
+I knew it was time to give the site some attention, but I didn’t want to disrupt existing users.
 
-What started as a quick cleanup turned into a GCP rabbit hole. Since each tool was already containerized and stateless, they fit perfectly on [Google Cloud Run](https://cloud.google.com/run). I cleaned up the code, split the services, and redeployed them on infrastructure that’s more stable, scalable, and free under Cloud Run’s generous tier. To [protect my budget](https://gist.github.com/hamzamerzic/8b834e56d2dc6a8f49bcb4047dd819df), I also set up a guardrail that stops serving once my monthly budget is exceeded.
+What started as a quick cleanup turned into a [Google Cloud](https://cloud.google.com/) rabbit hole. In hindsight, using Docker was a great decision back then. Since each tool was already containerized and stateless, they fit perfectly on [Google Cloud Run](https://cloud.google.com/run). I cleaned up the code, split the services, and redeployed them on infrastructure that’s more stable, scalable, and free under Cloud Run’s generous tier. To [protect my budget](https://gist.github.com/hamzamerzic/8b834e56d2dc6a8f49bcb4047dd819df), I also set up a guardrail that stops serving if my monthly budget is reached.
 
-The original toolbox lives on—now cleaner, faster, and more future-proof.
+The original toolbox lives on, now cleaner, faster, and more future-proof.
 
 Find the tools under [Projects](https://hamzamerzic.info/projects/):
 
-- 🔧 [Mesh Cleaner](https://hamzamerzic.info/mesh_cleaner/)  
+- 🔧 [Mesh Cleaner](https://hamzamerzic.info/mesh_cleaner/)
   Clean and process 3D mesh files for physics-based simulations.
-- 🧿 [Model Viewer](https://hamzamerzic.info/3d-viz/)  
+- 🧿 [Model Viewer](https://hamzamerzic.info/3d-viz/)
   Visualize 3D models and robots directly in your browser.
-- 🤖 [IKFast Generator](https://hamzamerzic.info/ikfast/)  
+- 🤖 [IKFast Generator](https://hamzamerzic.info/ikfast/)
   Generate analytic inverse-kinematics solvers from `.dae` files using OpenRAVE’s IKFast.
 
 These tools were invaluable during my master’s—especially computing inertial properties for dozens of objects and cleaning up meshes for simulations. Later, during my research assistantship, I relied on the tools for inverse-kinematics work on robot manipulators. Fast, reliable tools like these really made a difference.
