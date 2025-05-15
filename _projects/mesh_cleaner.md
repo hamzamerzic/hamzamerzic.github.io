@@ -13,7 +13,7 @@ giscus_comments: true
   Mesh Cleaner is a tool that cleans 3D mesh files and computes their geometric properties such as volume, center of mass, and moments of inertia. The idea behind this project was to automate the tedious process of preparing 3D models for use in Gazebo—as explained in the <a href="https://classic.gazebosim.org/tutorials?tut=inertia" target="_blank">classic Gazebo tutorial</a>.
 </p>
 
-<p>Supported file formats: <strong>.stl, .obj, .dae</strong> (max size: 32MB)</p>
+<p>Supported file formats: <strong>.stl, .obj, .dae</strong> (max size: 100MB)</p>
 
 <form id="uploadForm" onsubmit="event.preventDefault(); uploadFile();">
   <label for="fileInput"><strong>Select or drop a 3D model:</strong></label>

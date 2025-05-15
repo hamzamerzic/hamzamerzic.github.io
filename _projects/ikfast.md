@@ -85,7 +85,7 @@ giscus_comments: true
   <div id="ikfast-solver-output" style="display:none;">
     <hr />
     <p><strong>Solver Logs:</strong></p>
-    <pre id="ikfast-solver-log" class="ikfast-pre"></pre>
+    <pre id="ikfast-solver-log" class="ikfast-pre">Placeholder.</pre>
     <a id="downloadSolverLink" style="display:none;" download>⬇️ Download Generated Solver</a>
   </div>
 </div>
