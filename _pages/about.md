@@ -20,4 +20,4 @@ Along the way, I worked as a teaching and research assistant and spent time at [
 
 I'm passionate about strengthening the scientific community in Bosnia and Herzegovina and the broader region. I co-founded the [Association for the Advancement of Science and Technology (ANNT)](https://annt.ba/) to help connect and mobilize Bosnian talent worldwid.
 
-I'm also part of the organizing committee for the [Eastern European Machine Learning Summer School](https://www.eeml.eu) (EEML 2025) in Sarajevo.
+I'm also co-organizing the [Eastern European Machine Learning Summer School](https://www.eeml.eu) (EEML 2025) in Sarajevo.
