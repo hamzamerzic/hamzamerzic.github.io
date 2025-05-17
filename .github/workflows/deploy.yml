@@ -76,13 +76,6 @@ jobs:
         with:
           ruby-version: "3.3.5"
           bundler-cache: true
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-          cache: "npm"
-      - name: Install npm dependencies
-        run: npm install
       - name: Setup Python 🐍
         uses: actions/setup-python@v5
         with:
@@ -101,8 +94,10 @@ jobs:
           pip3 install --upgrade nbconvert
           export JEKYLL_ENV=production
           bundle exec jekyll build
-      - name: Optimize CSS (PurgeCSS & Autoprefixer) 🧹
-        run: npm run build:css
+      - name: Purge unused CSS 🧹
+        run: |
+          npm install -g purgecss
+          purgecss -c purgecss.config.js
       - name: Deploy 🚀
         if: github.event_name != 'pull_request'
         uses: JamesIves/github-pages-deploy-action@v4
