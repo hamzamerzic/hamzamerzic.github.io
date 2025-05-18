@@ -42,12 +42,14 @@ async function uploadFile() {
 }
 
 async function generateSolver() {
-  const solverLogEl = document.getElementById("ikfast-solver-log");
   const downloadLink = document.getElementById("downloadSolverLink");
   const solverOutputBlock = document.getElementById("ikfast-solver-output");
-
   solverOutputBlock.style.display = "block";
-  solverLogEl.textContent = "";
+
+  const solverLogEl = document.getElementById("ikfast-solver-log");
+  if (solverLogEl) {
+    solverLogEl.textContent = "";
+  }
   downloadLink.style.display = "none";
 
   const file = document.getElementById("fileInput").files[0];
