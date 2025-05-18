@@ -13,7 +13,7 @@ giscus_comments: true
   <strong>IKFast Generator</strong> is a tool that creates blazing-fast analytic inverse kinematics solvers for your robot, powered by <a href="http://openrave.org/docs/latest_stable/openravepy/ikfast/" target="_blank">OpenRAVE's IKFast</a>. Simply upload a <code>.dae</code> file of your robot, extract its kinematic structure, and generate a C++ solver ready for integration.
 </p>
 
-<p>Supported file format: <strong>.dae</strong> (max size: 100MB)</p>
+<p>Supported file format: <strong>.dae</strong> (max size: 32MB)</p>
 
 <form id="uploadForm" class="ikfast-form" onsubmit="event.preventDefault(); uploadFile();">
   <label for="fileInput"><strong>Select or drop a robot model (.dae):</strong></label>
@@ -85,6 +85,7 @@ giscus_comments: true
   <div id="ikfast-solver-output" style="display:none;">
     <hr />
     <p><strong>Solver Logs:</strong></p>
+    <p><em>If everything goes correctly, the download link will appear below the logs.</em></p>
     <pre id="ikfast-solver-log" class="ikfast-pre">Placeholder.</pre>
     <a id="downloadSolverLink" style="display:none;" download>⬇️ Download Generated Solver</a>
   </div>
@@ -118,7 +119,7 @@ async function uploadFile() {
   const responseEl = document.getElementById("ikfast-link-info");
 
   if (!file) return alert("Please select a file.");
-  if (file.size > 100 * 1024 * 1024) return alert("File size must be under 100MB.");
+  if (file.size > 32 * 1024 * 1024) return alert("File size must be under 32MB.");
   if (!file.name.toLowerCase().endsWith(".dae")) return alert("Only .dae files are supported.");
 
   document.getElementById("ikfast-results").style.display = "block";
@@ -156,9 +157,9 @@ async function generateSolver() {
   const downloadLink = document.getElementById("downloadSolverLink");
   const solverOutputBlock = document.getElementById("ikfast-solver-output");
 
-  solverOutputBlock.style.display = "block";
   solverLogEl.textContent = "";
   downloadLink.style.display = "none";
+  solverOutputBlock.style.display = "block";
 
   const file = document.getElementById("fileInput").files[0];
   const formData = new FormData();
