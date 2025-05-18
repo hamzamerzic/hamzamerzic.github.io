@@ -30,11 +30,11 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-migration-successful",
+        },{id: "post-migration-successful-goodbye-wordpress",
         
-          title: "Migration successful!",
+          title: "Migration Successful: Goodbye, WordPress!",
         
-        description: "Goodbye WordPress!",
+        description: "journey to modernize an old website",
         section: "Posts",
         handler: () => {
           
