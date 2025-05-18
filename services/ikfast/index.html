@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>IKFast Generator</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 2em;
+      }
+      pre {
+        background: #111;
+        color: #0f0;
+        padding: 1em;
+        height: 300px;
+        overflow-y: scroll;
+      }
+      input,
+      select,
+      button {
+        margin: 0.5em 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>IKFast Generator</h2>
+    <form id="ikForm">
+      <input type="file" name="file" accept=".dae" required /><br />
+      Solver type:
+      <select name="solver">
+        <option value="Transform6D">Transform6D</option>
+        <option value="Rotation3D">Rotation3D</option>
+        <option value="Translation3D">Translation3D</option>
+        <!-- add others if needed --></select
+      ><br />
+      Base link: <input type="text" name="baselink" value="0" /><br />
+      End effector link: <input type="text" name="eelink" value="8" /><br />
+      Free indices (comma-separated): <input type="text" name="freeindices" /><br />
+      <button type="submit">Generate</button>
+    </form>
+
+    <h3>Logs</h3>
+    <pre id="logs"></pre>
+
+    <div id="download" style="display: none">
+      <h3>Download</h3>
+      <a id="downloadLink" href="#" download="ikfast_output.cpp">Download Solver</a>
+    </div>
+
+    <script>
+      const form = document.getElementById("ikForm");
+      const logs = document.getElementById("logs");
+      const downloadDiv = document.getElementById("download");
+      const downloadLink = document.getElementById("downloadLink");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        logs.textContent = "";
+        downloadDiv.style.display = "none";
+
+        const formData = new FormData(form);
+
+        const response = await fetch("http://localhost:8080/generate", {
+          method: "POST",
+          body: formData,
+        });
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder("utf-8");
+        let logBuffer = "";
+
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value);
+          logs.textContent += chunk;
+          logs.scrollTop = logs.scrollHeight;
+
+          logBuffer += chunk;
+
+          // Check if the log mentions a download path
+          const match = logBuffer.match(/\/download\/([a-zA-Z0-9_-]+)/);
+          if (match) {
+            const downloadPath = match[0];
+            downloadLink.href = "http://localhost:8080" + downloadPath;
+            downloadDiv.style.display = "block";
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

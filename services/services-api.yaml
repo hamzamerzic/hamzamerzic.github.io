@@ -1,0 +1,77 @@
+swagger: "2.0"
+info:
+  title: Website Services API
+  version: "1.0.0"
+host: website-services-api.endpoints.website-serving-453817.cloud.goog
+schemes:
+  - https
+securityDefinitions:
+  api_key:
+    type: "apiKey"
+    name: "key"
+    in: "query"
+security:
+  - api_key: []
+x-google-management:
+  metrics:
+    - name: "request_count"
+      displayName: "Request Count"
+      valueType: INT64
+      metricKind: DELTA
+  quota:
+    limits:
+      - name: "request-limit"
+        metric: "request_count"
+        unit: "1/min/{project}"
+        values:
+          STANDARD: 100
+paths:
+  /generate_solver:
+    post:
+      operationId: generateSolver
+      x-google-backend:
+        address: https://ikfast-solver-692118822266.europe-west1.run.app/generate_solver
+      x-google-quota:
+        metricCosts:
+          request_count: 1
+      responses:
+        "200":
+          description: "Solver generated"
+  /robot_link_info:
+    post:
+      operationId: robotLinkInfo
+      x-google-backend:
+        address: https://robot-link-info-692118822266.europe-west1.run.app/robot_link_info
+      x-google-quota:
+        metricCosts:
+          request_count: 1
+      responses:
+        "200":
+          description: "Robot link info processed"
+  /mesh_cleaner:
+    post:
+      operationId: meshCleaner
+      x-google-backend:
+        address: https://mesh-cleaner-692118822266.europe-west1.run.app/upload
+      x-google-quota:
+        metricCosts:
+          request_count: 1
+      responses:
+        "200":
+          description: "Mesh cleaned"
+  /mesh_cleaner/download/{filename}:
+    get:
+      operationId: downloadFile
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          type: string
+      x-google-backend:
+        address: https://mesh-cleaner-692118822266.europe-west1.run.app/download/{filename}
+      x-google-quota:
+        metricCosts:
+          request_count: 1
+      responses:
+        "200":
+          description: "Returns the cleaned mesh file"
