@@ -201,8 +201,6 @@ plugins:
   - jekyll-tabs
   - jekyll-terser
   - jekyll-toc
-  - jekyll-twitter-plugin
-  - jemoji
 
 # Sitemap settings
 defaults:
