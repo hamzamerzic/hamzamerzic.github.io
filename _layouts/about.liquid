@@ -1,14 +1,17 @@
 ---
 layout: default
 ---
-
 {% if page.profile.image %}
   {% assign img_path = page.profile.image | remove: '.jpg' | remove: '.jpeg' | remove: '.png' | remove: '.tiff' | remove: '.gif' %}
-  <link rel="preload" as="image" fetchpriority="high"
-        href="{{ 'assets/img/' | append: img_path | append: '-800.webp' | relative_url }}"
-        type="image/webp"
-        imagesrcset="{{ 'assets/img/' | append: img_path | append: '-480.webp' | relative_url }} 480w, {{ 'assets/img/' | append: img_path | append: '-800.webp' | relative_url }} 800w"
-        imagesizes="(max-width: 575px) 480px, 800px">
+  <link
+    rel="preload"
+    as="image"
+    fetchpriority="high"
+    href="{{ 'assets/img/' | append: img_path | append: '-800.webp' | relative_url }}"
+    type="image/webp"
+    imagesrcset="{{ 'assets/img/' | append: img_path | append: '-480.webp' | relative_url }} 480w, {{ 'assets/img/' | append: img_path | append: '-800.webp' | relative_url }} 800w"
+    imagesizes="(max-width: 575px) 480px, 800px"
+  >
 {% endif %}
 
 <div class="post">
@@ -39,7 +42,8 @@ layout: default
             {%- assign max_width_val = site.max_width | default: '930px' | remove: 'px' | plus: 0 -%}
             {%- assign profile_img_desktop_width = max_width_val | minus: 30 | times: 0.3 | round -%}
             {% capture sizes %}(min-width: {{ max_width_val }}px) {{ profile_img_desktop_width }}px, (min-width: 576px) 30vw, 80vw{% endcapture %}
-            {% include figure.liquid 
+            {%
+              include figure.liquid
               loading="eager"
               fetchpriority="high"
               path=profile_image_path
@@ -48,7 +52,8 @@ layout: default
               alt=page.profile.image
               cache_bust=true
               width="480"
-              height="480" %}
+              height="480"
+            %}
           {% endif %}
         </div>
 
