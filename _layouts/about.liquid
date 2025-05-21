@@ -1,6 +1,16 @@
 ---
 layout: default
 ---
+
+{% if page.profile.image %}
+  {% assign img_path = page.profile.image | remove: '.jpg' | remove: '.jpeg' | remove: '.png' | remove: '.tiff' | remove: '.gif' %}
+  <link rel="preload" as="image" fetchpriority="high"
+        href="{{ 'assets/img/' | append: img_path | append: '-800.webp' | relative_url }}"
+        type="image/webp"
+        imagesrcset="{{ 'assets/img/' | append: img_path | append: '-480.webp' | relative_url }} 480w, {{ 'assets/img/' | append: img_path | append: '-800.webp' | relative_url }} 800w"
+        imagesizes="(max-width: 575px) 480px, 800px">
+{% endif %}
+
 <div class="post">
   <header class="post-header">
     <!-- Mobile-only name -->
@@ -28,9 +38,17 @@ layout: default
             {% endif %}
             {%- assign max_width_val = site.max_width | default: '930px' | remove: 'px' | plus: 0 -%}
             {%- assign profile_img_desktop_width = max_width_val | minus: 30 | times: 0.3 | round -%}
-            {%- comment %} For mobile (max-width: 575px), profile div is 80vw {%- endcomment %}
             {% capture sizes %}(min-width: {{ max_width_val }}px) {{ profile_img_desktop_width }}px, (min-width: 576px) 30vw, 80vw{% endcapture %}
-            {% include figure.liquid loading="eager" path=profile_image_path class=profile_image_class sizes=sizes alt=page.profile.image cache_bust=true width="480" height="480" %}
+            {% include figure.liquid 
+              loading="eager"
+              fetchpriority="high"
+              path=profile_image_path
+              class=profile_image_class
+              sizes=sizes
+              alt=page.profile.image
+              cache_bust=true
+              width="480"
+              height="480" %}
           {% endif %}
         </div>
 
@@ -96,10 +114,6 @@ layout: default
     width: 100%;
   }
 
-  /* Scale icons based on container width:
-   * - For large screens (>575px): icons are 1/7 of image width (30% of max-width)
-   * - For small screens (<575px): icons are 1/7 of mobile image width (80vw)
-   */
   .social .contact-icons {
     display: flex;
     justify-content: center;
