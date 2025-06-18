@@ -10,7 +10,7 @@ giscus_comments: true
 ---
 
 <p>
-  <strong>IKFast Generator</strong> is a tool that creates blazing-fast analytic inverse kinematics solvers for your robot, powered by <a href="http://openrave.org/docs/latest_stable/openravepy/ikfast/" target="_blank">OpenRAVE's IKFast</a>. Simply upload a <code>.dae</code> file of your robot, extract its kinematic structure, and generate a C++ solver ready for integration.
+  <strong>IKFast Generator</strong> is a tool that creates blazing-fast analytic inverse kinematics solvers for your robot, powered by <a href="http://openrave.org/docs/latest_stable/openravepy/ikfast/" target="_blank">OpenRAVE's IKFast</a>. Simply upload a <code>.dae</code> file of your robot, extract its kinematic structure, and generate a C++ solver ready for integration. For a detailed explanation of inverse kinematics, you can refer to this great reference: <a href="https://roboticseabass.com/2024/06/30/how-do-robot-manipulators-move/" target="_blank">How Do Robot Manipulators Move?</a>
 </p>
 
 <p>Supported file format: <strong>.dae</strong> (max size: 32MB)</p>
