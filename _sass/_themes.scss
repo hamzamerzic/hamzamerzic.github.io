@@ -4,22 +4,31 @@
 
 @use "sass:color";
 
+/* === Base (Light Mode) === */
 :root {
-  color-scheme: light;
-  --global-bg-color: #{$white-color};
-  --global-code-bg-color: #{$code-bg-color-light};
+  color-scheme: light dark;
+
+  /* Text colors */
   --global-text-color: #{$black-color};
   --global-text-color-light: #{$grey-color};
+
+  /* Backgrounds */
+  --global-bg-color: #{$white-color};
+  --global-code-bg-color: #{$code-bg-color-light};
+  --global-card-bg-color: #{$white-color};
+  --global-footer-bg-color: #{$grey-color-dark};
+  --global-newsletter-bg-color: #{$white-color};
+
+  /* Accent colors */
   --global-theme-color: #{$purple-color};
   --global-hover-color: #{$purple-color};
   --global-hover-text-color: #{$white-color};
-  --global-footer-bg-color: #{$grey-color-dark};
+
+  /* Misc UI colors */
   --global-footer-text-color: #{$grey-color-light};
   --global-footer-link-color: #{$white-color};
   --global-distill-app-color: #{$grey-color};
   --global-divider-color: rgba(0, 0, 0, 0.1);
-  --global-card-bg-color: #{$white-color};
-  --global-highlight-color: #{$red-color-dark};
   --global-back-to-top-bg-color: rgba(
     #{color.channel($black-color, "red", $space: rgb)},
     #{color.channel($black-color, "green", $space: rgb)},
@@ -27,9 +36,10 @@
     0.4
   );
   --global-back-to-top-text-color: #{$white-color};
-  --global-newsletter-bg-color: #{$white-color};
   --global-newsletter-text-color: #{$black-color};
+  --global-highlight-color: #{$red-color-dark};
 
+  /* Alert block colors (same for both themes) */
   --global-tip-block: #42b983;
   --global-tip-block-bg: #e2f5ec;
   --global-tip-block-text: #215d42;
@@ -43,22 +53,21 @@
   --global-danger-block-text: #600;
   --global-danger-block-title: #c00;
 
+  /* Light/Dark visibility defaults */
   #light-toggle-dark {
     display: none;
   }
-
   #light-toggle-light {
     display: none;
   }
-
   .only-light {
     display: block;
   }
-
   .only-dark {
     display: none;
   }
 
+  /* Back to top button */
   #back-to-top {
     color: var(--global-back-to-top-text-color);
     background: var(--global-back-to-top-bg-color);
@@ -70,15 +79,16 @@
   }
 }
 
+/* === Dark Mode === */
 html[data-theme="dark"] {
   color-scheme: dark;
+
   --global-bg-color: #{$grey-color-dark};
   --global-code-bg-color: #{$code-bg-color-dark};
   --global-text-color: #{$grey-color-light};
   --global-text-color-light: #{$grey-color};
   --global-theme-color: #{$cyan-color};
   --global-hover-color: #{$cyan-color};
-  --global-hover-text-color: #{$white-color};
   --global-footer-bg-color: #{$grey-color-light};
   --global-footer-text-color: #{$grey-color-dark};
   --global-footer-link-color: #{$black-color};
@@ -95,50 +105,24 @@ html[data-theme="dark"] {
   --global-newsletter-bg-color: #{$grey-color-light};
   --global-newsletter-text-color: #{$grey-color-dark};
 
-  --global-tip-block: #42b983;
-  --global-tip-block-bg: #e2f5ec;
-  --global-tip-block-text: #215d42;
-  --global-tip-block-title: #359469;
-  --global-warning-block: #e7c000;
-  --global-warning-block-bg: #fff8d8;
-  --global-warning-block-text: #6b5900;
-  --global-warning-block-title: #b29400;
-  --global-danger-block: #c00;
-  --global-danger-block-bg: #ffe0e0;
-  --global-danger-block-text: #600;
-  --global-danger-block-title: #c00;
-
   .only-light {
     display: none;
   }
-
   .only-dark {
     display: block;
   }
 }
 
+/* === Theme Toggle States === */
 html[data-theme-setting="dark"] {
   #light-toggle-dark {
     padding-left: 10px;
     padding-top: 12px;
     display: block;
   }
-
-  #light-toggle-light {
-    display: none;
-  }
-
-  #back-to-top {
-    color: var(--global-back-to-top-text-color);
-    background: var(--global-back-to-top-bg-color);
-  }
 }
 
 html[data-theme-setting="light"] {
-  #light-toggle-dark {
-    display: none;
-  }
-
   #light-toggle-light {
     padding-left: 10px;
     padding-top: 12px;
@@ -146,10 +130,9 @@ html[data-theme-setting="light"] {
   }
 }
 
-/* Thumbnail links with adaptive shadow */
+/* === Thumbnail links === */
 .thumbnail-link {
   display: block;
-
   img {
     transition:
       transform 0.2s ease,
@@ -159,7 +142,6 @@ html[data-theme-setting="light"] {
     }
   }
 }
-
 .thumbnail-link img {
   box-shadow: -2px 2px 12px rgba(0, 0, 0, 0.5);
 }
