@@ -9,37 +9,33 @@
   color-scheme: light dark;
 
   /* Text colors */
-  --global-text-color: #{$black-color};
-  --global-text-color-light: #{$grey-color};
+  --global-text-color: #{$theme-light-text};
+  --global-text-color-light: #{$theme-light-text-light};
 
   /* Backgrounds */
-  --global-bg-color: #{$white-color};
+  --global-bg-color: #{$theme-light-bg};
   --global-code-bg-color: #{$code-bg-color-light};
   --global-card-bg-color: #{$white-color};
   --global-footer-bg-color: #{$grey-color-dark};
   --global-newsletter-bg-color: #{$white-color};
 
   /* Accent colors */
-  --global-theme-color: #{$purple-color};
-  --global-hover-color: #{$purple-color};
+  --global-theme-color: #{$theme-light-accent};
+  --global-hover-color: #{$theme-light-accent};
   --global-hover-text-color: #{$white-color};
+  --global-secondary-accent-color: #{$theme-light-secondary};
 
   /* Misc UI colors */
   --global-footer-text-color: #{$grey-color-light};
   --global-footer-link-color: #{$white-color};
   --global-distill-app-color: #{$grey-color};
   --global-divider-color: rgba(0, 0, 0, 0.1);
-  --global-back-to-top-bg-color: rgba(
-    #{color.channel($black-color, "red", $space: rgb)},
-    #{color.channel($black-color, "green", $space: rgb)},
-    #{color.channel($black-color, "blue", $space: rgb)},
-    0.4
-  );
+  --global-back-to-top-bg-color: rgba(0, 0, 0, 0.4);
   --global-back-to-top-text-color: #{$white-color};
   --global-newsletter-text-color: #{$black-color};
   --global-highlight-color: #{$red-color-dark};
 
-  /* Alert block colors (same for both themes) */
+  /* Alert block colors */
   --global-tip-block: #42b983;
   --global-tip-block-bg: #e2f5ec;
   --global-tip-block-text: #215d42;
@@ -54,16 +50,14 @@
   --global-danger-block-title: #c00;
 
   /* Light/Dark visibility defaults */
-  #light-toggle-dark {
-    display: none;
-  }
-  #light-toggle-light {
-    display: none;
-  }
   .only-light {
     display: block;
   }
   .only-dark {
+    display: none;
+  }
+  #light-toggle-dark,
+  #light-toggle-light {
     display: none;
   }
 
@@ -83,24 +77,25 @@
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  --global-bg-color: #{$grey-color-dark};
+  /* Backgrounds & Text */
+  --global-bg-color: #{$theme-dark-bg};
+  --global-text-color: #{$theme-dark-text};
+  --global-text-color-light: #{$theme-dark-text-light};
+  --global-card-bg-color: #{$theme-dark-bg-card};
   --global-code-bg-color: #{$code-bg-color-dark};
-  --global-text-color: #{$grey-color-light};
-  --global-text-color-light: #{$grey-color};
-  --global-theme-color: #{$cyan-color};
-  --global-hover-color: #{$cyan-color};
+
+  /* Accent colors */
+  --global-theme-color: #{$theme-dark-accent};
+  --global-hover-color: #{$theme-dark-accent};
+  --global-secondary-accent-color: #{$theme-dark-secondary};
+
+  /* Misc UI colors */
   --global-footer-bg-color: #{$grey-color-light};
   --global-footer-text-color: #{$grey-color-dark};
   --global-footer-link-color: #{$black-color};
   --global-distill-app-color: #{$grey-color-light};
   --global-divider-color: #424246;
-  --global-card-bg-color: #{$grey-900};
-  --global-back-to-top-bg-color: rgba(
-    #{color.channel($white-color, "red", $space: rgb)},
-    #{color.channel($white-color, "green", $space: rgb)},
-    #{color.channel($white-color, "blue", $space: rgb)},
-    0.5
-  );
+  --global-back-to-top-bg-color: rgba(255, 255, 255, 0.5);
   --global-back-to-top-text-color: #{$black-color};
   --global-newsletter-bg-color: #{$grey-color-light};
   --global-newsletter-text-color: #{$grey-color-dark};
