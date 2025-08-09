@@ -38,9 +38,10 @@ table {
 a,
 table.table a {
   color: var(--global-theme-color);
+  transition: color 0.2s ease-in-out;
 
   &:hover {
-    color: var(--global-theme-color);
+    color: var(--global-secondary-accent-color);
     text-decoration: underline;
   }
 
@@ -57,11 +58,11 @@ table.table a {
 }
 
 blockquote {
-  background: var(--global-bg-color);
-  border-left: 5px solid var(--global-theme-color);
+  background: var(--global-code-bg-color);
+  border-left: 4px solid var(--global-secondary-accent-color);
   margin: 1.5em 0;
-  padding: 1em;
-  font-size: 1.2rem;
+  padding: 0.5em 1.5em;
+  border-radius: 4px;
 
   p {
     margin-bottom: 0;
@@ -235,7 +236,7 @@ ul.task-list input[type="checkbox"] {
     color: inherit;
 
     &:hover {
-      color: var(--global-theme-color);
+      color: var(--global-secondary-accent-color);
       text-decoration: none;
     }
   }
@@ -612,7 +613,7 @@ footer.sticky-bottom {
       text-decoration: none;
 
       &:hover {
-        color: var(--global-theme-color);
+        color: var(--global-secondary-accent-color);
       }
     }
 

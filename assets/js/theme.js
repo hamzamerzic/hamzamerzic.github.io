@@ -185,4 +185,8 @@
   };
 
   ThemeManager.init();
+
+  window.determineComputedTheme = function () {
+    return ThemeManager.getTheme();
+  };
 })();
