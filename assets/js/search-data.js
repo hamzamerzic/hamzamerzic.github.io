@@ -30,7 +30,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-migration-successful",
+        },{id: "post-eeml-2025-wrap-up",
+        
+          title: "EEML 2025 Wrap Up!",
+        
+        description: "BTS on Eastern European Machine Learning Summer School in Sarajevo.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2025/eeml-wrap-up/";
+          
+        },
+      },{id: "post-migration-successful",
         
           title: "Migration successful!",
         
