@@ -5,7 +5,7 @@ date: 2025-08-08 16:00:00
 description: BTS on Eastern European Machine Learning Summer School in Sarajevo.
 thumbnail: assets/img/eeml/eeml participants.jpeg
 categories: general
-giscus_comments: false
+giscus_comments: true
 related_posts: false
 ---
 
@@ -325,7 +325,7 @@ This last year was not what I had in mind a year ago. But I like to say that mos
   EEML 2025 in visuals.
 </div>
 
-I've tried to capture here a small fraction of my EEML 2025 story, but there were 350 other stories unfolding that week. I’d love to hear yours! **If you have a favorite memory please share it in the comments below.**
+I've tried to capture a small fraction of my EEML 2025 story here, but there were 350 other stories unfolding that week. I’d love to hear yours! **If you have a favorite memory please share it in the comments below.**
 
 And if bringing science and technology communities together is something you're passionate about or you'd like to get inolved with ANNT, please don't hesitate to get in touch!
 
