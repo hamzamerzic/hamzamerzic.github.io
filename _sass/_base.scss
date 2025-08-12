@@ -38,7 +38,6 @@ table {
 a,
 table.table a {
   color: var(--global-theme-color);
-  transition: color 1s ease-in-out;
 
   &:hover {
     color: var(--global-secondary-accent-color);
