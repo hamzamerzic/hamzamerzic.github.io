@@ -22,7 +22,7 @@ horizontal: false
 {% when "robotics" %}
 
 <p class="category-description">
-  These tools were built to support my research during my master's in robotics. They were hosted on my old site for years and kept running thanks to ongoing demand. They've been cleaned up, migrated, and redeployed here.
+  These tools were <b>built to support my master's research in robotics</b>. They were hosted on my old site for years and kept running thanks to ongoing demand. They've been cleaned up, migrated, and redeployed here.
   <br>
   <br>
   Read more in <a href="https://hamzamerzic.info/blog/2025/website-migration/">this blog post</a>.
