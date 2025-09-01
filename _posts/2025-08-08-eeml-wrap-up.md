@@ -1,11 +1,11 @@
 ---
 layout: post
-title: EEML 2025 Wrap Up!
+title: EEML 2025 wrap up!
 date: 2025-08-08 16:00:00
 description: BTS on Eastern European Machine Learning Summer School in Sarajevo.
 thumbnail: assets/img/eeml/eeml participants.jpeg
 categories: general
-giscus_comments: true
+giscus_comments: false
 related_posts: false
 ---
 
@@ -54,7 +54,7 @@ related_posts: false
 
 ## Bringing EEML to Sarajevo: A story about chairs, ćevapi, and controlled chaos
 
-It’s been a couple of weeks now since the [Eastern European Machine Learning Summer School](https://www.eeml.eu) wrapped up in Sarajevo. I’ve had some time to unwind, reacquaint myself with the concept of a full night's sleep, and finally try to put into words what was, frankly, one of the most insane and deeply rewarding projects of my life.
+It’s been a couple of weeks now since the [Eastern European Machine Learning Summer School](https://www.eeml.eu) wrapped up in Sarajevo. I’ve had some time to unwind, reacquaint myself with the concept of a full night's sleep, and finally try to put into words what was, frankly, one of the most intense and rewarding projects I've ever been a part of.
 
 Bringing a major academic event like EEML to Bosnia had been a quiet dream of mine for quite a while. I remember seeing an internal DeepMind post (back in the good old Slack days) about EEML around seven years ago and I immediately thought how amazing it would be to have something like this in Bosnia. A year or two prior, I had co-founded the [Association for Advancement of Science and Technology](https://www.annt.ba) (ANNT in Bosnian) and organizing a major science conference was something we were slowly building toward as it aligned perfectly with our mission. We started from the ground up with a local yearly [STEM youth camp](https://annt.ba/stem-youth-camp/) and since then grew it to host around 80 college students. Honestly, I assumed our path would be to grow our own event over time. I never imagined that, in such a short time, we would be partnering to bring an event of EEML's scale home.
 
@@ -86,13 +86,13 @@ After returning from last year’s EEML in August, I had no idea a chance for Bo
 
 Our local team from ANNT was super excited, but we had to show that _we_ (since I’m the only local and non-local organizer 😅) could handle the logistics from scratch. We needed to prove we could sort out the venue, accommodation, and food for around 250 people (at the time 😆) and that there was enough local interest to make the event both successful and valuable for the community.
 
-We made our case, and to our delight, it was convincing enough. We got the green light in December, and just like that, my entire year ahead was transformed! From that moment on, it was full steam ahead.
+We made our case, got the green light in December, and my entire year was suddenly mapped out. From that moment on, it was full steam ahead.
 
 In hindsight, I do have to admit I might have overestimated the local community's readiness a little. With ANNT, we had just finished a project to map out the [AI landscape](https://annt.ba/predstavljamo-ai-landscape-bosne-i-herzegovine-24/) in Bosnia, and on paper, it looked like a lot was happening. The reality was a bit quieter, but thankfully, we still managed to bring out the best out of the local community.
 
 ## The great venue puzzle
 
-The minute we started planning, we hit our first major hurdle: the accommodation. In the past, EEML participants were usually housed in student dorms, but the dorms in Sarajevo generally don't have A/C, which was out of the question for a summer school in July. This forced us to look elsewhere, and we narrowed our choice down to two hotels.
+Our first big hurdle was accommodation. In the past, EEML participants were usually housed in student dorms, but the dorms in Sarajevo generally don't have A/C, which was out of the question for a summer school in July. This forced us to look elsewhere, and we narrowed our choice down to two hotels.
 
 We faced a trade-off: one hotel outside the city versus a more expensive one in the heart of it all. This choice added to the overall complexity and cost, but we decided that being within walking distance of the city center would provide a much better experience for everyone. We chose one of Bosnia's most iconic hotels, built for the 1984 Winter Olympics—a pricier option that we had to subsidize heavily to keep things affordable for our participants.
 
@@ -100,7 +100,7 @@ With accommodation sorted, the next puzzle was the lecture venue. The university
 
 The decision to go all-in on a pricier hotel and subsidize the accommodation had a major ripple effect. It meant we needed more sponsors. But EEML is not an event where anyone can simply buy a seat; it’s a prestigious school where admission is based on academic excellence and we carefully curate both participants and sponsors to ensure the best possible experience.
 
-To maintain this balance, for every new sponsor we brought in, we also had to accept more students. This kicked off a challenging cycle: more students led to higher costs, which in turn complicated the logistics and created a need for even more sponsors. It's a delicate balance that can quickly get out of hand. And that is how our initial target of 250 participants ballooned to 350, making **EEML 2025 the largest in-person edition to date**, with participants from around 50 countries joining us in Sarajevo.
+To maintain this balance, for every new sponsor we brought in, we also had to accept more students. This created a cycle: more students led to higher costs, which in turn complicated the logistics and created a need for even more sponsors. It's a delicate balance that can quickly get out of hand. And that is how our initial target of 250 participants ballooned to 350, making **EEML 2025 the largest in-person edition to date**, with participants from around 50 countries joining us in Sarajevo.
 
 <div class="swiper">
   <div class="swiper-wrapper">
@@ -329,7 +329,7 @@ This last year was not what I had in mind a year ago. But I like to say that mos
   EEML 2025 in visuals.
 </div>
 
-I've tried to capture a small fraction of the EEML 2025 story here, but there were 350 other stories unfolding that week. I’d love to hear yours! **If you have a favorite memory please share it in the comments below.**
+I've tried to capture a small fraction of the EEML 2025 story here, but there were 350 other stories unfolding that week. I’d love to hear yours!
 
 And if bringing science and technology communities together is something you're passionate about or you'd like to get inolved with ANNT, please don't hesitate to get in touch!
 
