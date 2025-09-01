@@ -32,7 +32,7 @@ ninja.data = [{
           },
         },{id: "post-eeml-2025-wrap-up",
         
-          title: "EEML 2025 Wrap Up!",
+          title: "EEML 2025 wrap up!",
         
         description: "BTS on Eastern European Machine Learning Summer School in Sarajevo.",
         section: "Posts",
