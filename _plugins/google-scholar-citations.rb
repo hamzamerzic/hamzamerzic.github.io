@@ -54,7 +54,7 @@ module Jekyll
             matches = cited_by_text.match(/Cited by (\d+[,\d]*)/)
 
             if matches
-              citation_count = matches[1].sub(",", "").to_i
+              citation_count = matches[1].gsub(",", "").to_i
             end
 
           elsif !og_description_meta.empty?
@@ -62,7 +62,7 @@ module Jekyll
             matches = cited_by_text.match(/Cited by (\d+[,\d]*)/)
 
             if matches
-              citation_count = matches[1].sub(",", "").to_i
+              citation_count = matches[1].gsub(",", "").to_i
             end
           end
 
