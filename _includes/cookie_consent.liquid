@@ -1,0 +1,83 @@
+{% if site.enable_google_analytics and site.cookie_consent %}
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.css"
+    integrity="sha256-ygRrixsQlBByBZiOcJamh7JByO9fP+/l5UPtKNJmRsE="
+    crossorigin="anonymous"
+  >
+  <script
+    defer
+    src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.umd.js"
+    integrity="sha256-Emf9M/zzq0BDp8xizJJZosZvg59pUhb3c37Te3s+YuY="
+    crossorigin="anonymous"
+  ></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      CookieConsent.run({
+        categories: {
+          necessary: { enabled: true, readOnly: true },
+          analytics: {},
+        },
+        language: {
+          default: 'en',
+          translations: {
+            en: {
+              consentModal: {
+                title: 'Cookie Consent',
+                description:
+                  'This website uses cookies for analytics to understand how visitors interact with the site. You can choose to accept or decline analytics cookies.',
+                acceptAllBtn: 'Accept all',
+                acceptNecessaryBtn: 'Reject all',
+                showPreferencesBtn: 'Manage preferences',
+              },
+              preferencesModal: {
+                title: 'Cookie Preferences',
+                acceptAllBtn: 'Accept all',
+                acceptNecessaryBtn: 'Reject all',
+                savePreferencesBtn: 'Save preferences',
+                sections: [
+                  {
+                    title: 'Necessary Cookies',
+                    description: 'These cookies are essential for the website to function properly.',
+                    linkedCategory: 'necessary',
+                  },
+                  {
+                    title: 'Analytics Cookies',
+                    description: 'These cookies help understand how visitors interact with the website by collecting anonymous information.',
+                    linkedCategory: 'analytics',
+                  },
+                ],
+              },
+            },
+          },
+        },
+        onConsent: function () {
+          if (CookieConsent.acceptedCategory('analytics')) {
+            loadGoogleAnalytics();
+          }
+        },
+        onChange: function () {
+          if (CookieConsent.acceptedCategory('analytics')) {
+            loadGoogleAnalytics();
+          }
+        },
+      });
+    });
+
+    var gaLoaded = false;
+    function loadGoogleAnalytics() {
+      if (gaLoaded) return;
+      gaLoaded = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id={{ site.google_analytics }}';
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', '{{ site.google_analytics }}');
+    }
+  </script>
+{% endif %}
