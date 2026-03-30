@@ -363,6 +363,7 @@ lazy_loading_images: true # enables lazy loading of images (recommended)
 # -----------------------------------------------------------------------------
 
 enable_google_analytics: true # enables google analytics
+cookie_consent: true # enables GDPR cookie consent banner (blocks analytics until user consents)
 enable_cronitor_analytics: false # enables cronitor RUM analytics
 enable_pirsch_analytics: false # enables Pirsch analytics (https://pirsch.io/)
 enable_openpanel_analytics: false # enables Openpanel analytics (https://openpanel.dev/)
@@ -456,10 +457,10 @@ third_party_libraries:
     version: "8.0.6"
   jquery:
     integrity:
-      js: "sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      js: "sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
     url:
       js: "https://cdn.jsdelivr.net/npm/jquery@{{version}}/dist/jquery.min.js"
-    version: "3.6.0"
+    version: "3.7.1"
   leaflet:
     integrity:
       css: "sha256-q9ba7o845pMPFU+zcAll8rv+gC+fSovKsOoNQ6cynuQ="
