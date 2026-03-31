@@ -58,6 +58,7 @@ npx prettier --write .   # Format Liquid, Markdown, etc. (uses @shopify/prettier
 ### CI/CD
 
 GitHub Actions workflows in `.github/workflows/`:
+
 - **`deploy.yml`** — Main deployment (sets `JEKYLL_ENV=production`, builds with imagemagick, runs PurgeCSS, deploys to GitHub Pages).
 - **`prettier.yml`** — Format checking.
 - **`broken-links.yml`** — Link validation.
