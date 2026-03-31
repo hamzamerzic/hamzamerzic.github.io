@@ -5,6 +5,10 @@ RUN apt-get update && apt-get install -y \
     assimp-utils \
     libglib2.0-0 \
     libgl1 \
+    libopengl0 \
+    libcom-err2 \
+    libkrb5-3 \
+    libp11-kit0 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
