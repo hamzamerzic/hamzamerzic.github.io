@@ -75,7 +75,7 @@ async function uploadFile() {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-    const res = await fetch("https://mesh-cleaner-692118822266.europe-west1.run.app/upload", {
+    const res = await fetch("https://api.hamzamerzic.info/upload", {
       method: "POST",
       body: formData,
       signal: controller.signal
@@ -93,7 +93,7 @@ async function uploadFile() {
     responseEl.textContent = data.metrics;
     usageTip.style.display = "block";
 
-    const cleanedMeshURL = `https://mesh-cleaner-692118822266.europe-west1.run.app${data.download_url}`;
+    const cleanedMeshURL = `https://api.hamzamerzic.info${data.download_url}`;
     linkEl.href = cleanedMeshURL;
     linkEl.style.display = "inline";
 
