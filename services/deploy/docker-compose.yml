@@ -1,0 +1,48 @@
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile.caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp" # HTTP/3
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - ikfast
+      - robot-link-info
+      - mesh-cleaner
+    environment:
+      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN:-https://hamzamerzic.info}
+
+  ikfast:
+    build:
+      context: ../ikfast
+    restart: unless-stopped
+    expose:
+      - "8080"
+
+  robot-link-info:
+    build:
+      context: ../robot_link_info
+    restart: unless-stopped
+    expose:
+      - "8080"
+
+  mesh-cleaner:
+    build:
+      context: ../mesh_cleaner
+    restart: unless-stopped
+    expose:
+      - "8080"
+    tmpfs:
+      - /tmp/uploads:size=512M
+      - /tmp/results:size=512M
+
+volumes:
+  caddy_data:
+  caddy_config:
