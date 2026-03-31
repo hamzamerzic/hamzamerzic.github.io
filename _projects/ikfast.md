@@ -129,7 +129,7 @@ async function uploadFile() {
   formData.append("file", file);
 
   try {
-    const res = await fetch("https://robot-link-info-692118822266.europe-west1.run.app/robot_link_info", {
+    const res = await fetch("https://api.hamzamerzic.info/robot_link_info", {
       method: "POST",
       body: formData
     });
@@ -170,7 +170,7 @@ async function generateSolver() {
   formData.append("freeindices", document.getElementById("freeindices").value);
 
   try {
-    const res = await fetch("https://ikfast-solver-692118822266.europe-west1.run.app/generate_solver", {
+    const res = await fetch("https://api.hamzamerzic.info/generate_solver", {
       method: "POST",
       body: formData
     });

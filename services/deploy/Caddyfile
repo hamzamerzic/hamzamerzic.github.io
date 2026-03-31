@@ -32,8 +32,6 @@ api.hamzamerzic.info {
 		respond 204
 	}
 
-	header Access-Control-Allow-Origin {$ALLOWED_ORIGIN}
-
 	# --- Origin check (replaces API key + referrer restriction) ---
 	# Block requests from other websites (but allow no-Origin requests like curl)
 	@cross_site {
@@ -46,21 +44,31 @@ api.hamzamerzic.info {
 
 	handle /generate_solver {
 		reverse_proxy ikfast:8080 {
-			# Streaming: flush each byte immediately (for IKFast log streaming)
 			flush_interval -1
+			header_down Access-Control-Allow-Origin {$ALLOWED_ORIGIN}
+			header_down -Access-Control-Allow-Credentials
 		}
 	}
 
 	handle /robot_link_info {
-		reverse_proxy robot-link-info:8080
+		reverse_proxy robot-link-info:8080 {
+			header_down Access-Control-Allow-Origin {$ALLOWED_ORIGIN}
+			header_down -Access-Control-Allow-Credentials
+		}
 	}
 
 	handle /upload {
-		reverse_proxy mesh-cleaner:8080
+		reverse_proxy mesh-cleaner:8080 {
+			header_down Access-Control-Allow-Origin {$ALLOWED_ORIGIN}
+			header_down -Access-Control-Allow-Credentials
+		}
 	}
 
 	handle /download/* {
-		reverse_proxy mesh-cleaner:8080
+		reverse_proxy mesh-cleaner:8080 {
+			header_down Access-Control-Allow-Origin {$ALLOWED_ORIGIN}
+			header_down -Access-Control-Allow-Credentials
+		}
 	}
 
 	# Health check
