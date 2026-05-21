@@ -9,6 +9,8 @@ giscus_comments: false
 related_posts: false
 ---
 
+> **TL;DR.** I moved my eight-year-old WordPress-on-DigitalOcean robotics-tools site (mesh cleaner, model viewer, IKFast generator) to a containerized Cloud Run setup. About fifty people a month still use the tools, so the goal was preserving what works and future-proofing it, not rebuilding for its own sake.
+
 Back in my master’s in robotics days, I built a few tools to simplify creating, debugging, and simulating models and robots. Robotics workflows are rarely smooth, but my philosophy has always been: if it’s painful to do once, try to do it only once.
 
 So I Dockerized those tools and exposed them via [WordPress](https://wordpress.org/) on [DigitalOcean](https://www.digitalocean.com/). It began as a way to improve my research workflow, but soon I realized others might benefit too.

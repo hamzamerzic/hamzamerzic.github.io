@@ -5,7 +5,7 @@ permalink: /projects/
 description:
 nav: true
 nav_order: 2
-display_categories: [robotics]
+display_categories: [software, robotics]
 horizontal: false
 ---
 
@@ -19,6 +19,12 @@ horizontal: false
   <!-- Custom text per category -->
 
 {% case category %}
+{% when "software" %}
+
+<p class="category-description">
+  Side projects exploring agents, self-hosted tools, and small experiments in
+  what software-shaped-by-its-user can look like.
+</p>
 {% when "robotics" %}
 
 <p class="category-description">
