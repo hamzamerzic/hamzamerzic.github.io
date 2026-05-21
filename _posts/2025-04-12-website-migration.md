@@ -11,19 +11,13 @@ related_posts: false
 
 > **TL;DR.** I moved my eight-year-old WordPress-on-DigitalOcean robotics-tools site (mesh cleaner, model viewer, IKFast generator) to a containerized Cloud Run setup. About fifty people a month still use the tools, so the goal was preserving what works and future-proofing it, not rebuilding for its own sake.
 
-Back in my master’s in robotics days, I built a few tools to simplify creating, debugging, and simulating models and robots. Robotics workflows are rarely smooth, but my philosophy has always been: if it’s painful to do once, try to do it only once.
+During my master's in robotics, I built a few small tools for the parts of model and robot work I kept doing by hand: mesh cleanup, 3D model viewing, inverse-kinematics generation. I Dockerized them and exposed them via [WordPress](https://wordpress.org/) on [DigitalOcean](https://www.digitalocean.com/), originally as a way to tighten my own research loop, then opened up because a few other people seemed to want them.
 
-So I Dockerized those tools and exposed them via [WordPress](https://wordpress.org/) on [DigitalOcean](https://www.digitalocean.com/). It began as a way to improve my research workflow, but soon I realized others might benefit too.
+Eight years later, the site was still running. To my surprise, over fifty people a month still used the tools. It was time to give the site some attention, without disrupting existing users.
 
-Fast forward eight years.
+What started as a cleanup became a migration to [Google Cloud Run](https://cloud.google.com/run). Each tool was already containerized and stateless, so the move was mostly mechanical: I split the services into separate Cloud Run deployments, cleaned up the code, and put a [budget guardrail](https://gist.github.com/hamzamerzic/8b834e56d2dc6a8f49bcb4047dd819df) in place that stops serving if my monthly budget is hit. The free tier on Cloud Run is generous enough that the tools should keep working for a long time without me touching them.
 
-The site still works, and, to my surprise, over fifty people a month still use these tools.
-
-I knew it was time to give the site some attention, but I didn’t want to disrupt existing users.
-
-What started as a quick cleanup turned into a [Google Cloud](https://cloud.google.com/) rabbit hole. In hindsight, using Docker was a great decision back then. Since each tool was already containerized and stateless, they fit perfectly on [Google Cloud Run](https://cloud.google.com/run). I cleaned up the code, split the services, and redeployed them on infrastructure that’s more stable, scalable, and free under Cloud Run’s generous tier. To [protect my budget](https://gist.github.com/hamzamerzic/8b834e56d2dc6a8f49bcb4047dd819df), I also set up a guardrail that stops serving if my monthly budget is reached.
-
-The original toolbox lives on, now cleaner, faster, and more future-proof.
+The original toolbox is still available, now as separate Cloud Run services with the same URLs.
 
 Find the tools under [Projects](https://hamzamerzic.info/projects/):
 
@@ -34,7 +28,7 @@ Find the tools under [Projects](https://hamzamerzic.info/projects/):
 - 🤖 [IKFast Generator](https://hamzamerzic.info/ikfast/)
   Generate analytic inverse-kinematics solvers from `.dae` files using OpenRAVE’s IKFast.
 
-These tools were invaluable during my master’s—especially computing inertial properties for dozens of objects and cleaning up meshes for simulations. Later, during my research assistantship, I relied on the tools for inverse-kinematics work on robot manipulators. Fast, reliable tools like these really made a difference.
+These tools were the part of my master's I went back to constantly: computing inertial properties for dozens of objects, cleaning up meshes for simulations, and later, during my research assistantship, generating inverse-kinematics solvers for robot manipulators. Worth the time it took to package them properly back then.
 
 If you’re still using any of these—thank you. I hope the migration went smoothly. If not, feel free to reach out and let me know what’s broken.
 
