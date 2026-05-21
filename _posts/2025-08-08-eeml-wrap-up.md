@@ -9,6 +9,8 @@ giscus_comments: false
 related_posts: false
 ---
 
+> **TL;DR.** We brought EEML to Bosnia for the first time, and somehow it turned into the largest in-person edition yet: 350 participants from around 50 countries, all under one roof in the hotel built for the 1984 Winter Olympics. Along the way I learned what it actually takes to feed that many people ćevapi, transport 350 chairs across Sarajevo (twice, with a truck crash for good measure), and watch ANNT grow from a small STEM camp into an association that can pull off something like this.
+
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -94,11 +96,11 @@ In hindsight, I do have to admit I might have overestimated the local community'
 
 Our first big hurdle was accommodation. In the past, EEML participants were usually housed in student dorms, but the dorms in Sarajevo generally don't have A/C, which was out of the question for a summer school in July. This forced us to look elsewhere, and we narrowed our choice down to two hotels.
 
-We faced a trade-off: one hotel outside the city versus a more expensive one in the heart of it all. This choice added to the overall complexity and cost, but we decided that being within walking distance of the city center would provide a much better experience for everyone. We chose one of Bosnia's most iconic hotels, built for the 1984 Winter Olympics—a pricier option that we had to subsidize heavily to keep things affordable for our participants.
+We faced a trade-off: one hotel outside the city versus a more expensive one in the heart of it all. This choice added to the overall complexity and cost, but we decided that being within walking distance of the city center would provide a much better experience for everyone. We chose one of Bosnia's most iconic hotels, built for the 1984 Winter Olympics. It was a pricier option that we had to subsidize heavily to keep things affordable for our participants.
 
 With accommodation sorted, the next puzzle was the lecture venue. The university had one lecture hall large enough, but it lacked A/C. So we made another big decision: to host the lectures in the same hotel. It was more expensive and meant we had to figure out how to turn a conference hall into a proper lecture theatre, but it simplified the logistics slightly and created a better, more integrated experience. **For the first time, EEML was organized in a hotel, with students and lectures under one roof.** Is that how you scale it up?
 
-The decision to go all-in on a pricier hotel and subsidize the accommodation had a major ripple effect. It meant we needed more sponsors. But EEML is not an event where anyone can simply buy a seat; it’s a prestigious school where admission is based on academic excellence and we carefully curate both participants and sponsors to ensure the best possible experience.
+The decision to go all-in on a pricier hotel and subsidize the accommodation had a major ripple effect. It meant we needed more sponsors. But EEML is not an event where anyone can simply buy a seat; it’s a prestigious school where admission is based on academic excellence, and we carefully curate both participants and sponsors.
 
 To maintain this balance, for every new sponsor we brought in, we also had to accept more students. This created a cycle: more students led to higher costs, which in turn complicated the logistics and created a need for even more sponsors. It's a delicate balance that can quickly get out of hand. And that is how our initial target of 250 participants ballooned to 350, making **EEML 2025 the largest in-person edition to date**, with participants from around 50 countries joining us in Sarajevo.
 
@@ -140,9 +142,9 @@ As EEML approached, some logistical worries kept me up at night right until the 
 
 Beyond the big three, there was a mountain of smaller challenges leading up to and during EEML. Renting poster stands in Sarajevo was almost as expensive as buying new ones in Mostar, so we bought our own. Then a construction site popped up right in front of the hotel without any warning. We had to constantly monitor the work, especially when they fired up a machine that was literally shaking the entire hotel. And, of course, the noise peaked during one of our most anticipated lectures. 🫠
 
-Throughout EEML, we also tried to add personal touches that went beyond the academic program. We wanted participants to feel looked after from the moment they landed, embodying the true spirit of Eastern European hospitality. This also led to one of our biggest organizational hurdles: picking up every single participant from the airport. It was a massive effort, and yes, even I was playing taxi driver. On top of that, we dealt with a constant stream of small crises, like the A/C failing in a tutorial room, that our team would immediately jump on to fix. It was these small constant interventions that were crucial in making the week run smoothly.
+Throughout EEML, we also tried to add personal touches that went beyond the academic program. We wanted participants to feel looked after from the moment they landed, in the spirit of Eastern European hospitality. This also led to one of our biggest organizational hurdles: picking up every single participant from the airport. It was a massive effort, and yes, even I was playing taxi driver. On top of that, we dealt with a constant stream of small crises, like the A/C failing in a tutorial room, that our team would immediately jump on to fix. It was these small constant interventions that were crucial in making the week run smoothly.
 
-The week itself was a marathon with daily lectures, tutorials, and a packed social schedule with welcome drinks, poster sessions, and a gala dinner. Thursday was usually a half-day off, but this year we decided to organize a trip to the Tunnel of Salvation museum and a guided city tour. The day was further enriched by a brilliant Estimathon competition organized by [Jane Street](https://www.janestreet.com/) and evening drinks hosted by [Credo VC](https://www.credoventures.com/). While the participants networked, the organizers, speakers, and TAs snuck off for a quiet dinner—our well deserved moment of calm.
+The week itself was a marathon with daily lectures, tutorials, and a packed social schedule with welcome drinks, poster sessions, and a gala dinner. Thursday was usually a half-day off, but this year we decided to organize a trip to the Tunnel of Salvation museum and a guided city tour. The day was further enriched by a brilliant Estimathon competition organized by [Jane Street](https://www.janestreet.com/) and evening drinks hosted by [Credo VC](https://www.credoventures.com/). While the participants networked, the organizers, speakers, and TAs snuck off for a quiet dinner of our own. A well-deserved moment of calm.
 
 <div class="swiper">
   <div class="swiper-wrapper">
@@ -331,7 +333,7 @@ This last year was not what I had in mind a year ago. But I like to say that mos
 
 I've tried to capture a small fraction of the EEML 2025 story here, but there were 350 other stories unfolding that week. I’d love to hear yours!
 
-And if bringing science and technology communities together is something you're passionate about or you'd like to get inolved with ANNT, please don't hesitate to get in touch!
+And if bringing science and technology communities together is something you're passionate about or you'd like to get involved with ANNT, please don't hesitate to get in touch!
 
 <script>
   document.querySelectorAll('.swiper').forEach((swiperEl) => {
