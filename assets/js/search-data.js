@@ -30,7 +30,29 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-eeml-2025-wrap-up",
+        },{id: "post-the-self-improvement-harness-behind-möbius",
+        
+          title: "The self-improvement harness behind Möbius",
+        
+        description: "An outer agent talks to an inner agent and tries to make it more helpful. Notes on what we measured, what surprised us, and where the bottleneck moved to.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/the-self-improvement-harness/";
+          
+        },
+      },{id: "post-an-app-that-adapts-to-you",
+        
+          title: "An app that adapts to you",
+        
+        description: "A self-hosted PWA where the agent inside builds whatever the app needs to be next — and reshapes the interface, the providers, and itself around how you use it.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/mobius-an-app-that-builds-itself/";
+          
+        },
+      },{id: "post-eeml-2025-wrap-up",
         
           title: "EEML 2025 wrap up!",
         
@@ -57,6 +79,11 @@ ninja.data = [{
           description: "Visualize 3D models and robots directly in your browser",
           section: "Projects",handler: () => {
               window.location.href = "/3d-viz/";
+            },},{id: "projects-blox",
+          title: 'Blox',
+          description: "A functional, lightweight neural network library for JAX",
+          section: "Projects",handler: () => {
+              window.location.href = "/blox/";
             },},{id: "projects-ikfast-generator",
           title: 'IKFast Generator',
           description: "Generate analytic Inverse Kinematics solvers based on OpenRAVE&#39;s IKFast",
@@ -67,6 +94,11 @@ ninja.data = [{
           description: "Clean and process 3D mesh files for use in physics-based simulation environments",
           section: "Projects",handler: () => {
               window.location.href = "/mesh_cleaner/";
+            },},{id: "projects-möbius",
+          title: 'Möbius',
+          description: "A self-hosted PWA where an AI agent builds the app it lives in",
+          section: "Projects",handler: () => {
+              window.location.href = "/mobius/";
             },},{
         id: 'social-email',
         title: 'email',
