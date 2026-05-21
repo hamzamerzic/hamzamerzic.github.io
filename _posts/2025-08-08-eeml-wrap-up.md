@@ -9,7 +9,7 @@ giscus_comments: false
 related_posts: false
 ---
 
-> **TL;DR.** We brought EEML to Bosnia for the first time, and somehow it turned into the largest in-person edition yet: 350 participants from around 50 countries, all under one roof in the hotel built for the 1984 Winter Olympics. Along the way I learned what it actually takes to feed that many people ćevapi, transport 350 chairs across Sarajevo (twice, with a truck crash for good measure), and watch ANNT grow from a small STEM camp into an association that can pull off something like this.
+> **TL;DR.** EEML came to Bosnia for the first time in 2025: 350 participants from around 50 countries, hosted under one roof in the hotel built for the 1984 Winter Olympics. The harder story is the one about ANNT — the local science-and-tech association we'd been growing from a small STEM camp — scaling its logistics fast enough to handle a full international summer school in under a year.
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
