@@ -81,7 +81,7 @@ ninja.data = [{
               window.location.href = "/3d-viz/";
             },},{id: "projects-blox",
           title: 'Blox',
-          description: "A functional, lightweight neural network library for JAX",
+          description: "A small, functional neural network library for JAX — built to keep JAX&#39;s strengths visible instead of paper over them",
           section: "Projects",handler: () => {
               window.location.href = "/blox/";
             },},{id: "projects-ikfast-generator",
@@ -96,7 +96,7 @@ ninja.data = [{
               window.location.href = "/mesh_cleaner/";
             },},{id: "projects-möbius",
           title: 'Möbius',
-          description: "A personalized AI agent you can self-host, which builds the tools you need and the interface they sit in",
+          description: "A personalized AI agent you self-host, which builds the tools you need and the interface they sit in",
           section: "Projects",handler: () => {
               window.location.href = "/mobius/";
             },},{
