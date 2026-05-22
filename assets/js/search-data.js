@@ -41,11 +41,11 @@ ninja.data = [{
             window.location.href = "/blog/2026/the-self-improvement-harness/";
           
         },
-      },{id: "post-an-app-that-adapts-to-you",
+      },{id: "post-an-agent-that-adapts-to-you",
         
-          title: "An app that adapts to you",
+          title: "An agent that adapts to you",
         
-        description: "A self-hosted PWA where the agent inside builds whatever the app needs to be next — and reshapes the interface, the providers, and itself around how you use it.",
+        description: "A personalized AI agent you can self-host. It builds the tools you need, edits the interface around them, and adapts both its functionality and its presentation to how you actually use it.",
         section: "Posts",
         handler: () => {
           
@@ -96,7 +96,7 @@ ninja.data = [{
               window.location.href = "/mesh_cleaner/";
             },},{id: "projects-möbius",
           title: 'Möbius',
-          description: "A self-hosted PWA where an AI agent builds the app it lives in",
+          description: "A personalized AI agent you can self-host, which builds the tools you need and the interface they sit in",
           section: "Projects",handler: () => {
               window.location.href = "/mobius/";
             },},{
