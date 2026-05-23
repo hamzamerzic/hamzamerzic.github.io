@@ -72,6 +72,12 @@ published: true
     display: block;
     object-fit: contain;
   }
+  .swiper-slide video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+  }
   .swiper-button-prev,
   .swiper-button-next {
     color: var(--global-theme-color);
@@ -347,9 +353,15 @@ instances of the same product:
            loading="lazy" />
     </div>
     <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/theme-07-dynamic.gif' | relative_url }}"
-           alt="Animated GIF of the same theme in motion: bubbles drifting up, star silhouettes shifting position, the warm-cool gradient slowly cycling."
-           loading="lazy" />
+      <video src="{{ '/assets/img/mobius/theme-07-dynamic.mp4' | relative_url }}"
+             autoplay
+             loop
+             muted
+             playsinline
+             preload="metadata"
+             poster="{{ '/assets/img/mobius/theme-07-dynamic-built.png' | relative_url }}"
+             aria-label="Video of the same theme in motion: bubbles drifting up, star silhouettes shifting position, the warm-cool gradient slowly cycling.">
+      </video>
     </div>
   </div>
   <div class="swiper-button-next"></div>
@@ -366,9 +378,9 @@ instances of the same product:
   particles, and a <code>prefers-reduced-motion</code> guard.
   Second: a few minutes later, the theme is live and the chat
   exchange (a "hi" to test it) sits over the drifting bubbles and
-  silhouettes. Third: same theme animated — five seconds of the
+  silhouettes. Third: same theme in motion — five seconds of the
   gradient cycling and the particle layer drifting. The colors
-  look different between the still and the GIF because the
+  look different between the still and the clip because the
   gradient drifts between warm and cool tones over twenty
   seconds; both frames are the same theme, captured a few seconds
   apart.

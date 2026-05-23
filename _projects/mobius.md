@@ -97,6 +97,15 @@ category: software
   </div>
 </div>
 
+<figure class="text-center my-4">
+  <video src="{{ '/assets/img/mobius/theme-07-dynamic.mp4' | relative_url }}" width="240" autoplay loop muted playsinline poster="{{ '/assets/img/mobius/theme-07-dynamic-built.png' | relative_url }}" style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+    <img src="{{ '/assets/img/mobius/theme-07-dynamic-built.png' | relative_url }}" width="240" alt="Möbius dynamic theme in motion" />
+  </video>
+  <figcaption class="caption mt-2" style="font-size: 0.85em;">
+    Motion works too: drifting bubbles, parallax silhouettes, and a slowly cycling warm-cool gradient, all added by the agent as part of the theme.
+  </figcaption>
+</figure>
+
 <h3 class="mt-5">What you can do with it</h3>
 
 <ul class="mt-3">
