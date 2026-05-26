@@ -149,11 +149,11 @@ Can you add file upload to the chat?"_
 </div>
 
 <div class="caption mt-2">
-  Before: no file upload — me typing in the request, composer at
-  the bottom without a paperclip. After: file upload added by the
-  agent in the same chat — multipart endpoint, message storage,
-  drag-and-drop overlay, paste handler, chip row, image
-  thumbnails, all written from scratch.
+  Instructing the agent to add file upload to chat — the prompt at
+  the top, the agent's first dig through the codebase. Chat upload
+  added — multipart endpoint, message storage, drag-and-drop
+  overlay, paste handler, chip row, image thumbnails, all written
+  from scratch in the same conversation.
 </div>
 
 The full walk-through is below. So is the rest of what Möbius
