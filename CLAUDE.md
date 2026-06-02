@@ -66,10 +66,18 @@ GitHub Actions workflows in `.github/workflows/`:
 
 ### Key Integrations
 
-- **Comments:** Giscus (GitHub Discussions) — configured in `_config.yml`, template in `_includes/giscus.liquid`.
+- **Comments:** Giscus (GitHub Discussions) — configured in `_config.yml`, template in `_includes/giscus.liquid`. Enable on a post with `giscus_comments: true` in its front matter (the gate is `{% if site.giscus and page.giscus_comments %}` in `_layouts/post.liquid`).
 - **Analytics:** Google Analytics.
 - **Math:** MathJax, enabled per-page via front matter (`math: true`).
 - **Bibliography badges:** Altmetric, Dimensions, Google Scholar, Inspire HEP.
+
+## Design system
+
+The site uses a charcoal + emerald palette matching the [Möbius](/mobius/) project. The lever is the `--global-*` custom properties in `_sass/_themes.scss` (per light/dark mode), built from Sass tokens in `_sass/_variables.scss`. Fonts: Inter (UI/body) + JetBrains Mono (code, metadata, table numerics), loaded via `_config.yml` `google_fonts`. `_sass/_mobius-modern.scss` is the modernization layer (imported in `assets/css/main.scss` after `base`): translucent nav, card hover-lift, code chips, shared post components (`.tldr`, `.stat-callout`, `.pull-quote`), modern content tables, and a themed HTML **diagram kit** (`.mb-diagram`, `.mb-flow`, `.mb-node`, `.mb-stack`, `.mb-lanes`, `.mb-cycle`) — prefer these over ASCII art or stock images in posts. To verify CSS without the full Jekyll/Docker build, compile `assets/css/main.scss` with dart-sass (`--load-path _sass`, substituting the `{{ site.max_width }}` Liquid) and screenshot a harness page that links the real `main.css` + `assets/css/bootstrap.min.css` + Google Fonts in both `<html data-theme="dark">` and light.
+
+## Blog: the Möbius series
+
+Three linked posts under `_posts/2026-*`: `mobius-an-app-that-builds-itself`, `the-self-improvement-harness`, `the-agent-is-the-kernel` (app store / OS). They cross-link as a series and share the components above. Honest "shipped vs aspirational" framing is a deliberate house style — do not overclaim about Möbius features.
 
 ## Commit Guidelines
 
