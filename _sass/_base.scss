@@ -35,6 +35,70 @@ table {
   }
 }
 
+/* Modern content tables (markdown tables in blog posts).
+   Scoped to #markdown-content so Bootstrap component tables
+   (publications, CV) keep their own styling. Whitespace + a single
+   per-row rule does the structural work instead of a full grid;
+   numbers line up via tabular-nums; the header sticks; row hover
+   uses the emerald accent tint. */
+#markdown-content {
+  table {
+    width: 100%;
+    margin: 1.75rem 0;
+    border-collapse: collapse;
+    font-variant-numeric: tabular-nums;
+    font-size: 0.95rem;
+    line-height: 1.45;
+    overflow-x: auto;
+    display: block;
+
+    @media (min-width: 576px) {
+      display: table;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      text-align: left;
+      vertical-align: bottom;
+      padding: 0.6rem 1rem;
+      font-weight: 600;
+      font-size: 0.8rem;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--global-text-color);
+      background: var(--global-surface-elevated);
+      border-bottom: 1px solid var(--global-theme-color);
+      white-space: nowrap;
+    }
+
+    tbody td {
+      padding: 0.65rem 1rem;
+      color: var(--global-text-color);
+      border-bottom: 1px solid var(--global-divider-color);
+    }
+
+    /* Right-align + monospace any cell the author marks numeric, and
+       any cell that kramdown right-aligns via `--:` column syntax. */
+    td[align="right"],
+    th[align="right"] {
+      text-align: right;
+      font-family: var(--global-font-mono);
+      font-size: 0.88rem;
+    }
+
+    tbody tr {
+      transition: background 0.12s ease;
+    }
+    tbody tr:hover {
+      background: var(--global-accent-tint);
+    }
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
 a,
 table.table a {
   color: var(--global-theme-color);
@@ -47,6 +111,18 @@ table.table a {
   &:hover:after :not(.nav-item.dropdown) {
     width: 100%;
   }
+}
+
+/* Monospace for code, metadata, and terminal-flavoured UI — the
+   Möbius "code" signal. Body + headings inherit Inter from <body>. */
+code,
+pre,
+kbd,
+samp,
+tt,
+.post-meta,
+.post-tags {
+  font-family: var(--global-font-mono);
 }
 
 .table-dark {
