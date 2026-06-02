@@ -398,10 +398,10 @@ exists, and the disagreement between the two models is the cheapest
 way I have found to get there.
 
 <figure class="text-center my-4">
-  <img src="{{ '/assets/img/mobius/os/workflow-ensemble.jpg' | relative_url }}"
-       alt="Two glowing emerald cores trading critique across a dark field and converging into a single refined geometric form in the centre — two models reviewing one design."
+  <img src="{{ '/assets/img/mobius/os/labeled-ensemble.jpg' | relative_url }}"
+       alt="A diagram: a node labelled CLAUDE on the left and a node labelled CODEX on the right, both connected by arrows to a shared block of code in the centre — two models reviewing and refining one design."
        loading="lazy" style="max-width:100%; height:auto; border-radius:0.7rem;" />
-  <figcaption class="caption mt-2">The design phase, not the build, is where the leverage is: two models — Claude driving, Codex reviewing — pulling on a design until its weak parts show.</figcaption>
+  <figcaption class="caption mt-2">The design phase, not the build, is where the leverage is: two models — Claude driving, Codex reviewing — pulling on the same design until its weak parts show.</figcaption>
 </figure>
 
 ## The philosophy under all of it

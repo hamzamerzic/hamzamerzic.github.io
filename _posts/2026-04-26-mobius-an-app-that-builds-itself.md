@@ -296,7 +296,23 @@ instances of the same product:
     medieval manuscript in parchment cream with a blackletter
     wordmark and a three-star ornamental divider. Each one is CSS
     (sometimes plus a font import or a keyframe) the agent wrote
-    in response to one sentence.
+    in response to one sentence. The clip ends on the clean
+    charcoal default it ships with today.
+  </figcaption>
+</figure>
+
+<figure style="text-align: center; margin: 2rem auto;">
+  <video src="{{ '/assets/img/mobius/theme-agent-transformations.mp4' | relative_url }}" width="280" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
+    <img src="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" width="280" alt="Möbius restyled from its default to a Claude-style theme to a meme theme" />
+  </video>
+  <figcaption class="caption mt-2" style="font-size: 0.85em;">
+    Or ask for a specific look. Same instance, restyled end to end:
+    the charcoal default, then <em>"make this look like the Claude
+    app"</em> (a warm cream canvas, a clay-coral accent, serif
+    throughout, even the sidebar), then <em>"go wild and
+    meme-worthy"</em> (a rainbow canvas, floating unicorns and
+    bouncing emoji, chunky comic type). Two short prompts; the agent
+    rewrote the theme each time.
   </figcaption>
 </figure>
 

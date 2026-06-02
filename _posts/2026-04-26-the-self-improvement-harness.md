@@ -31,6 +31,13 @@ optimising for, and that lives upstream of the harness.</li>
 
 </details>
 
+<figure class="text-center my-4">
+  <img src="{{ '/assets/img/mobius/os/labeled-self-improvement.jpg' | relative_url }}"
+       alt="A diagram of the loop: an inner box labelled INNER AGENT sits inside an outer ring labelled OUTER AGENT, with an arrow labelled EDITS pointing in and an arrow labelled RESULTS pointing back out."
+       loading="lazy" style="max-width:100%; height:auto; border-radius:0.7rem;" />
+  <figcaption class="caption mt-2">The shape of it: an outer agent edits the inner agent's instructions; the inner agent builds; the results loop back. The detailed version is below.</figcaption>
+</figure>
+
 This is a companion post to [An agent that adapts to you]({{
 '/blog/2026/mobius-an-app-that-builds-itself/' | relative_url }}).
 That post is about the agent itself. This one is about the loop
