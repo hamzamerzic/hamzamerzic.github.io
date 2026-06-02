@@ -466,8 +466,9 @@ Claude tends to spell out reasoning. For the iteration work behind
 this post (and for the companion post on the harness), I have been
 letting Claude drive Codex through its [Codex
 plugin](https://github.com/openai/codex). The disagreements between
-the two models were useful: they exposed assumptions either model
-alone tended to leave implicit.
+the two models were the useful part: when they pulled in different
+directions on an edit, that was usually a sign the edit was worth a
+closer look.
 
 Since this was written, the apps the agent builds grew a place to
 live: an app store, and the start of an operating system around it

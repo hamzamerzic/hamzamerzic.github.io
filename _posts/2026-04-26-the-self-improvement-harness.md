@@ -307,7 +307,7 @@ re-read and quote, the introspective answers turn out to be useful
 _often enough_ to be the better default than third-party theory of
 mind.
 
-## Sycophancy wasn't the worry; tone still mattered
+## Sycophancy was not the worry; tone still mattered
 
 Once introspection was the default, a second question came up: did
 it matter _how_ I asked? Was there a difference between
