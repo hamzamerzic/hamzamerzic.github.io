@@ -2,7 +2,6 @@
 layout: page
 title: projects
 permalink: /projects/
-description: Projects by Hamza Merzić — Möbius (a self-hosted AI agent that builds apps), Blox (a functional neural-network library for JAX), and open-source robotics tools.
 nav: true
 nav_order: 2
 display_categories: [software, robotics]

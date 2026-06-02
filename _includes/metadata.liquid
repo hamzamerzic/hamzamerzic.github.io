@@ -86,10 +86,6 @@
   {% endcomment %}
   {% assign sameaslinks = '' | split: ',' %}
   {% assign socials = site.data.socials %}
-  {% if socials.inspirehep_id %}
-    {% capture link %}https://inspirehep.net/authors/{{ socials.inspirehep_id }}{% endcapture %}
-    {% assign sameaslinks = sameaslinks | push: link %}
-  {% endif %}
   {% if site.orcid_id %}
     {% capture link %}https://orcid.org/{{ site.orcid_id }}{% endcapture %}
     {% assign sameaslinks = sameaslinks | push: link %}
