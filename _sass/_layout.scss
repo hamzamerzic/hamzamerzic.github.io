@@ -6,6 +6,11 @@ body {
   padding-bottom: 70px;
   color: var(--global-text-color);
   background-color: var(--global-bg-color);
+  font-family: var(--global-font);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Inter stylistic sets: cv01 (open digit 1) + ss01 — matches Möbius. */
+  font-feature-settings: "cv01", "ss01";
 
   h1,
   h2,
@@ -14,6 +19,8 @@ body {
   h5,
   h6 {
     scroll-margin-top: 66px;
+    font-family: var(--global-font);
+    letter-spacing: -0.011em;
   }
 }
 

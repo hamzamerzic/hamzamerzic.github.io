@@ -8,32 +8,40 @@
 :root {
   color-scheme: light dark;
 
+  /* Type stacks (shared across modes) */
+  --global-font: #{$font-sans};
+  --global-font-mono: #{$font-mono};
+
   /* Text colors */
   --global-text-color: #{$theme-light-text};
   --global-text-color-light: #{$theme-light-text-light};
 
-  /* Backgrounds */
+  /* Backgrounds & surfaces */
   --global-bg-color: #{$theme-light-bg};
   --global-code-bg-color: #{$code-bg-color-light};
-  --global-card-bg-color: #{$white-color};
-  --global-footer-bg-color: #{$grey-color-dark};
+  --global-card-bg-color: #{$theme-light-surface};
+  --global-surface-elevated: #fbfaf8;
+  --global-border-color: #e3dfd9;
+  --global-footer-bg-color: #141414; /* charcoal footer = brand base in both modes */
   --global-newsletter-bg-color: #{$white-color};
 
   /* Accent colors */
   --global-theme-color: #{$theme-light-accent};
-  --global-hover-color: #{$theme-light-accent};
+  --global-theme-color-bright: #{$theme-light-accent-bright};
+  --global-accent-tint: rgba(5, 150, 105, 0.08);
+  --global-hover-color: #{$theme-light-secondary};
   --global-hover-text-color: #{$white-color};
   --global-secondary-accent-color: #{$theme-light-secondary};
 
   /* Misc UI colors */
-  --global-footer-text-color: #{$grey-color-light};
-  --global-footer-link-color: #{$white-color};
+  --global-footer-text-color: #a8a8a8;
+  --global-footer-link-color: #{$theme-light-accent-bright};
   --global-distill-app-color: #{$grey-color};
-  --global-divider-color: rgba(0, 0, 0, 0.1);
-  --global-back-to-top-bg-color: rgba(0, 0, 0, 0.4);
+  --global-divider-color: rgba(0, 0, 0, 0.08);
+  --global-back-to-top-bg-color: #{$theme-light-accent};
   --global-back-to-top-text-color: #{$white-color};
   --global-newsletter-text-color: #{$black-color};
-  --global-highlight-color: #{$red-color-dark};
+  --global-highlight-color: #{$theme-light-accent};
 
   /* Alert block colors */
   --global-tip-block: #42b983;
@@ -77,28 +85,32 @@
 html[data-theme="dark"] {
   color-scheme: dark;
 
-  /* Backgrounds & Text */
+  /* Backgrounds & surfaces */
   --global-bg-color: #{$theme-dark-bg};
   --global-text-color: #{$theme-dark-text};
   --global-text-color-light: #{$theme-dark-text-light};
   --global-card-bg-color: #{$theme-dark-bg-card};
+  --global-surface-elevated: #{$theme-dark-bg-elevated};
+  --global-border-color: #{$theme-dark-border};
   --global-code-bg-color: #{$code-bg-color-dark};
 
   /* Accent colors */
   --global-theme-color: #{$theme-dark-accent};
-  --global-hover-color: #{$theme-dark-accent};
+  --global-theme-color-bright: #{$theme-dark-accent-bright};
+  --global-accent-tint: rgba(16, 185, 129, 0.1);
+  --global-hover-color: #{$theme-dark-accent-bright};
   --global-secondary-accent-color: #{$theme-dark-secondary};
 
   /* Misc UI colors */
-  --global-footer-bg-color: #{$grey-color-light};
-  --global-footer-text-color: #{$grey-color-dark};
-  --global-footer-link-color: #{$black-color};
+  --global-footer-bg-color: #0a0a0a;
+  --global-footer-text-color: #{$theme-dark-text-light};
+  --global-footer-link-color: #{$theme-dark-accent-bright};
   --global-distill-app-color: #{$grey-color-light};
-  --global-divider-color: #424246;
-  --global-back-to-top-bg-color: rgba(255, 255, 255, 0.5);
-  --global-back-to-top-text-color: #{$black-color};
-  --global-newsletter-bg-color: #{$grey-color-light};
-  --global-newsletter-text-color: #{$grey-color-dark};
+  --global-divider-color: #{$theme-dark-border};
+  --global-back-to-top-bg-color: #{$theme-dark-accent};
+  --global-back-to-top-text-color: #0a0a0a;
+  --global-newsletter-bg-color: #{$theme-dark-bg-card};
+  --global-newsletter-text-color: #{$theme-dark-text};
 
   .only-light {
     display: none;

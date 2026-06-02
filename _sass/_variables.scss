@@ -6,22 +6,44 @@
 @use "sass:color";
 
 // === Custom Theme Colors ===
-// Use these to control the main look and feel of the site.
+// The site shares its visual language with Möbius (the self-hosted
+// agent project): true charcoal surfaces, one restrained accent, a
+// mono face for code and metadata. The accent is emerald rather than
+// Möbius's purple — the green analogue of the same system. Dark values
+// mirror Möbius's theme.js DARK_COLORS; light mirrors its warm LIGHT_COLORS.
+// Emerald-500 #10b981 clears WCAG AA on every dark surface here (7.6:1
+// on #0d0d0d, 7.0:1 on #171717); on light backgrounds the deeper
+// emerald-600 #059669 keeps links AA.
 
-// Light Theme (Soft & Neutral)
-$theme-light-bg: #f8f9fa; // A very light, soft off-white
-$theme-light-text: #212121; // Dark charcoal (matches dark theme background)
-$theme-light-text-light: #6c757d; // Standard secondary gray
-$theme-light-accent: #4c956c; // Deep forest green
-$theme-light-secondary: #e57a44; // Warm terracotta
+// Light Theme (warm neutral + emerald)
+$theme-light-bg: #f4f2ef; // warm off-white
+$theme-light-surface: #ffffff; // cards read by contrast, not just shadow
+$theme-light-text: #1c1b1a; // near-black ink (never pure black)
+$theme-light-text-light: #6b6864; // ~5.4:1 muted
+$theme-light-accent: #059669; // emerald-600 — AA on light
+$theme-light-accent-bright: #10b981;
+$theme-light-secondary: #047857; // emerald-700 for hover/secondary
 
-// Dark Theme (Neutral Charcoal)
-$theme-dark-bg: #212121; // Neutral charcoal background
-$theme-dark-bg-card: #2c3237; // Lighter gray for cards
-$theme-dark-text: #eaeaea; // Neutral off-white text
-$theme-dark-text-light: #a9a9a9; // Standard dimmer gray
-$theme-dark-accent: #4c956c; // Deep forest green
-$theme-dark-secondary: #e57a44; // Warm terracotta
+// Dark Theme (true charcoal + emerald — the hero)
+$theme-dark-bg: #0d0d0d; // page
+$theme-dark-bg-card: #171717; // card / surface
+$theme-dark-bg-elevated: #1f1f1f; // raised surface
+$theme-dark-border: #2a2a2a; // hairline border
+$theme-dark-text: #ececec; // off-white
+$theme-dark-text-light: #a8a8a8; // ~6.1:1 muted
+$theme-dark-accent: #10b981; // emerald-500 — 7.6:1 on #0d0d0d
+$theme-dark-accent-bright: #34d399; // emerald-400 for hover/links
+$theme-dark-secondary: #34d399;
+
+// Shared type stacks (match Möbius: Inter + JetBrains Mono)
+$font-sans:
+  "Inter",
+  system-ui,
+  -apple-system,
+  "Segoe UI",
+  Roboto,
+  sans-serif;
+$font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
 // === Base Color Palette ===
 // Original color variables
@@ -52,8 +74,8 @@ $white-color: #ffffff !default;
 $black-color: #000000 !default;
 
 // Theme colors
-$code-bg-color-light: #f1f1f1;
-$code-bg-color-dark: #2c3237 !default;
+$code-bg-color-light: #f1efec;
+$code-bg-color-dark: #1a1a1a !default;
 
 // Font awesome location
 $fa-font-path: "../webfonts";
