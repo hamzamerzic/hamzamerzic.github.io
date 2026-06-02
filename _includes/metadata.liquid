@@ -55,20 +55,22 @@
   <!-- OpenGraph -->
   <meta property="og:site_name" content="{{ title }}">
   <meta property="og:type" content="{% if is_blog_post %}article{% else %}website{% endif %}">
-  <meta property="og:title" content="{% if page.title %}{{ title }} | {{ page.title }}{% else %}{{ title }}{% endif %}">
+  <meta property="og:title" content="{% if page.title and page.url != '/' %}{{ page.title }} | {{ title }}{% else %}{{ title }}{% endif %}">
   <meta property="og:url" content="{{ page.url | prepend: site.baseurl | prepend: site.url | remove_first: 'index.html' }}">
   <meta property="og:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
-  {% if page.og_image or site.og_image %}
-    <meta property="og:image" content="{% if page.og_image %}{{ page.og_image }}{% else %}{{ site.og_image }}{% endif %}">
+  {% comment %} Prefer per-page og_image, then the post thumbnail, then the site default — and always emit an absolute URL so crawlers can resolve it. {% endcomment %}
+  {% assign og_image_path = page.og_image | default: page.thumbnail | default: site.og_image %}
+  {% if og_image_path %}
+    <meta property="og:image" content="{{ og_image_path | relative_url | absolute_url }}">
   {% endif %}
   <meta property="og:locale" content="{{ site.lang }}">
 
   <!-- Twitter card -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="{% if is_blog_post %}summary_large_image{% else %}summary{% endif %}">
   <meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ title }}{% endif %}">
   <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
-  {% if page.og_image or site.og_image %}
-    <meta name="twitter:image" content="{% if page.og_image %}{{ page.og_image }}{% else %}{{ site.og_image }}{% endif %}">
+  {% if og_image_path %}
+    <meta name="twitter:image" content="{{ og_image_path | relative_url | absolute_url }}">
   {% endif %}
   {% if site.x_username %}
     <meta name="twitter:site" content="@{{ site.x_username }}">
@@ -222,20 +224,26 @@
 
   <script type="application/ld+json">
     {
+        "@context": "https://schema.org",
+        "@type": "{% if is_blog_post %}BlogPosting{% else %}WebSite{% endif %}",
+        "url": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
+        "name": "{{ author_name }}",
+        "headline": "{% if page.title and page.title != 'blank' %}{{ page.title }}{% else %}{{ author_name }}{% endif %}",
+        "description": "{% if page.description %}{{ page.description | strip_newlines }}{% else %}{{ site.description | strip_newlines }}{% endif %}",
+        {% if is_blog_post %}
+        "datePublished": "{{ page.date | date_to_xmlschema }}",
+        "dateModified": "{{ page.last_updated | default: page.date | date_to_xmlschema }}",
+        {% assign schema_image = page.og_image | default: page.thumbnail | default: site.og_image %}{% if schema_image %}
+        "image": "{{ schema_image | relative_url | absolute_url }}",{% endif %}
+        "mainEntityOfPage": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
+        "publisher": { "@type": "Person", "name": "{{ author_name }}" },
+        {% endif %}
         "author":
         {
             "@type": "Person",
-            "name": "{{ author_name }}"
-        },
-        "url": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
-        "@type": "{% if is_blog_post %}BlogPosting{% else %}WebSite{% endif %}",
-        "description": "{% if page.description %}{{ page.description }}{% else if site.description %}{{ site.description }}{% endif %}",
-        "headline": "{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}",
-        {% if sameaslinks != blank %}
-        "sameAs": {{ sameaslinks }},
-        {% endif %}
-        "name": "{{ author_name }}",
-        "@context": "https://schema.org"
+            "name": "{{ author_name }}"{% if sameaslinks != blank %},
+            "sameAs": {{ sameaslinks }}{% endif %}
+        }
     }
   </script>
 {% endif %}

@@ -3,7 +3,7 @@ layout: post
 title: An agent that adapts to you
 date: 2026-04-26 12:00:00
 description: A personalized AI agent you can self-host. It builds the tools you need, edits the interface around them, and adapts both its functionality and its presentation to how you actually use it.
-thumbnail: assets/img/moebius.png
+thumbnail: assets/img/mobius/covers/cover-post1.jpg
 categories: software
 giscus_comments: true
 related_posts: false
@@ -83,8 +83,8 @@ deploys in about three minutes.</li>
 ## The demo
 
 Möbius's starting point is a deliberately small chat — no file
-upload, no scheduled jobs panel, no notifications button. To check
-that's an honest claim and not a stage-managed demo, I picked file
+upload, no scheduled jobs panel, no notifications button. To keep
+the claim honest rather than stage-managed, I picked file
 upload and tore the entire pipeline out: deleted the FastAPI route
 from `/app`, ripped the React component out of the shell,
 restarted the app. Then I sent a deliberately ordinary prompt:
@@ -270,7 +270,7 @@ above the first one — the harness that watches the inner agent —
 and a recurring pass that asks: _was this change generally useful,
 or was it just for me?_ The generally-useful diffs are candidates
 for upstreaming into the shipped image, so the next clean install
-starts with them already in place. That's how Möbius's starting
+starts with them already in place. That is how Möbius's starting
 point grows over time without bloating; the harness picks which
 features survive the edit and ship to everyone.
 

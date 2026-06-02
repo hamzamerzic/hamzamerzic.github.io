@@ -3,15 +3,16 @@ layout: post
 title: The agent is the kernel
 date: 2026-06-02 12:00:00
 description: Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store — it is what an editable, recoverable, single-owner operating system lets the agent do for you.
-thumbnail: assets/img/moebius.png
+thumbnail: assets/img/mobius/covers/cover-post3.jpg
 categories: software
+keywords: self-hosted AI agent, AI agent that builds apps, AI app store, personal AI operating system, self-hosted PWA, agent-built mini-apps, Claude Code, Codex, Möbius
 giscus_comments: true
 related_posts: false
 published: true
 ---
 
 <details class="tldr">
-<summary><strong>TL;DR.</strong> Möbius now has an app store: a handful of installable mini-apps, each a public git repo with a manifest. You install one by pasting a URL, tweak it by asking the agent, save it to your home screen, and use it offline. The store is the visible part; the point is an operating system you own and can reshape, where breaking something is safe because it is recoverable.</summary>
+<summary><strong>TL;DR.</strong> Möbius now has an app store: a handful of installable mini-apps, each a public git repo with a manifest. You install one by pasting a URL, tweak it by asking the agent, save it to your home screen, and use it offline. The store is the visible part; the point is an operating system you own and can reshape, where breaking something is cheap to undo because the system is built around recovery.</summary>
 
 <ul>
 <li><strong>The store</strong> is a curated starter pack, not a registry. A Möbius app is just a public repo with a <code>mobius.json</code> and a single <code>index.jsx</code>. Sharing one means sharing a URL.</li>
@@ -42,7 +43,7 @@ yours to keep, move, rewrite, or throw away.
 <figure class="text-center my-4">
   <img src="{{ '/assets/img/mobius/os/os-hero.png' | relative_url }}"
        alt="The Möbius OS landing page: the headline 'The agent is the kernel.' over a description of a self-hosted PWA where mini-apps are installed, customized, and rebuilt from a single chat surface."
-       loading="lazy" style="max-width:100%; height:auto;" />
+       loading="lazy" style="max-width:330px; width:100%; height:auto; border-radius:0.7rem;" />
   <figcaption class="caption mt-2">The framing, stated plainly on the project's own front page.</figcaption>
 </figure>
 
@@ -52,8 +53,8 @@ In a normal operating system the kernel is the privileged core: it
 owns the hardware, schedules the work, and everything you actually
 use runs on top of it. Möbius keeps that shape and swaps the core.
 The privileged thing in the middle is not a scheduler — it is the
-agent. You describe what you want; it writes the app, installs it,
-schedules its background jobs, and wires it into the shell. The apps
+agent. You describe what you want; it can write the app, install it,
+schedule its background jobs, and wire it into the shell. The apps
 are user space. The chat is the system call.
 
 <figure class="mb-diagram">
@@ -80,13 +81,13 @@ still aspirational.
 The app store is itself a Möbius app — it ships in the drawer of a
 fresh install, because on first boot the platform installs it
 through the exact same path you will use for everything else. The
-store eating its own dogfood is the first sign that there is no
-privileged install channel hiding somewhere.
+store installs through the same channel as every other app — the
+first sign that there is no privileged install path hiding somewhere.
 
 <figure class="text-center my-4">
   <img src="{{ '/assets/img/mobius/os/store-catalog.png' | relative_url }}"
-       alt="The Möbius OS curated app catalog: cards for News, Visited, and Gym, each with an icon, version number, description, and capability badges such as 'Works offline' and 'Runs daily'."
-       loading="lazy" style="max-width:100%; height:auto;" />
+       alt="The Möbius OS curated app catalog: cards for News, Visited, Gym, LaTeX, and Dreaming, each with an icon, version number, description, and capability badges such as 'Works offline' and 'Runs daily'."
+       loading="lazy" style="max-width:340px; width:100%; height:auto; border-radius:0.7rem;" />
   <figcaption class="caption mt-2">The curated catalog — the same starter-pack apps the in-app store installs. Each card is generated from that app's manifest, so the version and description are always the live ones.</figcaption>
 </figure>
 
@@ -134,8 +135,8 @@ source, its icon, its background job if it has one, and any starter
 data it ships. It compiles the source off to the side, and only
 promotes the compiled app to "live" after the database row commits —
 so a half-written app is never something you can open. If anything
-fails along the way, the whole thing rolls back and leaves no
-half-installed wreckage.
+fails along the way, the whole thing rolls back and leaves nothing
+half-installed behind.
 
 That all-or-nothing property is not a detail. It is what lets the
 rest of the system be relaxed about breaking, which is the next
@@ -272,9 +273,10 @@ your own server, which is what makes the next section possible.
 
 ## Offline, and the sync that catches up
 
-The apps work with no network. This is the part I spent the most
-unglamorous engineering on, because "works offline" is easy to claim
-and hard to actually land on a phone.
+Offline-capable apps work with no network, and storage works offline
+for every app. This is the part I spent the most unglamorous
+engineering on, because "works offline" is easy to claim and hard to
+actually land on a phone.
 
 When an app is marked offline-capable, a service worker caches the
 shell and the app's code, so opening it with the network off still
@@ -378,7 +380,7 @@ path, not a wall.
 trivial: a personal tracker that stores a little data and works
 offline should take one sentence. The hard thing should be possible:
 the storage primitive is a convenience, not a cage, and an app that
-wants its own database or a different sync model is free to reach for
+wants its own local database or storage layer is free to reach for
 it. The one real wall right now is that apps cannot open arbitrary
 network connections to outside services — a deliberate security line
 I have not yet built a careful door through.
@@ -400,8 +402,8 @@ all reversible; and where the privileged core is the one part that
 can turn "I wish I had a thing that…" into a thing that is there the
 next time you open your phone.
 
-The apps above are a starter pack. The interesting ones are the ones
-that do not exist yet because nobody has needed them yet. If you
+The apps above are a starter pack. The interesting ones are the apps
+that do not exist yet, because nobody has needed them yet. If you
 [deploy an instance]({{ '/mobius/' | relative_url }}) and build
 something — or tear one of these apart and rebuild it as something
 better — that is exactly the point, and I would love to see it.

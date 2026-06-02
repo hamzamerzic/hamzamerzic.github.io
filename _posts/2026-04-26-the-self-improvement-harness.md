@@ -3,7 +3,7 @@ layout: post
 title: The self-improvement harness behind Möbius
 date: 2026-04-26 13:00:00
 description: An outer agent talks to an inner agent and tries to make it more helpful. Notes on what we measured, what surprised us, and where the bottleneck moved to.
-thumbnail: assets/img/moebius.png
+thumbnail: assets/img/mobius/covers/cover-post2.jpg
 categories: software, research
 giscus_comments: true
 related_posts: false
@@ -289,10 +289,10 @@ one iteration. The TOM rounds that preceded it had not identified
 this failure mode at all — I had been reading transcripts where
 the agent built creative apps and thinking "that looks fine."
 
-The headline result is that the introspection arm reaches
+The working hypothesis is that the introspection arm reaches
 saturation faster, in fewer iterations, with edits that turn out
 to be more durable on the next round. The whack-a-mole tradeoff
-mostly goes away.
+became less frequent.
 
 This is, frankly, an embarrassing finding in retrospect. The thing
 that worked was **asking**. The reason it surprised me is that I
@@ -441,7 +441,7 @@ _"If you'd like changes, let me know."_
 | Feedback asked       | 2/2      | 2/2             |
 | **Total**            | 2/12     | **12/12**       |
 
-The harness contributes +10 of the 12 scored items. The only
+The harness contributes 10 of the 12 scorecard points. The only
 behavior the model produces on its own is the feedback ask. Every
 other item — platform-contract knowledge, clarification flow,
 persistent logging, notification delivery, visual verification —
@@ -573,5 +573,5 @@ the disagreement to become diagnostic. Seed edits that felt obvious
 to one and surprising to the other almost always landed on the
 surprise. On the kind of work this post is about — polishing a
 blog draft, auditing a skill file, choosing which gotchas belong
-in the seed — that collaboration consistently produced better edits
+in the seed — that collaboration often produced better edits
 than either model running alone.
