@@ -25,6 +25,17 @@ nav.navbar {
   -webkit-backdrop-filter: saturate(180%) blur(12px);
 }
 
+/* Brand wordmark: first name bold, surname light — owner preference, and
+   robust against PurgeCSS stripping the Bootstrap utility classes the
+   header markup relies on. The header wraps first_name in `.font-weight-bold`
+   and leaves last_name on the `.font-weight-lighter` anchor. */
+.navbar-brand.title {
+  font-weight: 300;
+  .font-weight-bold {
+    font-weight: 700;
+  }
+}
+
 /* Post header: heavier, tighter title; muted description in the body face. */
 .post .post-header {
   .post-title {
