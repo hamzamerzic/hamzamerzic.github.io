@@ -153,7 +153,7 @@ about the work, you still have to carry the system in your head.
 
 (The name is from Möbius strips, where moving across a level
 brings you back to the same surface. Each app the agent builds
-doesn't sit somewhere external — it lands in the shell the chat
+does not sit somewhere external — it lands in the shell the chat
 lives in, becomes part of the surface the next conversation
 happens on. The shell the chat runs in was, once, written by a
 different version of the same chat.)
@@ -198,8 +198,8 @@ interesting part. Walk through it from the top of the chat:
 
 <div class="caption mt-2">
   Pressing Submit, three frames. First: the chat opens — the
-  prompt lands and the agent goes off to check what's actually
-  possible (is the backend writeable, what's the existing shape)
+  prompt lands and the agent goes off to check what is actually
+  possible (is the backend writeable, what is the existing shape)
   before proposing anything. Second: it comes back with a
   one-paragraph summary of what needs building, then three real
   decisions to surface — file types, affordances, size cap —
@@ -241,8 +241,8 @@ interesting part. Walk through it from the top of the chat:
   inline in the sent message, and the agent on the other side
   actually sees the image — its reply reads off every meaningful
   detail and ties the symbolism back to the project. The endpoint
-  it called wasn't there when I asked; the component rendering
-  the chip didn't exist either. Both shipped in one chat.
+  it called was not there when I asked; the component rendering
+  the chip did not exist either. Both shipped in one chat.
 </div>
 
 File upload is one example of a capability the agent builds. The
@@ -265,14 +265,12 @@ on the canvas next to the chat and persist there:
 
 The same loop is how _every_ general capability lands: notifications,
 scheduled jobs, a web-search button, voice mode, a richer settings
-panel. The agent builds it when you ask. Then there's a second loop
+panel. The agent builds it when you ask. Then there is a second loop
 above the first one — the harness that watches the inner agent —
 and a recurring pass that asks: _was this change generally useful,
-or was it just for me?_ The generally-useful diffs are candidates
-for upstreaming into the shipped image, so the next clean install
-starts with them already in place. That is how Möbius's starting
-point grows over time without bloating; the harness picks which
-features survive the edit and ship to everyone.
+or was it just for me?_ Generally useful diffs are candidates for
+upstreaming into the shipped image; I still review that promotion
+step.
 
 ### Presentation: the part that stays yours
 
@@ -351,7 +349,7 @@ instances of the same product:
 The harder axis is _layout_ — where things are, not how they look.
 Same conversation, same chat box: ask the agent to rewrite the
 navigation model and it does. The default is drawer-first; one
-prompt later it's a bottom-nav app with Chat / Apps / Settings as
+prompt later it is a bottom-nav app with Chat / Apps / Settings as
 tabs:
 
 <div class="swiper">
@@ -389,7 +387,7 @@ tabs:
   as a persistent bottom strip, no header bar, native-app style.
   Third and fourth: the other two tabs of the reshaped layout —
   Apps (mini-app grid) and Settings (provider switching, Gemini
-  key configured for image generation). It's not a re-skin; the
+  key configured for image generation). It is not a re-skin; the
   navigation model of the whole instance changed, and the
   Settings page is shared across navigation styles.
 </div>
@@ -445,13 +443,13 @@ and it shows. Four directions:
   learning, asking before interrupting — proactive in service of
   the user, never as a way to manufacture engagement.
 - **Help that seeks you out.** The part I want most and am least
-  sure how to land. An agent that notices you've been reading
+  sure how to land. An agent that notices you have been reading
   distributed-systems papers three Tuesdays in a row and builds
   you a swipe-style recommender, as a small gift, without being
   asked. Most products in this space are tuned to maximise
-  engagement; the goal here is the opposite — a system that's
+  engagement; the goal here is the opposite — a system that is
   quiet, knows when to speak, and shows up because it knows you,
-  not because it's trying to keep you.
+  not because it is trying to keep you.
 
 None of those ship yet. The loop that makes them possible — and
 that makes the existing platform less brittle the longer you use
@@ -465,10 +463,11 @@ A note on the agent itself: Möbius can run with Claude Code or
 Codex inside (one settings toggle, switching mid-thread is one
 click). Both have different tastes — Codex tends to be terser,
 Claude tends to spell out reasoning. For the iteration work behind
-this post (and for the companion post on the harness), I've been
+this post (and for the companion post on the harness), I have been
 letting Claude drive Codex through its [Codex
-plugin](https://github.com/openai/codex). The disagreement between
-the two models is the part I trust most.
+plugin](https://github.com/openai/codex). The disagreements between
+the two models were useful: they exposed assumptions either model
+alone tended to leave implicit.
 
 Since this was written, the apps the agent builds grew a place to
 live: an app store, and the start of an operating system around it
@@ -478,7 +477,7 @@ That is its own [companion post]({{ '/blog/2026/the-agent-is-the-kernel/' | rela
 The source is on [GitHub](https://github.com/hamzamerzic/mobius),
 the project page is [here]({{ '/mobius/' | relative_url }}), and
 the README's deploy button gets you a working instance in about
-three minutes. I'd love to know what you build with it — and what
+three minutes. I would love to know what you build with it — and what
 you change _around_ what you build.
 
 <script>

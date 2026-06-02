@@ -15,7 +15,7 @@ published: true
 <summary><strong>TL;DR.</strong> Möbius now has an app store: a handful of installable mini-apps, each a public git repo with a manifest. You install one by pasting a URL, tweak it by asking the agent, save it to your home screen, and use it offline. The store is the visible part; the point is an operating system you own and can reshape, where breaking something is cheap to undo because the system is built around recovery.</summary>
 
 <ul>
-<li><strong>The store</strong> is a curated starter pack, not a registry. A Möbius app is just a public repo with a <code>mobius.json</code> and a single <code>index.jsx</code>. Sharing one means sharing a URL.</li>
+<li><strong>The store</strong> is a curated starter pack, not a registry. A Möbius app is just a public repo with a <code>mobius.json</code> and an <code>index.jsx</code> entry point. Sharing one means sharing a URL.</li>
 <li><strong>Updates</strong> are URL-keyed: bump the version upstream, the store shows "Update available", reinstalling patches the code and keeps your data.</li>
 <li><strong>Recovery</strong> is the philosophy made concrete: atomic installs that cannot half-land, a <code>/recover</code> route, and a git history of your whole instance. Breaking is allowed because it is reversible.</li>
 <li><strong>Offline + home screen.</strong> Apps install to your home screen as standalone PWAs and keep working with no network; writes queue and sync when you reconnect.</li>
@@ -80,9 +80,9 @@ still aspirational.
 
 The app store is itself a Möbius app — it ships in the drawer of a
 fresh install, because on first boot the platform installs it
-through the exact same path you will use for everything else. The
-store installs through the same channel as every other app — the
-first sign that there is no privileged install path hiding somewhere.
+through the exact same path you will use for everything else — the
+first sign that there is no privileged install channel hiding
+somewhere.
 
 <figure class="text-center my-4">
   <img src="{{ '/assets/img/mobius/os/store-catalog.png' | relative_url }}"
@@ -107,15 +107,23 @@ pass:
 </div>
 
 Each of those is a public git repo in the [`mobius-os`](https://github.com/mobius-os)
-organization, named `app-<something>`, holding three things: a
-`mobius.json` manifest, a single `index.jsx` that is the whole app,
-and a 1024×1024 icon. That is the entire contract. There is no
-submission queue, no review board, no registry to be blessed by.
-"Publishing" an app means making a repo public and sharing the URL
-to its manifest. The curated list above is a starter pack I picked;
-the install button will take any manifest URL you paste, and the
-store warns — but does not stop you — if it comes from a host it has
-not seen before.
+organization, named `app-<something>`, built around three things: a
+`mobius.json` manifest, an `index.jsx` entry point, and a 1024×1024
+icon. The smallest apps are that single file; larger ones pull in a
+few more, but the manifest plus an entry is the whole contract.
+There is no submission queue, no review board, no registry to be
+blessed by. "Publishing" an app means making a repo public and
+sharing the URL to its manifest. The curated list above is a starter
+pack I picked; the install button will take any manifest URL you
+paste, and the store warns — but does not stop you — if it comes from
+a host it has not seen before.
+
+<figure class="text-center my-4">
+  <img src="{{ '/assets/img/mobius/os/app-repo.png' | relative_url }}"
+       alt="The app-gym repository on GitHub: a flat list of files including mobius.json, index.jsx, and icon.png alongside a README and a couple of support files."
+       loading="lazy" style="max-width:100%; height:auto;" />
+  <figcaption class="caption mt-2">One app's repo. The manifest, the entry point, and the icon are the contract; everything else is the app's own code — here the agent has been rebuilding the Gym tracker.</figcaption>
+</figure>
 
 <figure class="text-center my-4">
   <img src="{{ '/assets/img/mobius/os/github-org.png' | relative_url }}"
@@ -230,12 +238,12 @@ what each one is, because "recovery" can mean a lot of things:
     <div class="mb-node">
       <span class="mb-node__tag">layer 1</span>
       <span class="mb-node__title">Atomic install</span>
-      <span class="mb-node__sub">a broken update can't half-land; the previous version is restored from a snapshot</span>
+      <span class="mb-node__sub">a broken update cannot half-land; the previous version is restored from a snapshot</span>
     </div>
     <div class="mb-node">
       <span class="mb-node__tag">layer 2</span>
       <span class="mb-node__title"><code>/recover</code></span>
-      <span class="mb-node__sub">a server-side page the agent can't edit; resets the shell, keeps chats, apps, and data</span>
+      <span class="mb-node__sub">a server-side page the agent cannot edit; resets the shell, keeps chats, apps, and data</span>
     </div>
     <div class="mb-node">
       <span class="mb-node__tag">layer 3</span>
@@ -255,8 +263,7 @@ philosophy in one move: when a guardrail falls short, you do not add
 a check, you invoke Möbius.
 
 <blockquote class="pull-quote">
-The correct response to "the agent broke X" is rarely "add a check"
-and usually "spawn an agent to fix X."
+Recovery paths should make agent mistakes cheap to inspect and repair.
 </blockquote>
 
 ## Your home screen, with or without Möbius
@@ -280,8 +287,8 @@ actually land on a phone.
 
 When an app is marked offline-capable, a service worker caches the
 shell and the app's code, so opening it with the network off still
-renders the real app — not the browser's dinosaur, not a blank
-screen, but a branded "you're offline" panel at worst and the
+renders the real app — not the browser's offline page, not a blank
+screen, but a branded "you are offline" panel at worst and the
 working app at best. And storage works offline for _every_ app, not
 just the offline-capable ones: reads come instantly from a local
 cache and refresh in the background, and writes you make offline

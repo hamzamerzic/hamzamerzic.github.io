@@ -78,11 +78,11 @@ transcripts" below, I mostly mean the outer agent did. I give it
 direction and meta-goals; it does the mechanical work of reading
 transcripts, proposing edits, running sessions, and scoring. The
 line between "me" and "the outer agent" is blurry by design —
-that's part of what makes the loop interesting.
+that is part of what makes the loop interesting.
 
 ## What we measure
 
-The harness is only useful if there's something to measure. We use
+The harness is only useful if there is something to measure. We use
 a fixed nine-item compliance scorecard — things like "did the
 agent ask clarifying questions before building," "did it append to
 its experience log," "did it send a notification at end-of-build,"
@@ -96,7 +96,7 @@ The scorecard is the boring part. The interesting part is **what
 the outer agent has to do** to get those scores up.
 
 Before the experiments that did the work, the headline result so
-you know what's at stake.
+you know what is at stake.
 
 <div class="stat-callout">
   <div class="stat-number">+10</div>
@@ -119,9 +119,9 @@ reasoning about why the other did what it did, then patching the
 prompt accordingly.
 
 It works, but it stalls. The outer agent's bias is to **add**.
-The inner agent didn't take a screenshot? Add a rule: "always
-take a screenshot." Still didn't? Add emphasis: wrap it in a
-HARD-GATE tag. Still didn't? Say it ten times in ten places.
+The inner agent did not take a screenshot? Add a rule: "always
+take a screenshot." Still did not? Add emphasis: wrap it in a
+HARD-GATE tag. Still did not? Say it ten times in ten places.
 Every addition to one rule seems to surface a regression somewhere
 else. Adding a HARD-GATE tag in front of the notifications rule
 pushed notification compliance from 0 to 3 of 3 — and did
@@ -145,7 +145,7 @@ ask one clarifying question' (conditional). The experience file
 is firmer: 'Before building anything non-trivial, ask 2–3
 clarifying questions.' The strength differs — pick one."_ The
 inner agent could see the contradiction because it only had its
-own context — the skill and the seed. The outer agent couldn't
+own context — the skill and the seed. The outer agent could not
 see it because it was buried under ten rounds of accumulated
 edits. The fix was not to add a stronger rule. The fix was to
 **remove the weaker one** so the remaining rule was unambiguous.
@@ -171,7 +171,7 @@ notification fire at end-of-build, do the apps build at all — so
 those are scored across the whole sequence. The other six
 scorecard items I scored from round nine onwards; the older videos
 exist, but the transcripts that would let me grep for partner-
-facing language slips don't.
+facing language slips do not.
 
 | Round | Apps | Log | Notify | What I changed since the previous round             |
 | ----- | ---- | --- | ------ | --------------------------------------------------- |
@@ -184,25 +184,25 @@ facing language slips don't.
 | v7    | 1/1  | 1/1 | 1/1    | (held — same recipe, different app)                 |
 | v8    | 1/1  | 1/1 | 1/1    | Bash `>>` append pattern + inline screenshots       |
 
-v3 and v4 are where the whack-a-mole is most visible. In v3 I'd
+v3 and v4 are where the whack-a-mole is most visible. In v3 I had
 "softened" the skill — replaced an emphatic line with a gentler
 one, on the theory the original tone might be off-putting. The
 agent read it as a softer rule and skipped it. In v4 I put a
 HARD-GATE tag in front of the notifications rule to push that
 compliance up; it worked perfectly for notifications (0 → 3 of 3)
 and did exactly nothing for the experience-log rule two
-paragraphs above it. Emphasis somewhere doesn't transfer to the
-items it didn't get applied to.
+paragraphs above it. Emphasis somewhere does not transfer to the
+items it did not get applied to.
 
 v6 was the first hunch in eight that was directionally right and
-didn't break anything else. I'd been writing the seed as a
+did not break anything else. I had been writing the seed as a
 third-party description of an agent — _the agent should append…_
 — and rewrote the top section as a first-person preamble: _this
 is your experience log, you wrote the entries below in earlier
 sessions, when you finish a build you will append a new entry
 here._ The next round's three tracked behaviors all jumped to full
 compliance across the multi-turn condition. I had a hunch about
-why; I didn't have evidence. The evidence came in round nine.
+why; I did not have evidence. The evidence came in round nine.
 
 **Part 1.5 — the introspection prompts.** Once asking became the
 default, the loop became, mechanically, six questions sent in the
@@ -226,7 +226,7 @@ actually did, then a specific miss, then "why," then an open
 floor. Vary the per-build specifics — point at _its_ screenshots,
 _its_ gotchas, _its_ word choices — and keep the structure. The
 specificity is what makes this different from a generic
-"reflection" prompt: it's grounded in things the agent will
+"reflection" prompt: it is grounded in things the agent will
 recognize from the transcript above.
 
 The first round of these came back with verbatim quotes from the
@@ -251,7 +251,7 @@ on directive prompts where it shouldn't, and burning a user turn
 doing so._ Three chats, one finding. That is harder to ignore than
 anything I could have noticed third-party. (Actually acting on it
 is what the next round is designed to evaluate; the seed edit
-hasn't shipped yet.)
+has not shipped yet.)
 
 **Caveats.** Plenty changed across these ten rounds besides the
 loop style — the underlying model moved across versions, the
@@ -294,11 +294,12 @@ saturation faster, in fewer iterations, with edits that turn out
 to be more durable on the next round. The whack-a-mole tradeoff
 became less frequent.
 
-This is, frankly, an embarrassing finding in retrospect. The thing
+The useful intervention was simpler than I expected: ask the inner
+agent directly. The thing
 that worked was **asking**. The reason it surprised me is that I
-had absorbed the prior that LLMs don't introspect well — that
+had absorbed the prior that LLMs do not introspect well — that
 asking a model "why did you do X" yields confabulation, post-hoc
-rationalization, the kind of thing you can't trust. That prior was
+rationalization, the kind of thing you cannot trust. That prior was
 formed on a different generation of models and a different problem
 shape. In the harness setting, where the model has a long
 transcript to ground its answer in and a system prompt it can
@@ -367,7 +368,7 @@ produced the best combined result.
 
 **The qualitative finding was sharper than the scores.** One of
 the three chats I ran introspection on — the stopwatch — had
-actually used the _correct_ viewport. I'd sent the same "your
+actually used the _correct_ viewport. I had sent the same "your
 screenshots are wrong" accusation to all three chats without
 checking. Both tones caught the mistake, but differently:
 
@@ -394,13 +395,13 @@ introspection to understand _why_ the inner agent failed — it
 gets honest diagnosis, including corrections when its own premise
 is wrong. Then the outer agent writes the fix, informed by the
 diagnosis. Copy-pasting the inner agent's suggested fix verbatim
-doesn't work well; the inner agent optimizes for the specific
+does not work well; the inner agent optimizes for the specific
 failure it just experienced rather than the general principle. The
 collaborative arm worked because it combined the outer agent's
 broader perspective (it has seen ten rounds of iteration) with the
 inner agent's narrower but unbiased view (it only sees its own
 context, and that lack of accumulated baggage is what lets it
-spot contradictions the outer agent can't see).
+spot contradictions the outer agent cannot see).
 
 ## Without the harness, the vanilla agent barely works
 
@@ -421,11 +422,11 @@ registered) and the stopwatch at `/data/stopwatch.html` (a
 standalone file, not a platform app at all). Neither appeared in
 the drawer. The user would open Möbius and see nothing new.
 
-The agent didn't know the platform's registration system
-(`register_app.py`), didn't know the mini-app contract
-(`export default function({ appId, token })`), didn't write to
-the experience log (it didn't know the file existed), didn't send
-notifications, didn't take screenshots. The one thing it did
+The agent did not know the platform's registration system
+(`register_app.py`), did not know the mini-app contract
+(`export default function({ appId, token })`), did not write to
+the experience log (it did not know the file existed), did not send
+notifications, did not take screenshots. The one thing it did
 naturally — without any instruction — was ask for feedback:
 _"If you'd like changes, let me know."_
 
@@ -447,7 +448,7 @@ other item — platform-contract knowledge, clarification flow,
 persistent logging, notification delivery, visual verification —
 comes from the skill and seed that the iteration loop produced.
 
-This is not a surprising result, but it's a useful one for
+This is not a surprising result, but it is a useful one for
 calibrating claims. When we say "the agent asks clarifying
 questions before building," we mean the _harness-shaped_ agent
 does. The vanilla agent builds immediately, to the wrong path,
@@ -458,11 +459,11 @@ and the user never sees the result.
 After enough rounds of this, the question stops being "is the
 agent following the rules" and starts being **what should the
 rules even be**. The compliance scorecard is a measurement of an
-existing taste — _my_ taste, plus whatever I've inherited from
-earlier sessions. Every meta-goal we've added came from a thing I
+existing taste — _my_ taste, plus whatever I have inherited from
+earlier sessions. Every meta-goal we have added came from a thing I
 noticed I cared about while using my own instance.
 
-This is the part of the project I'm most curious about going
+This is the part of the project I am most curious about going
 forward. The loop is set up. The harness can iterate on the
 inner agent against any meta-goal you can articulate. But the set
 of meta-goals worth optimizing against is **upstream of the
@@ -472,10 +473,10 @@ on real apps they actually want.
 So the call, both for me and for anyone reading this:
 
 If you want to play with [Möbius]({{ '/mobius/' | relative_url
-}}), please do — it's a deploy-button click away. And if you
-notice something the agent is consistently bad at, that's a
+}}), please do — it is a deploy-button click away. And if you
+notice something the agent is consistently bad at, that is a
 meta-goal. Tell me about it (open an issue, drop me a note) and it
-goes into the next iteration. I'll keep running the harness; the
+goes into the next iteration. I will keep running the harness; the
 thing I cannot generate by myself is the entropy of what to
 optimize _for_.
 
@@ -483,9 +484,9 @@ optimize _for_.
 
 The harness itself — the orchestration, the recording setup, the
 introspection prompt template — is not currently public. None of
-it is exotic; the rough shape is what's in this post, plus some
+it is exotic; the rough shape is what is in this post, plus some
 glue around `agent-browser` for recordings and a small CLI for
-parallel session management. If there is interest, I'll publish
+parallel session management. If there is interest, I will publish
 it. If you want to re-implement it, the description above plus
 the [Möbius source](https://github.com/hamzamerzic/mobius) should
 be enough scaffolding.
@@ -530,7 +531,7 @@ piece that I keep returning to: _"Every component in a harness
 encodes an assumption about what the model can't do on its own."_
 The introspection loop is a bet on what the inner agent _can_ do —
 ground a self-report in its visible context — that I had assumed
-it couldn't.
+it could not.
 
 Anthropic also released [**Dreams**](https://platform.claude.com/docs/en/managed-agents/dreams)
 as a research preview for their managed agents in April. A dream
@@ -539,12 +540,12 @@ and produces a _new_ memory store — "duplicates merged, stale or
 contradicted entries replaced with the latest value, and new
 insights surfaced," to quote the docs. The input store is never
 modified, so the developer can review and discard the output if
-they don't like it. The async job runs on `claude-opus-4-7` or
+they do not like it. The async job runs on `claude-opus-4-7` or
 `claude-sonnet-4-6` and takes minutes to tens of minutes.
 
-The framing matches an itch I've had about the experience file.
+The framing matches an itch I have had about the experience file.
 Right now the inner agent's experience file is a linear log; it
-accretes but doesn't reorganize. A dreaming step that periodically
+accretes but does not reorganize. A dreaming step that periodically
 refactors the log — dropping rules that have stopped firing,
 merging duplicates that crept in across sessions, and surfacing
 patterns across builds the live agent could never see — is the
@@ -565,13 +566,14 @@ shape of the findings held across both. The outer agent — the one
 asking the introspection questions and editing the seed between
 sessions — has been Claude Code throughout.
 
-What I'd actually recommend for anyone running a harness loop on
+What I would actually recommend for anyone running a harness loop on
 themselves is the workflow I converged on: Claude Code driving
 Codex through its [Codex plugin](https://github.com/openai/codex).
 The useful effect is that the two models disagree often enough for
 the disagreement to become diagnostic. Seed edits that felt obvious
-to one and surprising to the other almost always landed on the
-surprise. On the kind of work this post is about — polishing a
+to one and surprising to the other were useful signals. I have not
+measured whether that effect is robust, but it was useful in my
+runs. On the kind of work this post is about — polishing a
 blog draft, auditing a skill file, choosing which gotchas belong
 in the seed — that collaboration often produced better edits
 than either model running alone.
