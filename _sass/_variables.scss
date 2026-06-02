@@ -8,32 +8,32 @@
 // === Custom Theme Colors ===
 // The site shares its visual language with Möbius (the self-hosted
 // agent project): true charcoal surfaces, one restrained accent, a
-// mono face for code and metadata. The accent is emerald rather than
-// Möbius's purple — the green analogue of the same system. Dark values
-// mirror Möbius's theme.js DARK_COLORS; light mirrors its warm LIGHT_COLORS.
-// Emerald-500 #10b981 clears WCAG AA on every dark surface here (7.6:1
-// on #0d0d0d, 7.0:1 on #171717); on light backgrounds the deeper
-// emerald-600 #059669 keeps links AA.
+// mono face for code and metadata. The accent is a vivid green rather
+// than Möbius's purple — the green analogue of the same system. Dark
+// values mirror Möbius's theme.js DARK_COLORS; light mirrors its warm
+// LIGHT_COLORS. Green-500 #22c55e clears WCAG AA on every dark surface
+// here (~8:1 on #0d0d0d); on light backgrounds the deeper green-700
+// #15803d keeps links AA.
 
-// Light Theme (warm neutral + emerald)
+// Light Theme (warm neutral + green)
 $theme-light-bg: #f4f2ef; // warm off-white
 $theme-light-surface: #ffffff; // cards read by contrast, not just shadow
 $theme-light-text: #1c1b1a; // near-black ink (never pure black)
 $theme-light-text-light: #6b6864; // ~5.4:1 muted
-$theme-light-accent: #059669; // emerald-600 — AA on light
-$theme-light-accent-bright: #10b981;
-$theme-light-secondary: #047857; // emerald-700 for hover/secondary
+$theme-light-accent: #15803d; // green-700 — AA on light
+$theme-light-accent-bright: #16a34a; // green-600
+$theme-light-secondary: #166534; // green-800 for hover/secondary
 
-// Dark Theme (true charcoal + emerald — the hero)
+// Dark Theme (true charcoal + green — the hero)
 $theme-dark-bg: #0d0d0d; // page
 $theme-dark-bg-card: #171717; // card / surface
 $theme-dark-bg-elevated: #1f1f1f; // raised surface
 $theme-dark-border: #2a2a2a; // hairline border
 $theme-dark-text: #ececec; // off-white
 $theme-dark-text-light: #a8a8a8; // ~6.1:1 muted
-$theme-dark-accent: #10b981; // emerald-500 — 7.6:1 on #0d0d0d
-$theme-dark-accent-bright: #34d399; // emerald-400 for hover/links
-$theme-dark-secondary: #34d399;
+$theme-dark-accent: #22c55e; // green-500 — ~8:1 on #0d0d0d
+$theme-dark-accent-bright: #4ade80; // green-400 for hover/links
+$theme-dark-secondary: #4ade80;
 
 // Shared type stacks (match Möbius: Inter + JetBrains Mono)
 $font-sans:
