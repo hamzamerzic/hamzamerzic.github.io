@@ -67,7 +67,7 @@
 
   <!-- Twitter card -->
   <meta name="twitter:card" content="{% if is_blog_post %}summary_large_image{% else %}summary{% endif %}">
-  <meta name="twitter:title" content="{% if page.title %}{{ page.title }}{% else %}{{ title }}{% endif %}">
+  <meta name="twitter:title" content="{% if page.title and page.url != '/' %}{{ page.title }} | {{ title }}{% else %}{{ title }}{% endif %}">
   <meta name="twitter:description" content="{% if page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
   {% if og_image_path %}
     <meta name="twitter:image" content="{{ og_image_path | relative_url | absolute_url }}">
@@ -80,14 +80,22 @@
 
 {% if site.serve_schema_org %}
   <!-- Schema.org -->
-  {% comment %} Social links generator for "sameAs schema" {% endcomment %}
+  {% comment %}
+    Social links generator for "sameAs schema". Profiles live in
+    _data/socials.yml, so read the populated ones from site.data.socials.
+  {% endcomment %}
   {% assign sameaslinks = '' | split: ',' %}
+  {% assign socials = site.data.socials %}
+  {% if socials.inspirehep_id %}
+    {% capture link %}https://inspirehep.net/authors/{{ socials.inspirehep_id }}{% endcapture %}
+    {% assign sameaslinks = sameaslinks | push: link %}
+  {% endif %}
   {% if site.orcid_id %}
     {% capture link %}https://orcid.org/{{ site.orcid_id }}{% endcapture %}
     {% assign sameaslinks = sameaslinks | push: link %}
   {% endif %}
-  {% if site.scholar_userid %}
-    {% capture link %}https://scholar.google.com/citations?user={{ site.scholar_userid }}{% endcapture %}
+  {% if socials.scholar_userid %}
+    {% capture link %}https://scholar.google.com/citations?user={{ socials.scholar_userid }}{% endcapture %}
     {% assign sameaslinks = sameaslinks | push: link %}
   {% endif %}
   {% if site.semanticscholar_id %}
@@ -114,16 +122,16 @@
     {% capture link %}https://www.scopus.com/authid/detail.uri?authorId={{ site.scopus_id }}{% endcapture %}
     {% assign sameaslinks = sameaslinks | push: link %}
   {% endif %}
-  {% if site.github_username %}
-    {% capture link %}https://github.com/{{ site.github_username }}{% endcapture %}
+  {% if socials.github_username %}
+    {% capture link %}https://github.com/{{ socials.github_username }}{% endcapture %}
     {% assign sameaslinks = sameaslinks | push: link %}
   {% endif %}
   {% if site.telegram_username %}
     {% capture link %}https://telegram.me/{{ site.telegram_username }}{% endcapture %}
     {% assign sameaslinks = sameaslinks | push: link %}
   {% endif %}
-  {% if site.linkedin_username %}
-    {% capture link %}https://www.linkedin.com/in/{{ site.linkedin_username }}{% endcapture %}
+  {% if socials.linkedin_username %}
+    {% capture link %}https://www.linkedin.com/in/{{ socials.linkedin_username }}{% endcapture %}
     {% assign sameaslinks = sameaslinks | push: link %}
   {% endif %}
   {% if site.x_username %}
@@ -222,28 +230,43 @@
     {% assign sameaslinks = sameaslinks | split: '' %}
   {% endif %}
 
+  {% assign is_home = false %}
+  {% if page.url == '/' %}{% assign is_home = true %}{% endif %}
+  {% assign schema_image = page.og_image | default: page.thumbnail | default: site.og_image | default: '/assets/img/prof_pic.jpg' %}
   <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "{% if is_blog_post %}BlogPosting{% else %}WebSite{% endif %}",
+        "@type": "{% if is_blog_post %}BlogPosting{% elsif is_home %}Person{% else %}WebSite{% endif %}",
         "url": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
         "name": "{{ author_name }}",
+        {% if is_home %}
+        "image": "{{ schema_image | relative_url | absolute_url }}",
+        "jobTitle": "Staff Research Engineer",
+        "worksFor": [
+            { "@type": "Organization", "name": "Google DeepMind", "url": "https://deepmind.google/" },
+            { "@type": "CollegeOrUniversity", "name": "University College London", "url": "https://www.ucl.ac.uk/" }
+        ],
+        "description": "{{ site.description | strip_newlines }}"{% if sameaslinks != blank %},
+        "sameAs": {{ sameaslinks }}{% endif %}
+        {% else %}
         "headline": "{% if page.title and page.title != 'blank' %}{{ page.title }}{% else %}{{ author_name }}{% endif %}",
         "description": "{% if page.description %}{{ page.description | strip_newlines }}{% else %}{{ site.description | strip_newlines }}{% endif %}",
         {% if is_blog_post %}
         "datePublished": "{{ page.date | date_to_xmlschema }}",
         "dateModified": "{{ page.last_updated | default: page.date | date_to_xmlschema }}",
-        {% assign schema_image = page.og_image | default: page.thumbnail | default: site.og_image %}{% if schema_image %}
-        "image": "{{ schema_image | relative_url | absolute_url }}",{% endif %}
+        {% if schema_image %}"image": "{{ schema_image | relative_url | absolute_url }}",{% endif %}
         "mainEntityOfPage": "{{ page.url | prepend: site.baseurl | prepend: site.url }}",
-        "publisher": { "@type": "Person", "name": "{{ author_name }}" },
+        "publisher": { "@type": "Person", "name": "{{ author_name }}", "url": "{{ site.url }}" },
+        "wordCount": "{{ page.content | strip_html | number_of_words }}",
         {% endif %}
         "author":
         {
             "@type": "Person",
-            "name": "{{ author_name }}"{% if sameaslinks != blank %},
+            "name": "{{ author_name }}",
+            "url": "{{ site.url }}"{% if sameaslinks != blank %},
             "sameAs": {{ sameaslinks }}{% endif %}
         }
+        {% endif %}
     }
   </script>
 {% endif %}
