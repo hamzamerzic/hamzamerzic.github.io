@@ -370,6 +370,40 @@ will build it against.
   <figcaption>The composition I want and have not built. The permission substrate for one app to read another's data exists and is enforced; the flow that turns four apps into a unifying fifth does not. The dashed box is a promise, not a feature.</figcaption>
 </figure>
 
+## Building a good one, in practice
+
+A practical note, because the loop matters more than any single prompt.
+Two things have made the difference for me when the goal is for the
+agent to build apps _well_, not just build them.
+
+The first is the introspection loop from the [companion post on the
+harness]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }}).
+The way to make the agent reliably produce good apps is not to write
+it a longer prompt. It is to have it build one, ask it _why_ it made
+the choices it did while the transcript is still in front of it, and
+fold the answer back into its system prompt. Iterating the
+instructions is the lever; the introspection is how I find the edit
+worth making. Testing and validating an app this way, then adjusting
+the seed, has done more for app quality than any amount of up-front
+prompting.
+
+The second is the design phase, where I do not let one model decide
+alone. I drive with Claude and use the [Codex
+plugin](https://github.com/openai/codex) to ensemble and
+adversarially review the design before the build starts. Two models
+disagreeing about an interface, a data model, or an edge case
+surfaces the questions a single model tends to skip. The build itself
+is cheap; the leverage is in getting the design right before any code
+exists, and the disagreement between the two models is the cheapest
+way I have found to get there.
+
+<figure class="text-center my-4">
+  <img src="{{ '/assets/img/mobius/os/workflow-ensemble.jpg' | relative_url }}"
+       alt="Two glowing emerald cores trading critique across a dark field and converging into a single refined geometric form in the centre — two models reviewing one design."
+       loading="lazy" style="max-width:100%; height:auto; border-radius:0.7rem;" />
+  <figcaption class="caption mt-2">The design phase, not the build, is where the leverage is: two models — Claude driving, Codex reviewing — pulling on a design until its weak parts show.</figcaption>
+</figure>
+
 ## The philosophy under all of it
 
 Three ideas hold this together, and they are worth stating plainly
