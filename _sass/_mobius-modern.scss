@@ -481,14 +481,32 @@ details.tldr {
   align-items: center;
   gap: 0.5rem;
 }
+/* Agent marks are external SVGs tinted via CSS mask (kramdown drops inline
+   <svg> from a post body, so the marks cannot live in the markdown). The mask
+   takes the element's background-color, so they still follow the theme. */
 .agent-mark {
   flex: 0 0 auto;
+  display: inline-block;
   width: 1.6rem;
   height: 1.6rem;
-  color: var(--global-text-color);
+  background-color: var(--global-text-color);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+.agent-mark--claude {
+  mask-image: url("/assets/img/mobius/os/icon-claude.svg");
+  -webkit-mask-image: url("/assets/img/mobius/os/icon-claude.svg");
+}
+.agent-mark--codex {
+  mask-image: url("/assets/img/mobius/os/icon-codex.svg");
+  -webkit-mask-image: url("/assets/img/mobius/os/icon-codex.svg");
 }
 .mb-node.accent .agent-mark {
-  color: var(--global-theme-color);
+  background-color: var(--global-theme-color);
 }
 .mb-node__lead {
   font-family: var(--global-font-mono);

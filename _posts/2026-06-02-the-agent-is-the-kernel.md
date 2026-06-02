@@ -361,27 +361,14 @@ the design.
     <div class="mb-lanes__sources">
       <div class="mb-node accent">
         <div class="mb-node__head">
-          <svg class="agent-mark agent-mark--claude" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><g>
-            <line x1="19.60" y1="16.00" x2="29.20" y2="16.00"/>
-            <line x1="19.12" y1="17.80" x2="24.49" y2="20.90"/>
-            <line x1="17.80" y1="19.12" x2="22.60" y2="27.43"/>
-            <line x1="16.00" y1="19.60" x2="16.00" y2="25.80"/>
-            <line x1="14.20" y1="19.12" x2="9.40" y2="27.43"/>
-            <line x1="12.88" y1="17.80" x2="7.51" y2="20.90"/>
-            <line x1="12.40" y1="16.00" x2="2.80" y2="16.00"/>
-            <line x1="12.88" y1="14.20" x2="7.51" y2="11.10"/>
-            <line x1="14.20" y1="12.88" x2="9.40" y2="4.57"/>
-            <line x1="16.00" y1="12.40" x2="16.00" y2="6.20"/>
-            <line x1="17.80" y1="12.88" x2="22.60" y2="4.57"/>
-            <line x1="19.12" y1="14.20" x2="24.49" y2="11.10"/>
-          </g></svg>
+          <span class="agent-mark agent-mark--claude" aria-hidden="true"></span>
           <span class="mb-node__title">Claude · the driver</span>
         </div>
         <span class="mb-node__sub">proposes the design and writes the code, holding the whole plan in view</span>
       </div>
       <div class="mb-node">
         <div class="mb-node__head">
-          <svg class="agent-mark agent-mark--codex" viewBox="0 0 14 14" fill="currentColor" aria-hidden="true"><path d="M10.931 3.34a.112.112 0 0 0-.069-.104l-.038-.007c-1.537.05-2.45.318-3.714 1.002v6.683c.48-.248.936-.44 1.414-.58.695-.203 1.417-.292 2.303-.305l.038-.008a.113.113 0 0 0 .066-.104V3.341ZM2.363 9.919c0 .064.051.11.105.111l.33.008c1.162.046 2.042.243 2.975.662-.403-.585-1.008-1.075-1.654-1.292a.991.991 0 0 1-.674-.941v-5.14a6.36 6.36 0 0 0-.59-.076l-.37-.02a.115.115 0 0 0-.122.111v6.577Zm9.455-.001a.998.998 0 0 1-.877.992l-.101.007c-.832.012-1.47.095-2.066.27-.599.174-1.176.448-1.883.863a.444.444 0 0 1-.449 0c-1.299-.763-2.229-1.07-3.689-1.125l-.299-.008a.997.997 0 0 1-.977-.998V3.342c0-.573.478-1.017 1.038-.999l.417.023c.188.015.35.037.513.062v-.754c0-.708.749-1.244 1.429-.903.984.492 1.836 1.449 2.15 2.505 1.216-.617 2.222-.884 3.771-.934l.105.003a.998.998 0 0 1 .918.996v6.576ZM4.332 8.466c0 .049.03.087.07.1l.24.091a4.319 4.319 0 0 1 1.581 1.176V3.721c-.164-.803-.799-1.617-1.584-2.07l-.162-.088c-.025-.012-.054-.013-.088.009a.12.12 0 0 0-.057.102v6.792Z"/></svg>
+          <span class="agent-mark agent-mark--codex" aria-hidden="true"></span>
           <span class="mb-node__title">Codex · the second opinion</span>
         </div>
         <span class="mb-node__sub">ensembles alternatives and reviews adversarially: where does this break?</span>
