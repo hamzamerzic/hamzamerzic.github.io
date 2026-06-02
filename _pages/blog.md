@@ -183,7 +183,7 @@ pagination:
       <img
         class="card-img"
         src="{{ post.thumbnail | relative_url }}"
-        style="object-fit: cover; width: 100%; aspect-ratio: 16 / 9; border-radius: 0.5rem;"
+        style="width: 100%; height: auto; border-radius: 0.5rem;"
         loading="lazy"
         alt="{{ post.title }}"
       >
