@@ -110,6 +110,8 @@ category: software
 
 <ul class="mt-3">
   <li><strong>Build apps from the chat.</strong> Describe what you want; the agent writes the code, mounts it, and you use it next to the conversation.</li>
+  <li><strong>Install from an app store.</strong> A starter pack of apps you install by pasting a URL, update with a tap, and tweak by asking — all of it yours to keep.</li>
+  <li><strong>Use them anywhere.</strong> Save an app to your home screen and run it standalone; it keeps working offline and syncs when you reconnect.</li>
   <li><strong>Reshape the shell.</strong> Themes, layout, navigation model, fonts — all editable by asking.</li>
   <li><strong>Pick your provider.</strong> Claude Code or Codex for the coding agent, Gemini for image generation. Toggle in settings.</li>
   <li><strong>Recover from anything.</strong> A <code>/recover</code> route resets the shell while keeping your chats, apps, and data.</li>
@@ -136,4 +138,5 @@ category: software
 <ul>
   <li><a href="{{ '/blog/2026/mobius-an-app-that-builds-itself/' | relative_url }}"><strong>An agent that adapts to you</strong></a> — what Möbius is, and why an editable shell matters.</li>
   <li><a href="{{ '/blog/2026/the-self-improvement-harness/' | relative_url }}"><strong>The self-improvement harness behind it</strong></a> — how an outer agent makes the inner one progressively better at building.</li>
+  <li><a href="{{ '/blog/2026/the-agent-is-the-kernel/' | relative_url }}"><strong>The agent is the kernel</strong></a> — the app store, updates and recovery, offline apps, and Möbius as an operating system you own.</li>
 </ul>
