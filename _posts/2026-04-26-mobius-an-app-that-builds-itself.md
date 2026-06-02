@@ -5,7 +5,7 @@ date: 2026-04-26 12:00:00
 description: A personalized AI agent you can self-host. It builds the tools you need, edits the interface around them, and adapts both its functionality and its presentation to how you actually use it.
 thumbnail: assets/img/moebius.png
 categories: software
-giscus_comments: false
+giscus_comments: true
 related_posts: false
 published: true
 ---
@@ -14,45 +14,7 @@ published: true
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
 <style>
-  details.tldr {
-    margin: 1.5rem 0 2rem;
-    padding: 0.75rem 1.1rem;
-    background: rgba(127, 127, 127, 0.06);
-    border: 1px solid rgba(127, 127, 127, 0.18);
-    border-left: 3px solid var(--global-theme-color);
-    border-radius: 0.4rem;
-  }
-  details.tldr summary {
-    cursor: pointer;
-    list-style: none;
-    font-size: 0.95em;
-    line-height: 1.55;
-    color: var(--global-text-color);
-  }
-  details.tldr summary::-webkit-details-marker { display: none; }
-  details.tldr summary::before {
-    content: "▸";
-    color: var(--global-theme-color);
-    display: inline-block;
-    margin-right: 0.5rem;
-    transition: transform 0.2s ease;
-  }
-  details.tldr[open] > summary::before {
-    transform: rotate(90deg);
-  }
-  details.tldr[open] > summary {
-    margin-bottom: 0.85rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid rgba(127, 127, 127, 0.18);
-  }
-  details.tldr ul {
-    margin: 0;
-    padding-left: 1.25rem;
-  }
-  details.tldr ul li {
-    margin: 0.4rem 0;
-    line-height: 1.55;
-  }
+  /* .tldr lives in the shared Möbius post stylesheet (_sass/_mobius-modern). */
   .swiper {
     max-width: 320px;
     margin: 2rem auto;
@@ -507,6 +469,11 @@ this post (and for the companion post on the harness), I've been
 letting Claude drive Codex through its [Codex
 plugin](https://github.com/openai/codex). The disagreement between
 the two models is the part I trust most.
+
+Since this was written, the apps the agent builds grew a place to
+live: an app store, and the start of an operating system around it
+where you install, update, tweak, and recover apps you fully own.
+That is its own [companion post]({{ '/blog/2026/the-agent-is-the-kernel/' | relative_url }}).
 
 The source is on [GitHub](https://github.com/hamzamerzic/mobius),
 the project page is [here]({{ '/mobius/' | relative_url }}), and

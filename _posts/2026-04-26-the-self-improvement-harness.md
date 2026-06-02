@@ -5,88 +5,13 @@ date: 2026-04-26 13:00:00
 description: An outer agent talks to an inner agent and tries to make it more helpful. Notes on what we measured, what surprised us, and where the bottleneck moved to.
 thumbnail: assets/img/moebius.png
 categories: software, research
-giscus_comments: false
+giscus_comments: true
 related_posts: false
 published: true
 ---
 
-<style>
-  details.tldr {
-    margin: 1.5rem 0 2rem;
-    padding: 0.75rem 1.1rem;
-    background: rgba(127, 127, 127, 0.06);
-    border: 1px solid rgba(127, 127, 127, 0.18);
-    border-left: 3px solid var(--global-theme-color);
-    border-radius: 0.4rem;
-  }
-  details.tldr summary {
-    cursor: pointer;
-    list-style: none;
-    font-size: 0.95em;
-    line-height: 1.55;
-    color: var(--global-text-color);
-  }
-  details.tldr summary::-webkit-details-marker { display: none; }
-  details.tldr summary::before {
-    content: "▸";
-    color: var(--global-theme-color);
-    display: inline-block;
-    margin-right: 0.5rem;
-    transition: transform 0.2s ease;
-  }
-  details.tldr[open] > summary::before {
-    transform: rotate(90deg);
-  }
-  details.tldr[open] > summary {
-    margin-bottom: 0.85rem;
-    padding-bottom: 0.6rem;
-    border-bottom: 1px solid rgba(127, 127, 127, 0.18);
-  }
-  details.tldr ul {
-    margin: 0;
-    padding-left: 1.25rem;
-  }
-  details.tldr ul li {
-    margin: 0.5rem 0;
-    line-height: 1.55;
-  }
-  .stat-callout {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    margin: 2rem auto;
-    padding: 1.25rem 1.5rem;
-    max-width: 600px;
-    background: linear-gradient(135deg, rgba(127, 127, 127, 0.04), rgba(127, 127, 127, 0.10));
-    border: 1px solid rgba(127, 127, 127, 0.18);
-    border-radius: 0.6rem;
-  }
-  .stat-callout .stat-number {
-    font-size: 2.6rem;
-    font-weight: 700;
-    line-height: 1;
-    color: var(--global-theme-color);
-    font-variant-numeric: tabular-nums;
-    flex-shrink: 0;
-  }
-  .stat-callout .stat-label {
-    font-size: 0.95em;
-    line-height: 1.45;
-    color: var(--global-text-color);
-  }
-  .stat-callout .stat-label strong {
-    color: var(--global-theme-color);
-  }
-  .pull-quote {
-    margin: 2rem 0;
-    padding: 0.5rem 0 0.5rem 1.5rem;
-    border-left: 3px solid var(--global-theme-color);
-    font-size: 1.1em;
-    line-height: 1.55;
-    font-style: italic;
-    color: var(--global-text-color);
-  }
-</style>
+<!-- .tldr, .stat-callout, .pull-quote live in the shared Möbius post
+     stylesheet (_sass/_mobius-modern.scss). -->
 
 <details class="tldr">
 <summary><strong>TL;DR.</strong> Pairing an inner agent (building apps in a container) with an outer one (editing the inner's instructions between sessions) earned 10 of 12 scorecard points over the same agent running without the harness.</summary>
@@ -110,7 +35,8 @@ This is a companion post to [An agent that adapts to you]({{
 '/blog/2026/mobius-an-app-that-builds-itself/' | relative_url }}).
 That post is about the agent itself. This one is about the loop
 that makes it slowly better, and what falls out of running that
-loop on yourself.
+loop on yourself. A [third post]({{ '/blog/2026/the-agent-is-the-kernel/' | relative_url }})
+covers the app store and the operating system those builds grew into.
 
 ## The setup
 
@@ -126,30 +52,21 @@ apps_. It does this by editing the skill file and the experience
 seed, then watching the inner agent take a fresh shot at a new
 build.
 
-```
-                ┌─────────────────────────────────────┐
-                │             host machine            │
-                │                                     │
-   user ───────►│  outer agent                        │
-   feedback     │       │                             │
-                │       │ edits skill + seed          │
-                │       ▼                             │
-                │  ┌──────────────────────────────┐   │
-                │  │  mobius container            │   │
-                │  │                              │   │
-   user prompts │  │  inner agent                 │   │
-   in chat ─────┼─►│  builds mini-apps            │   │
-                │  │  updates experience.md       │   │
-                │  └──────────────────────────────┘   │
-                │       │                             │
-                │       │ transcripts, screenshots,   │
-                │       │ scorecards                  │
-                │       ▼                             │
-                │  outer agent reads ──┐              │
-                └──────────────────────┼──────────────┘
-                                       │
-                                       └──► next iteration
-```
+<figure class="mb-diagram">
+  <div class="mb-cycle">
+    <div class="mb-node accent">
+      <span class="mb-node__title">Outer agent · host machine</span>
+      <span class="mb-node__sub">reads the inner agent's transcripts, screenshots, and scorecards; rewrites the skill and the experience seed</span>
+    </div>
+    <span class="mb-arrow">↓<span class="mb-arrow__label">edits skill + seed</span></span>
+    <div class="mb-node">
+      <span class="mb-node__title">Inner agent · Möbius container</span>
+      <span class="mb-node__sub">builds mini-apps from the user's prompts in chat, appends to its experience log as it works</span>
+    </div>
+    <span class="mb-arrow">↑<span class="mb-arrow__label">transcripts · scorecards → next iteration</span></span>
+  </div>
+  <figcaption>The loop. The outer agent's only job is to make the inner agent better at building. Each pass it reshapes the instructions; the inner agent takes a fresh build; what it did — and what it says about why — feeds the next pass.</figcaption>
+</figure>
 
 The outer agent has access to: the inner agent's chat transcripts,
 the platform's logs, the experience file the inner agent wrote,
