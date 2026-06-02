@@ -472,3 +472,78 @@ details.tldr {
     }
   }
 }
+
+/* Agent marks (Claude sunburst, Codex blossom) sized for node headers, and
+   an actor micro-label above a node title. Marks inherit currentColor so
+   they follow the theme; identity reads from the shape, not a brand hue. */
+.mb-node__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.agent-mark {
+  flex: 0 0 auto;
+  width: 1.6rem;
+  height: 1.6rem;
+  color: var(--global-text-color);
+}
+.mb-node.accent .agent-mark {
+  color: var(--global-theme-color);
+}
+.mb-node__lead {
+  font-family: var(--global-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--global-text-color-light);
+}
+
+/* A bidirectional connector (the introspection exchange): two-headed glyph
+   in the accent colour, label sits beneath it. */
+.mb-arrow--bi {
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 1.3rem;
+  .mb-arrow__label {
+    margin-left: 0;
+    text-align: center;
+    color: var(--global-theme-color);
+  }
+}
+
+/* A loop-back bar that closes a cycle: a dashed accent pill spanning the
+   column, reading "↺ … back to …". Used for the inner (harness) loop and
+   the outer (you set new scenarios) loop. */
+.mb-loopback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  margin: 0.2rem auto;
+  padding: 0.4rem 0.7rem;
+  width: 100%;
+  border: 1px dashed var(--global-theme-color);
+  border-radius: 0.5rem;
+  background: var(--global-accent-tint);
+  font-family: var(--global-font-mono);
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: var(--global-theme-color);
+  text-align: center;
+
+  .mb-loopback__glyph {
+    font-size: 1rem;
+    flex: 0 0 auto;
+  }
+}
+
+/* Ensemble figure: two agent lanes feeding one result. Reuses .mb-lanes;
+   this just lets the two source agents sit side by side on wide screens. */
+.mb-lanes--pair .mb-lanes__sources {
+  @media (min-width: 576px) {
+    flex-direction: row;
+    .mb-node {
+      flex: 1 1 0;
+    }
+  }
+}

@@ -30,7 +30,7 @@ Find the tools under [Projects](https://hamzamerzic.info/projects/):
 
 These tools were the part of my master's I went back to constantly: computing inertial properties for dozens of objects, cleaning up meshes for simulations, and later, during my research assistantship, generating inverse-kinematics solvers for robot manipulators. Worth the time it took to package them properly back then.
 
-If you’re still using any of these—thank you. I hope the migration went smoothly. If not, feel free to reach out and let me know what’s broken.
+If you’re still using any of these, thank you. I hope the migration went smoothly. If not, feel free to reach out and let me know what’s broken.
 
 For nostalgia, here’s a little album of the old site:
 
