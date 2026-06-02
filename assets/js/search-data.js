@@ -18,7 +18,7 @@ ninja.data = [{
           },
         },{id: "nav-projects",
           title: "projects",
-          description: "Projects by Hamza Merzić — Möbius (a self-hosted AI agent that builds apps), Blox (a functional neural-network library for JAX), and open-source robotics tools.",
+          description: "",
           section: "Navigation",
           handler: () => {
             window.location.href = "/projects/";
@@ -116,13 +116,6 @@ ninja.data = [{
         section: 'Socials',
         handler: () => {
           window.open("mailto:%68%61%6D%7A%61%6D%65%72%7A%69%63+%77%65%62%73%69%74%65@%67%6D%61%69%6C.%63%6F%6D", "_blank");
-        },
-      },{
-        id: 'social-inspire',
-        title: 'Inspire HEP',
-        section: 'Socials',
-        handler: () => {
-          window.open("https://inspirehep.net/authors/1010907", "_blank");
         },
       },{
         id: 'social-linkedin',
