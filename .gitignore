@@ -13,3 +13,7 @@ vendor
 .idea
 venv
 .env
+# Agent instruction files — local dev only, never track (may expose internal notes)
+.claude/
+AGENTS.md
+CLAUDE.md
