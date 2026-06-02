@@ -18,7 +18,7 @@ ninja.data = [{
           },
         },{id: "nav-projects",
           title: "projects",
-          description: "",
+          description: "Projects by Hamza Merzić — Möbius (a self-hosted AI agent that builds apps), Blox (a functional neural-network library for JAX), and open-source robotics tools.",
           section: "Navigation",
           handler: () => {
             window.location.href = "/projects/";
@@ -30,7 +30,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-the-self-improvement-harness-behind-möbius",
+        },{id: "post-the-agent-is-the-kernel",
+        
+          title: "The agent is the kernel",
+        
+        description: "Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store — it is what an editable, recoverable, single-owner operating system lets the agent do for you.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/the-agent-is-the-kernel/";
+          
+        },
+      },{id: "post-the-self-improvement-harness-behind-möbius",
         
           title: "The self-improvement harness behind Möbius",
         
