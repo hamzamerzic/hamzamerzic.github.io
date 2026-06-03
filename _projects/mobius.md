@@ -70,6 +70,27 @@ category: software
   like a native app, and your data stays on a server you control.
 </p>
 
+<figure class="shot-row shot-row--flow" style="margin: 1.75rem auto 0.4rem;">
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/upload-02a-pristine.png' | relative_url }}" loading="lazy" alt="Asking the agent to add file upload to the chat." />
+    <span class="shot__label">ask for file upload</span>
+  </div>
+  <span class="shot-arrow" aria-hidden="true">→</span>
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/upload-02b-answered.png' | relative_url }}" loading="lazy" alt="The agent's plan and a few clarifying questions." />
+    <span class="shot__label">answer a few questions</span>
+  </div>
+  <span class="shot-arrow" aria-hidden="true">→</span>
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/upload-04-in-use.png' | relative_url }}" loading="lazy" alt="File upload working: an image attached inline in the chat." />
+    <span class="shot__label">file upload, working</span>
+  </div>
+</figure>
+<p class="caption text-center mb-4" style="font-size: 0.85em;">
+  You grow it from a chat. Ask for file upload and the agent writes the
+  endpoint, the schema, and the UI, all in one conversation.
+</p>
+
 <div class="row text-center my-4">
   <div class="col-md-6 mb-4">
     <figure>
@@ -90,19 +111,19 @@ category: software
         <img src="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" width="240" alt="Möbius theme cycle" />
       </video>
       <figcaption class="caption mt-2" style="font-size: 0.85em;">
-        Same instance, four prompts. The colors, fonts, and layout
-        are CSS the agent wrote in response to a single sentence.
+        Different variations of the same instance, each from a single
+        prompt. The colors, fonts, and layout are CSS the agent wrote.
       </figcaption>
     </figure>
   </div>
 </div>
 
 <figure class="text-center my-4">
-  <video src="{{ '/assets/img/mobius/theme-07-dynamic.mp4' | relative_url }}" width="240" autoplay loop muted playsinline poster="{{ '/assets/img/mobius/theme-07-dynamic-built.png' | relative_url }}" style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-    <img src="{{ '/assets/img/mobius/theme-07-dynamic-built.png' | relative_url }}" width="240" alt="Möbius dynamic theme in motion" />
+  <video src="{{ '/assets/img/mobius/theme-meme-motion.mp4' | relative_url }}" width="240" autoplay loop muted playsinline poster="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+    <img src="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" width="240" alt="Möbius restyled into a meme theme: rainbow canvas, floating unicorns, bouncing emoji" />
   </video>
   <figcaption class="caption mt-2" style="font-size: 0.85em;">
-    Motion works too: drifting bubbles, parallax silhouettes, and a slowly cycling warm-cool gradient, all added by the agent as part of the theme.
+    Or go fully meme-worthy: a rainbow canvas with floating unicorns and bouncing emoji, all from one prompt. The agent does not judge your taste.
   </figcaption>
 </figure>
 
