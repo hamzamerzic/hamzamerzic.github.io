@@ -108,12 +108,13 @@ category: software
   <div class="col-md-6 mb-4">
     <figure>
       <video src="{{ '/assets/img/mobius/theme-switch.mp4' | relative_url }}" width="240" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-        <img src="{{ '/assets/img/mobius/newchat-default.png' | relative_url }}" width="240" alt="The Möbius new-chat screen switching between its default and meme themes" />
+        <img src="{{ '/assets/img/mobius/theme-06-medieval.png' | relative_url }}" width="240" alt="The same Möbius new-chat screen cycling through several themes the agent built, ending on a meme theme" />
       </video>
       <figcaption class="caption mt-2" style="font-size: 0.85em;">
-        The same new-chat screen, default and meme-worthy. The colors,
-        fonts, and layout are CSS the agent rewrites, and the change is
-        live immediately.
+        The same new-chat screen in a range of looks, from a medieval
+        manuscript to a deep-blue ambient theme to fully meme-worthy. The
+        colors, fonts, and layout are CSS the agent rewrites, live
+        immediately.
       </figcaption>
     </figure>
   </div>
