@@ -166,65 +166,36 @@ those two stacks differently.
 Walk through that file-upload chat from the top. The order is the
 point.
 
-<div class="swiper">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/upload-02a-pristine.png' | relative_url }}"
-           alt="Top of the chat just after sending the prompt. The agent's reply: 'Before I propose anything, let me check a couple of things, I want to know what's actually possible before committing to an approach.' Then a stack of tool calls, Bash, Read of chats.py, Read of chats_stream.py and ChatView.jsx, then 'Now I have enough for clarifying questions.'"
-           loading="lazy" />
-    </div>
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/upload-02b-answered.png' | relative_url }}"
-           alt="Question cards. The agent's plan: 'No existing attachments pipeline. The build is: backend endpoint, schema extension, agent-side hook, paperclip + previews UI.' Then three forks: FILE TYPES (Images + documents recommended), AFFORDANCES (Paperclip + Paste + Drag-and-drop), SIZE LIMIT (20 MB)."
-           loading="lazy" />
-    </div>
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/upload-02c-submitted.png' | relative_url }}"
-           alt="After pressing Submit. The cards lock to the chosen answer per row. Below the cards the agent picks the thread back up: 'On it. Let me load TodoWrite and look at the agent-CLI hand-off + message rendering.' Tool calls follow, Read of chat.py, useStreamConnection.js, MsgContent.jsx."
-           loading="lazy" />
-    </div>
+<figure class="shot-row shot-row--flow">
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/upload-02a-pristine.png' | relative_url }}"
+         alt="Top of the chat just after sending the prompt. The agent's reply: 'Before I propose anything, let me check a couple of things, I want to know what's actually possible before committing to an approach.' Then a stack of tool calls reading chats.py, chats_stream.py, and ChatView.jsx."
+         loading="lazy" />
+    <span class="shot__label">ask for file upload</span>
   </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-pagination"></div>
-</div>
+  <span class="shot-arrow" aria-hidden="true">→</span>
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/upload-02b-answered.png' | relative_url }}"
+         alt="Question cards. The agent's plan: 'No existing attachments pipeline. The build is: backend endpoint, schema extension, agent-side hook, paperclip + previews UI.' Then three forks: FILE TYPES (Images + documents), AFFORDANCES (Paperclip + Paste + Drag-and-drop), SIZE LIMIT (20 MB)."
+         loading="lazy" />
+    <span class="shot__label">answer a few questions</span>
+  </div>
+  <span class="shot-arrow" aria-hidden="true">→</span>
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/upload-04-in-use.png' | relative_url }}"
+         alt="The feature in use end to end: my user bubble showing the Möbius logo attached inline, with the text 'Here is the Möbius logo. Tell me what you see.' The agent reads off the symbolism: 'a human and an AI collaborating on a shared canvas, neither one fully upstream of the other.'"
+         loading="lazy" />
+    <span class="shot__label">file upload, working</span>
+  </div>
+</figure>
 
 <div class="caption mt-2">
   The build starts from an empty composer. The agent checks the
   codebase, surfaces three real decisions (file types, affordances,
-  size cap) then resumes with the answers locked in and goes
-  straight into the schemas and message handoff, picking up the
-  existing <code>[Files in this session: …]</code> convention it just
-  noticed in the frontend. At this point the endpoint, schema,
-  picker, and paperclip still do not exist.
-</div>
-
-<div class="swiper">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/upload-02d-built.png' | relative_url }}"
-           alt="Near the end of the same chat. The agent's hand-off: 'Backend won't activate until the container restarts.' Then a numbered round-trip walk-through of attach → send → render. Caps and limits: 20 MB per file, files live under /data/chats/<chat>/uploads/. The composer at the bottom shows a paperclip icon, the frontend pieces are already serving."
-           loading="lazy" />
-    </div>
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/upload-04-in-use.png' | relative_url }}"
-           alt="The feature in use end to end: my user bubble showing the Möbius logo attached inline, with the text 'Here is the Möbius logo. Tell me what you see.' The agent reads off the symbolism: 'a human and an AI collaborating on a shared canvas, neither one fully upstream of the other.'"
-           loading="lazy" />
-    </div>
-  </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-pagination"></div>
-</div>
-
-<div class="caption mt-2">
-  Same chat, end to end. The agent summarises what it shipped
-  (backend route, schema fields, overlay, paste handler, chip row,
-  thumbnails) and flags the one piece that needs a restart; the
-  picked file then shows up inline, and the agent on the other side
-  actually sees the image: its reply reads off the meaningful
-  details. The endpoint it called was not there when I asked, and
-  the chip component did not exist either. Both shipped in one chat.
+  size cap), then writes the endpoint, the schema, the picker, and the
+  paperclip, none of which existed when I asked. By the end of the same
+  chat I attach the Möbius logo and the agent on the other side reads it
+  back. One conversation, from empty composer to working feature.
 </div>
 
 File upload is one capability the agent can build. The same loop
@@ -291,42 +262,41 @@ instances of the same product:
   </figcaption>
 </figure>
 
-<div class="swiper">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/theme-07-dynamic-prompt.png' | relative_url }}"
-           alt="Build chat moment: the agent has scrolled the user's playful-theme prompt out of view at the top, the warm-rose-tinted background is already running while the agent reads files and stages CSS edits, tool blocks (Bash cat / curl / Read /data/shell/src/components/) visible below the prompt."
-           loading="lazy" />
-    </div>
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/theme-07-dynamic-built.png' | relative_url }}"
-           alt="Built result, same theme: chat with 'say hi in one short sentence with a smiley' / 'Hi! :)' exchange, drifting bubbles and dark star silhouettes layered over the gradient, composer at the bottom."
-           loading="lazy" />
-    </div>
-    <div class="swiper-slide">
-      <video src="{{ '/assets/img/mobius/theme-07-dynamic.mp4' | relative_url }}"
-             autoplay
-             loop
-             muted
-             playsinline
-             preload="metadata"
-             poster="{{ '/assets/img/mobius/theme-07-dynamic-built.png' | relative_url }}"
-             aria-label="Video of the same theme in motion: bubbles drifting up, star silhouettes shifting position, the warm-cool gradient slowly cycling.">
-      </video>
-    </div>
+<figure class="shot-row">
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/theme-07-dynamic-prompt.png' | relative_url }}"
+         alt="Build chat moment: the agent has scrolled the playful-theme prompt out of view, the warm-rose-tinted background is already running while it reads files and stages CSS edits, tool blocks visible below."
+         loading="lazy" />
+    <span class="shot__label">mid-build: the agent stages CSS edits, live</span>
   </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-pagination"></div>
-</div>
+  <div class="shot">
+    <video src="{{ '/assets/img/mobius/theme-07-dynamic.mp4' | relative_url }}"
+           autoplay
+           loop
+           muted
+           playsinline
+           preload="metadata"
+           poster="{{ '/assets/img/mobius/theme-07-dynamic-built.png' | relative_url }}"
+           aria-label="The finished playful theme in motion: bubbles drifting up, star silhouettes shifting position, the warm-cool gradient slowly cycling."></video>
+    <span class="shot__label">the finished theme, in motion</span>
+  </div>
+</figure>
 
 <div class="caption mt-2">
-  One chat: mid-build as the agent stages edits, then the finished
-  theme with a test "hi" over the drifting bubbles, then the same
-  theme in motion. The prompt asked for a "playful room" with a
-  <code>prefers-reduced-motion</code> guard. The still and clip
-  differ because the gradient cycles.
+  One chat. The agent stages CSS edits while the page updates live, and
+  the result is a "playful room" of drifting bubbles over a slowly
+  cycling gradient, with a <code>prefers-reduced-motion</code> guard,
+  all from a single prompt.
 </div>
+
+<figure style="text-align: center; margin: 2rem auto;">
+  <video src="{{ '/assets/img/mobius/theme-meme-motion.mp4' | relative_url }}" width="280" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);"></video>
+  <figcaption class="caption mt-2" style="font-size: 0.85em;">
+    Or go fully meme-worthy. One prompt, and the same shell becomes a
+    rainbow canvas with floating unicorns and bouncing emoji. The agent
+    does not judge your taste.
+  </figcaption>
+</figure>
 
 The harder axis is _layout_: where things are, not how they look.
 Same conversation, same chat box: ask the agent to rewrite the
@@ -334,39 +304,32 @@ navigation model and it does. The default is drawer-first; one
 prompt later it is a bottom-nav app with Chat / Apps / Settings as
 tabs:
 
-<div class="swiper">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/nav-00-drawer.png' | relative_url }}"
-           alt="Default Möbius: drawer-first navigation. The drawer is open, listing 'New chat' at the top, a HISTORY section with three recent chats, an APPS section with one mini-app, and Settings at the bottom. The rest of the chat is dimmed behind."
-           loading="lazy" />
-    </div>
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/nav-01-chat.png' | relative_url }}"
-           alt="After prompting for bottom-nav: the chat fills the screen, no header bar, and a persistent bottom strip shows three tabs, Chat (active, purple), Apps, Settings."
-           loading="lazy" />
-    </div>
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/nav-02-apps.png' | relative_url }}"
-           alt="Apps tab active in the bottom-nav layout: a Hello World card with a hand-wave emoji icon, bottom nav showing Apps highlighted"
-           loading="lazy" />
-    </div>
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/nav-03-settings.png' | relative_url }}"
-           alt="Settings tab active: AI Provider section showing Claude Code and OpenAI Codex both CONNECTED with Reconnect buttons, an Image Generation section with a 'Configured' pill on the Gemini API key, a Dark mode toggle, and a Recovery section."
-           loading="lazy" />
-    </div>
+<figure class="shot-row">
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/nav-01-chat.png' | relative_url }}"
+         alt="After prompting for bottom-nav: the chat fills the screen, no header bar, and a persistent bottom strip shows three tabs, Chat (active), Apps, Settings."
+         loading="lazy" />
+    <span class="shot__label">Chat</span>
   </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-pagination"></div>
-</div>
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/nav-02-apps.png' | relative_url }}"
+         alt="Apps tab active in the bottom-nav layout: a Hello World card with a hand-wave emoji icon, bottom nav showing Apps highlighted."
+         loading="lazy" />
+    <span class="shot__label">Apps</span>
+  </div>
+  <div class="shot">
+    <img src="{{ '/assets/img/mobius/nav-03-settings.png' | relative_url }}"
+         alt="Settings tab active: AI Provider section showing Claude Code and OpenAI Codex both connected, an Image Generation section with a Gemini API key configured, a Dark mode toggle, and a Recovery section."
+         loading="lazy" />
+    <span class="shot__label">Settings</span>
+  </div>
+</figure>
 
 <div class="caption mt-2">
-  Default vs reshaped. The drawer-first shell becomes a bottom-nav
-  app with Chat / Apps / Settings as a persistent strip, native-app
-  style. It is not a re-skin; the navigation model of the whole
-  instance changed, and the Settings page is shared across both
+  Default vs reshaped. The drawer-first shell, chats and apps tucked
+  behind a toggle, becomes a bottom-nav app with Chat / Apps / Settings
+  as a persistent strip. It is not a re-skin; the navigation model of
+  the whole instance changed, and Settings is shared across both
   layouts.
 </div>
 
