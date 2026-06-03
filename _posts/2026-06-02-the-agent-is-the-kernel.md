@@ -133,7 +133,7 @@ channel hiding somewhere.
           <span class="mb-app__name">Mind</span>
           <span class="mb-node__tag">memory</span>
         </div>
-        <span class="mb-app__desc">An Obsidian-style graph of what Möbius has learned about you, the agent's own memory made browsable.</span>
+        <span class="mb-app__desc">An Obsidian-style graph of everything the agent has learned, every interaction and lesson, made browsable.</span>
       </div>
     </div>
     <div class="mb-app">
@@ -170,7 +170,7 @@ pass:
 | **News**     | A daily AI-curated digest. A background job wakes at 10:00, runs the agent with web search only, and writes the morning's report.                   |
 | **Workout**  | A natural-language workout logger. Type what you did, like "3×5 deadlift at 100kg", and it parses the sets. No agent, no cloud, all on your device. |
 | **Visited**  | A draggable 3D globe; tap the countries you have been to and the count climbs toward 195.                                                           |
-| **Mind**     | An Obsidian-style graph of what Möbius has learned about you, the agent's own memory made browsable.                                                |
+| **Mind**     | An Obsidian-style graph of everything the agent has learned, every interaction and lesson, made browsable.                                          |
 | **LaTeX**    | An Overleaf-style editor with a file drawer and a real tectonic engine; an AI sub-agent writes `.tex` while you watch it typeset.                   |
 | **Dreaming** | Overnight, the agent interviews the day's work and writes itself notes, so it starts the next day a little sharper.                                 |
 
