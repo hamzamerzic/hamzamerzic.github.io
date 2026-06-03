@@ -178,27 +178,16 @@ shell and it rewrites the CSS, swaps the fonts, and repaints the
 background. There is no build step you wait on: the new look is live
 the moment the agent saves, and you watch it change as it works.
 
-<figure class="shot-row shot-row--flow">
-  <div class="shot">
-    <img src="{{ '/assets/img/mobius/newchat-default.png' | relative_url }}"
-         alt="The Möbius new-chat screen in the default charcoal theme: the logo, the heading 'What's on your mind?', and a message composer."
-         loading="lazy" />
-    <span class="shot__label">the default</span>
-  </div>
-  <span class="shot-arrow" aria-hidden="true">→</span>
-  <div class="shot">
-    <img src="{{ '/assets/img/mobius/newchat-meme.png' | relative_url }}"
-         alt="The same new-chat screen restyled into a meme theme: a hot-pink canvas with a rainbow, floating unicorns and emoji, and a comic-font heading."
-         loading="lazy" />
-    <span class="shot__label">one prompt later</span>
-  </div>
+<figure style="text-align: center; margin: 2rem auto;">
+  <video src="{{ '/assets/img/mobius/theme-switch.mp4' | relative_url }}" width="260" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
+    <img src="{{ '/assets/img/mobius/newchat-default.png' | relative_url }}" width="260" alt="The Möbius new-chat screen switching between its default charcoal theme and a meme theme: a hot-pink canvas with a rainbow, floating unicorns, and a comic-font heading." />
+  </video>
+  <figcaption class="caption mt-2" style="font-size: 0.85em;">
+    The same new-chat screen, default and fully meme-worthy. One prompt
+    flips it from the charcoal default to a rainbow canvas of floating
+    unicorns, and the change is live the moment the agent saves.
+  </figcaption>
 </figure>
-
-<div class="caption mt-2">
-  The same new-chat screen, before and after one prompt. The agent
-  rewrote the whole look, the background, the type, the buttons, and
-  scattered in a few unicorns for good measure.
-</div>
 
 <figure style="text-align: center; margin: 2rem auto;">
   <video src="{{ '/assets/img/mobius/theme-meme-motion.mp4' | relative_url }}" width="280" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);"></video>
