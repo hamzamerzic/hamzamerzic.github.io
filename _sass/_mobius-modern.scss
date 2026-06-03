@@ -680,6 +680,13 @@ details.tldr {
     flex-wrap: wrap;
     gap: 0.3rem 0.55rem;
   }
+  /* Stacked variant: the three claims sit on their own lines and build to
+     the accent "kernel" line, instead of wrapping 2 + 1 with a dangling dot. */
+  .mb-hero__thesis--stack {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+  }
   .mb-hero__claim {
     padding: 0.32rem 0.7rem;
     border: 1px solid var(--global-border-color);
@@ -748,7 +755,11 @@ details.tldr {
   }
   .mb-app__icon {
     flex: 0 0 auto;
-    font-size: 1.6rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.55rem;
+    object-fit: cover;
+    font-size: 1.6rem; /* emoji fallback */
     line-height: 1.1;
   }
   .mb-app__body {

@@ -8,20 +8,21 @@
 // === Custom Theme Colors ===
 // The site shares its visual language with Möbius (the self-hosted
 // agent project): true charcoal surfaces, one restrained accent, a
-// mono face for code and metadata. The accent is a single green
-// (green-600 #16a34a) used in both modes, the green analogue of
-// Möbius's purple. It clears AA on charcoal (~5.9:1 on #0d0d0d) and
-// stays readable on the warm light surface; hover states shift to an
-// adjacent green in each mode.
+// mono face for code and metadata. The accent is a deep forest green,
+// green-700 #15803d on light and a forest #1f9d54 on dark. It is tuned
+// to read confident and grounded rather than fluorescent, the green
+// analogue of Möbius's purple. Both clear AA on their background
+// (#15803d ~5.0:1 on white cards, #1f9d54 ~5.6:1 on #0d0d0d); hover
+// states shift to an adjacent green in each mode.
 
-// Light Theme (warm neutral + green)
+// Light Theme (warm neutral + forest green)
 $theme-light-bg: #f4f2ef; // warm off-white
 $theme-light-surface: #ffffff; // cards read by contrast, not just shadow
 $theme-light-text: #1c1b1a; // near-black ink (never pure black)
 $theme-light-text-light: #6b6864; // ~5.4:1 muted
-$theme-light-accent: #16a34a; // green-600 — the unified accent
-$theme-light-accent-bright: #16a34a; // green-600
-$theme-light-secondary: #15803d; // green-700 for hover/secondary
+$theme-light-accent: #15803d; // green-700 — deep forest accent
+$theme-light-accent-bright: #15803d; // green-700
+$theme-light-secondary: #166534; // green-800 for hover/secondary
 
 // Dark Theme (true charcoal + green — the hero)
 $theme-dark-bg: #0d0d0d; // page
@@ -30,9 +31,9 @@ $theme-dark-bg-elevated: #1f1f1f; // raised surface
 $theme-dark-border: #2a2a2a; // hairline border
 $theme-dark-text: #ececec; // off-white
 $theme-dark-text-light: #a8a8a8; // ~6.1:1 muted
-$theme-dark-accent: #16a34a; // green-600 — the unified accent, ~5.9:1 on #0d0d0d
-$theme-dark-accent-bright: #22c55e; // green-500 for hover/links
-$theme-dark-secondary: #22c55e;
+$theme-dark-accent: #1f9d54; // forest green — calmer than grass, ~5.6:1 on #0d0d0d
+$theme-dark-accent-bright: #25b061; // forest for hover/links (not neon green-500)
+$theme-dark-secondary: #25b061;
 
 // Shared type stacks (match Möbius: Inter + JetBrains Mono)
 $font-sans:
