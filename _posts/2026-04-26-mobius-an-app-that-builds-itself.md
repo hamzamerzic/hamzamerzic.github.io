@@ -180,12 +180,13 @@ the moment the agent saves, and you watch it change as it works.
 
 <figure style="text-align: center; margin: 2rem auto;">
   <video src="{{ '/assets/img/mobius/theme-switch.mp4' | relative_url }}" width="260" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
-    <img src="{{ '/assets/img/mobius/newchat-default.png' | relative_url }}" width="260" alt="The Möbius new-chat screen switching between its default charcoal theme and a meme theme: a hot-pink canvas with a rainbow, floating unicorns, and a comic-font heading." />
+    <img src="{{ '/assets/img/mobius/theme-06-medieval.png' | relative_url }}" width="260" alt="The same Möbius new-chat screen cycling through themes the agent built: a medieval manuscript, a cozy reading room, a light Y2K look, a deep-blue ambient theme, and a hot-pink meme theme with floating unicorns." />
   </video>
   <figcaption class="caption mt-2" style="font-size: 0.85em;">
-    The same new-chat screen, default and fully meme-worthy. One prompt
-    flips it from the charcoal default to a rainbow canvas of floating
-    unicorns, and the change is live the moment the agent saves.
+    The same new-chat screen in a range of looks the agent has built, from
+    a medieval manuscript to a cozy reading room to a deep-blue ambient
+    theme, finishing fully meme-worthy. Each one is a single prompt, and
+    the new look is live the moment the agent saves.
   </figcaption>
 </figure>
 
