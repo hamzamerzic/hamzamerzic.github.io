@@ -30,11 +30,11 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-the-agent-is-the-kernel",
+        },{id: "post-an-app-store-that-adapts-to-you",
         
-          title: "The agent is the kernel",
+          title: "An app store that adapts to you",
         
-        description: "Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store but what an editable, recoverable, single-owner operating system lets the agent do for you.",
+        description: "Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store but that the agent does not build isolated apps, it grows a cross-app personal system that adapts to you over time.",
         section: "Posts",
         handler: () => {
           
