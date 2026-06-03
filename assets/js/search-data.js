@@ -92,7 +92,7 @@ ninja.data = [{
               window.location.href = "/3d-viz/";
             },},{id: "projects-blox",
           title: 'Blox',
-          description: "A small, functional neural network library for JAX — built to keep JAX&#39;s strengths visible instead of paper over them",
+          description: "A small, functional neural network library for JAX, built to keep JAX&#39;s strengths visible instead of paper over them",
           section: "Projects",handler: () => {
               window.location.href = "/blox/";
             },},{id: "projects-ikfast-generator",
