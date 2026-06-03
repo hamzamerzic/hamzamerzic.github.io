@@ -30,15 +30,15 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-",
+        },{id: "post-the-agent-is-the-kernel",
         
-          title: "",
+          title: "The agent is the kernel",
         
-        description: "",
+        description: "Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store but what an editable, recoverable, single-owner operating system lets the agent do for you.",
         section: "Posts",
         handler: () => {
           
-            window.location.href = "/blog/2026/2026-06-02-the-agent-is-the-kernel/";
+            window.location.href = "/blog/2026/the-agent-is-the-kernel/";
           
         },
       },{id: "post-the-self-improvement-harness-behind-möbius",
