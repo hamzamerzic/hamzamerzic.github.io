@@ -12,11 +12,11 @@ published: true
 ---
 
 <details class="tldr">
-<summary><strong>TL;DR.</strong> Möbius now has an app store: a handful of installable mini-apps, each a public git repo with a manifest. You install one by pasting a URL, tweak it by asking the agent, save it to your home screen, and use it offline. The store is the visible part; the point is an operating system you own and can reshape, where breaking something is cheap to undo because the system is built around recovery.</summary>
+<summary><strong>TL;DR.</strong> Möbius now has an app store, a handful of installable mini-apps, each a public git repo with a manifest. You install one by pasting a URL, tweak it by asking the agent, save it to your home screen, and use it offline. The store is the visible part; the point is an operating system you own and can reshape, where breaking something is cheap to undo because the system is built around recovery.</summary>
 
 <ul>
 <li><strong>The store</strong> is a curated starter pack, not a registry. A Möbius app is just a public repo with a <code>mobius.json</code> and an <code>index.jsx</code> entry point. Sharing one means sharing a URL.</li>
-<li><strong>Updates</strong> are URL-keyed: bump the version upstream, the store shows "Update available", reinstalling patches the code and keeps your data.</li>
+<li><strong>Updates</strong> are URL-keyed. Bump the version upstream, the store shows "Update available", reinstalling patches the code and keeps your data.</li>
 <li><strong>Recovery</strong> is the philosophy made concrete: atomic installs that cannot half-land, a <code>/recover</code> route, and a git history of your whole instance. Breaking is allowed because it is reversible.</li>
 <li><strong>Offline + home screen.</strong> Apps install to your home screen as standalone PWAs and keep working with no network; writes queue and sync when you reconnect.</li>
 <li><strong>The honest edges.</strong> Cross-app composition and per-app rollback are not built yet. I will say so where it matters.</li>
@@ -56,10 +56,10 @@ rules are yours to keep, move, rewrite, or throw away.
 
 ## The agent is the kernel
 
-In a normal operating system the kernel is the privileged core: it
+In a normal operating system the kernel is the privileged core. It
 owns the hardware, schedules the work, and everything you use runs on
 top of it. Möbius keeps that shape and swaps the core. The privileged
-thing in the middle is not a scheduler: it is the agent. You describe
+thing in the middle is not a scheduler. It is the agent. You describe
 what you want; it writes the app, installs it, schedules its
 background jobs, and wires it into the shell. The apps are user space.
 The chat is the system call.
@@ -71,7 +71,7 @@ The chat is the system call.
     <div class="mb-layer kernel"><span class="mb-layer__name">The agent</span><span class="mb-layer__role">turns a request into running software</span></div>
     <div class="mb-layer"><span class="mb-layer__name">Your server &amp; data</span><span class="mb-layer__role">one container · git history · storage</span></div>
   </div>
-  <figcaption>The stack, with the agent where the kernel usually sits. The chat is the system call: you describe a thing, the agent builds it into the layer above, and it lands on the hardware you own at the bottom.</figcaption>
+  <figcaption>The stack, with the agent where the kernel usually sits. The chat is the system call. You describe a thing, the agent builds it into the layer above, and it lands on the hardware you own at the bottom.</figcaption>
 </figure>
 
 That changes what the primitives are. An app is not a binary you
@@ -141,7 +141,7 @@ channel hiding somewhere.
       </div>
     </div>
   </div>
-  <figcaption>The curated catalog: the starter-pack apps the in-app store installs.</figcaption>
+  <figcaption>The curated catalog, the starter-pack apps the in-app store installs.</figcaption>
 </figure>
 
 What is in it today is a hand-picked set, not a gate you have to
@@ -174,7 +174,7 @@ you, if it comes from a host it has not seen before.
   <div class="mb-stack mb-files">
     <div class="mb-layer kernel">
       <span class="mb-layer__name"><code>index.jsx</code></span>
-      <span class="mb-layer__role">the app itself: one React component the agent wrote</span>
+      <span class="mb-layer__role">the app itself, one React component the agent wrote</span>
     </div>
     <div class="mb-layer">
       <span class="mb-layer__name"><code>mobius.json</code></span>
@@ -205,7 +205,7 @@ something you can open. If anything fails, the whole thing rolls back
 and leaves nothing half-installed behind.
 
 That all-or-nothing property is the foundation for the next two
-sections: it is what lets an update patch your app in place, and it
+sections. It is what lets an update patch your app in place, and it
 is what lets recovery treat any break as something to undo.
 
 ## Updates: version bumps you can see, data you keep
@@ -294,7 +294,7 @@ has three layers:
     <div class="mb-node">
       <span class="mb-node__tag">layer 3</span>
       <span class="mb-node__title">Your instance is a git repo</span>
-      <span class="mb-node__sub">shell, themes, app source, schedules: the agent reads the log and restores</span>
+      <span class="mb-node__sub">shell, themes, app source, schedules, where the agent reads the log and restores</span>
     </div>
   </div>
   <figcaption>Three independent safety nets, not a single rollback button. Breaking is cheap to undo, so the agent does not have to be wrapped in guardrails that stop it from being useful.</figcaption>
@@ -304,7 +304,7 @@ There is no one-click "roll back this app to last week's version"
 button yet; recovery today is uninstall-and-reinstall, plus `/recover`,
 plus the git history. When an update breaks something, you tell the
 agent what went wrong and it walks the commit log back to the working
-version: the recovery path the third layer describes, run for you.
+version, the recovery path the third layer describes, run for you.
 
 <blockquote class="pull-quote">
 Recovery paths should make agent mistakes cheap to inspect and repair.
@@ -332,8 +332,8 @@ is the part that got the most unglamorous engineering, and it holds.
 When an app is marked offline-capable, a service worker caches the
 shell and the app's code, so opening it with the network off still
 renders the real app, not the browser's offline page. And storage
-works offline for _every_ app, not just the offline-capable ones:
-reads come instantly from a local cache and refresh in the background,
+works offline for _every_ app, not just the offline-capable ones.
+Reads come instantly from a local cache and refresh in the background,
 and writes you make offline queue in a local outbox and sync to your
 server the moment you reconnect.
 
@@ -354,7 +354,7 @@ server the moment you reconnect.
       <span class="mb-node__sub">the outbox drains to your server; last-write-wins per item</span>
     </div>
   </div>
-  <figcaption>Log a set in airplane mode, mark a country from a plane, jot a note on the subway: the outbox catches up the moment you reconnect. Listing and chat deliberately stay online.</figcaption>
+  <figcaption>Log a set in airplane mode, mark a country from a plane, jot a note on the subway. The outbox catches up the moment you reconnect. Listing and chat deliberately stay online.</figcaption>
 </figure>
 
 So your own data survives a dead connection, and I have checked it on
@@ -377,7 +377,7 @@ already exists.
 **Composing several apps into a new one is not a feature yet.** The
 idea is a health dashboard that reads across your workout tracker,
 calorie log, gratitude journal, and dream diary and surfaces the
-metrics you actually care about. The substrate exists: an app can
+metrics you actually care about. The substrate exists. An app can
 declare that it reads another app's data, and the backend enforces the
 handshake on both sides. But almost nothing uses it today, each app's
 storage is scoped to itself by default, and there is no "build me an
@@ -437,7 +437,7 @@ the design.
           <span class="agent-mark agent-mark--codex" aria-hidden="true"></span>
           <span class="mb-node__title">Codex · the second opinion</span>
         </div>
-        <span class="mb-node__sub">ensembles alternatives and reviews adversarially: where does this break?</span>
+        <span class="mb-node__sub">ensembles alternatives and reviews adversarially, asking where this breaks</span>
       </div>
     </div>
     <div class="mb-lanes__join">⇄<div style="font-family:var(--global-font-mono);font-size:0.64rem;color:var(--global-text-color-light);margin-top:0.25rem;line-height:1.3">propose&nbsp;⇄&nbsp;refute,<br>a few rounds</div></div>
@@ -463,19 +463,19 @@ a little data and works offline should take one sentence; the storage
 primitive is a convenience, not a cage, and an app that wants its own
 local database is free to reach for one. The one real wall right now
 is that apps cannot open arbitrary network connections to outside
-services: a deliberate security line I have not yet built a careful
+services, a deliberate security line I have not yet built a careful
 door through.
 
 **You own all of it.** Your data is on a server you control. Your apps
 are files you can read. Your shell is a git repo you can revert.
 Nothing here is tuned to keep you engaged; the whole series has been an
-argument for the opposite: an assistant that builds you the thing,
+argument for the opposite, an assistant that builds you the thing,
 gets out of the way, and leaves you holding something you can keep.
 
 ## Where this goes
 
 An app store was the obvious next thing once the agent could build
-apps reliably. The less obvious thing is what it turns Möbius into: a
+apps reliably. The less obvious thing is what it turns Möbius into, a
 place where the unit of software is small enough for the agent to
 write, own, and repair, where installing and breaking are reversible,
 and where the privileged core turns "I wish I had a thing that…" into a

@@ -14,7 +14,7 @@ published: true
 <summary><strong>TL;DR.</strong> Möbius is a personalized AI agent you can self-host. It builds the tools you need, edits the interface they sit in, and learns from use.</summary>
 
 <ul>
-<li><strong>The demo:</strong> asked the agent for file upload and got the full pipeline (backend
+<li><strong>The demo.</strong> Asked the agent for file upload and got the full pipeline (backend
 route, message storage, drag-and-drop, image rendering) in one
 conversation.</li>
 <li><strong>Capabilities</strong> (file upload, notifications,
@@ -41,7 +41,7 @@ itself. Ask for an app and one appears on the canvas. The shell you
 end up with is the one you talked into being.
 
 Here is one of those moments, end to end. I sent a deliberately
-ordinary prompt: _"I'd like to send files and images along with my
+ordinary prompt. _"I'd like to send files and images along with my
 messages, pictures of stuff I want to talk about, the occasional
 document. Can you add file upload to the chat?"_ One conversation
 later there was a backend route, message storage, drag-and-drop, and
@@ -58,12 +58,12 @@ grow in any direction is, by construction, an interface you can also
 break.
 
 What makes that safe is that breaking is cheap to undo. `/recover`
-bounds the blast radius: it resets the shell to its seeded baseline
+bounds the blast radius. It resets the shell to its seeded baseline
 while keeping your chats, your apps, and your data. It renders from a
 separate server-side codepath the agent does not edit, so it survives
 even a shell rewrite that hides everything else. Grow in any
 direction, break it, recover, try again. The goal is maximal
-personalization: software that bends to you instead of the other way
+personalization, software that bends to you instead of the other way
 around.
 
 ## Why I built this
@@ -77,14 +77,14 @@ only talk about the tool. You ask for a workflow and get advice. You
 describe a tool and get a mockup, a snippet, or a plan. The
 assistant stays on one side of the glass.
 
-The premise of Möbius is to put it on the other side: shorten the
+The premise of Möbius is to put it on the other side, to shorten the
 distance between wanting, making, using, and correcting until they
 happen in one place. Requests become software, software becomes
 context, the next request lands somewhere sharper. The platform has
-to be editable for that to work: if the agent can only talk about
+to be editable for that to work. If the agent can only talk about
 the work, you still have to carry the system in your head.
 
-The name is from Möbius strips: each app the agent builds does not
+The name is from Möbius strips. Each app the agent builds does not
 sit somewhere external; it lands in the shell the chat lives in, and
 becomes part of the surface the next conversation happens on. The
 shell the chat runs in was, once, written by a different version of
@@ -139,7 +139,7 @@ point.
 
 File upload is one capability the agent can build. The same loop
 produces apps, too, actual mini-applications that land on the canvas
-next to the chat and persist there:
+next to the chat and persist there.
 
 <figure style="text-align: center; margin: 2rem auto;">
   <video src="{{ '/assets/img/mobius/apps-cycle.mp4' | relative_url }}" width="280" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
@@ -156,8 +156,8 @@ next to the chat and persist there:
 </figure>
 
 This is how general capabilities land (notifications, scheduled
-jobs, a web-search button, voice mode, a richer settings panel): the
-agent builds it when you ask. A second loop sits above the first: a
+jobs, a web-search button, voice mode, a richer settings panel). The
+agent builds it when you ask. A second loop sits above the first, a
 harness that watches the inner agent and periodically asks _was this
 change generally useful, or was it just for me?_ The generally useful
 diffs become candidates for upstreaming into the shipped image, a
@@ -175,7 +175,7 @@ different layers.
 
 The cheap-to-vary axis is visual. Ask the agent to restyle the whole
 shell and it rewrites the CSS, swaps the fonts, and repaints the
-background. There is no build step you wait on: the new look is live
+background. There is no build step you wait on. The new look is live
 the moment the agent saves, and you watch it change as it works.
 
 <figure style="text-align: center; margin: 2rem auto;">
@@ -193,18 +193,18 @@ the moment the agent saves, and you watch it change as it works.
 <figure style="text-align: center; margin: 2rem auto;">
   <video src="{{ '/assets/img/mobius/theme-meme-motion.mp4' | relative_url }}" width="280" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);"></video>
   <figcaption class="caption mt-2" style="font-size: 0.85em;">
-    Or go fully meme-worthy. One prompt, and the same shell becomes a
-    rainbow canvas with floating unicorns and bouncing emoji. The agent
-    does not judge your taste.
+    And it moves. The meme theme is live CSS, so the rainbow drifts and
+    the unicorns and emoji bounce across the screen. The agent does not
+    judge your taste.
   </figcaption>
 </figure>
 
-The harder axis is _layout_: where things are, not how they look.
-Same conversation, same chat box: ask the agent to rewrite the
-navigation model and it does, and the new layout is live immediately,
-the same way a theme change is. The default is drawer-first; one
-prompt later it is a bottom-nav app with Chat / Apps / Settings as
-tabs:
+The harder axis is _layout_, where things are, not how they look. It
+is the same conversation and the same chat box. Ask the agent to
+rewrite the navigation model and it does, and the new layout is live
+immediately, the same way a theme change is. The default is
+drawer-first; one prompt later it is a bottom-nav app with Chat /
+Apps / Settings as tabs.
 
 <figure class="shot-row">
   <div class="shot">
@@ -245,7 +245,7 @@ mid-thread if a turn goes sideways.
 
 The same plainness applies to app data. Apps store data through a
 small storage primitive the agent already knows how to compose. New
-schemas, scheduled jobs, webhooks: these are the plumbing you would
+schemas, scheduled jobs, webhooks are the plumbing you would
 write yourself, except you describe it instead.
 
 ## Recovery, so you can be fearless
@@ -261,7 +261,7 @@ reversible.
 seeded baseline while keeping your chats, apps, and data. It renders
 from a separate server-side codepath the agent does not edit, so it
 survives even a misbehaved shell rewrite. The whole point of the
-route is to let you grow the thing without fear: any change you make
+route is to let you grow the thing without fear. Any change you make
 is one you can roll back, so there is no edit too bold to try.
 
 ## The agent is the server
@@ -295,26 +295,26 @@ shows. Four directions:
   something similar for managed agents; the Möbius version is the
   self-hosted, user-controllable one.
 - **Discretion.** Noticing stale apps, suggesting something worth
-  learning, asking before interrupting: proactive in service of
+  learning, asking before interrupting, proactive in service of
   the user, not engagement.
 - **Help that seeks you out.** The part I want most and am least
   sure how to land. An agent that notices you have been reading
   distributed-systems papers three Tuesdays in a row and builds you
   a swipe-style recommender, without being asked. Most products
   in this space are tuned to maximise engagement; the goal here is
-  the opposite: a system that shows up because it knows you, not
+  the opposite, a system that shows up because it knows you, not
   because it is trying to keep you.
 
 None of those ship yet. The loop that makes them possible is the
 subject of a [companion post on the self-improvement
-harness]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }}):
+harness]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }}),
 an outer agent that watches the inner one build, asks it questions,
 and rewrites its instructions to make it less brittle next time.
 
-A note on the agent itself: for the iteration work behind this post I
+A note on the agent itself. For the iteration work behind this post I
 have been letting Claude drive Codex through its [Codex
 plugin](https://github.com/openai/codex). The disagreements between
-the two models were the useful part: when they pulled in different
+the two models were the useful part. When they pulled in different
 directions on an edit, that was usually a sign the edit was worth a
 closer look.
 

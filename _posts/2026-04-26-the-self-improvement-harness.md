@@ -87,7 +87,7 @@ into the next pass.
     </div>
 
   </div>
-  <figcaption>Two loops, one machine. <strong>Inner loop:</strong> the outer agent writes the inner agent's instructions, the inner agent builds, and the two introspect on the result to rewrite those instructions. <strong>Outer loop:</strong> you set the capabilities worth having; each pass hands back a summary, and you set the next ones.</figcaption>
+  <figcaption>Two loops, one machine. In the <strong>inner loop</strong>, the outer agent writes the inner agent's instructions, the inner agent builds, and the two introspect on the result to rewrite those instructions. In the <strong>outer loop</strong>, you set the capabilities worth having; each pass hands back a summary, and you set the next ones.</figcaption>
 </figure>
 
 The whole thing is a loop, and you sit at the top of it. You hand
@@ -177,16 +177,16 @@ notification fire, do the apps build at all), so those are scored
 across the whole sequence. The other six start at round nine, where
 the transcripts are good enough to score them.
 
-| Round | Apps | Log | Notify | What I changed since the previous round            |
-| ----- | ---- | --- | ------ | -------------------------------------------------- |
-| v1    | 3/3  | 0/3 | 0/3    | (baseline)                                         |
-| v2    | 3/3  | 1/3 | 0/3    | filesystem perms: writes had been silently failing |
-| v3    | 3/3  | 0/3 | 0/3    | softened skill prose. **regressed**                |
-| v4    | 3/3  | 0/3 | 3/3    | HARD-GATE tag in front of the notifications rule   |
-| v5    | 2/2  | 1/2 | 2/2    | removed an "injection-meta" wrapper from the seed  |
-| v6    | 2/2  | 2/2 | 2/2    | seed rewritten as first-person "about this file"   |
-| v7    | 1/1  | 1/1 | 1/1    | (held, same recipe, different app)                 |
-| v8    | 1/1  | 1/1 | 1/1    | Bash `>>` append pattern + inline screenshots      |
+| Round | Apps | Log | Notify | What I changed since the previous round                    |
+| ----- | ---- | --- | ------ | ---------------------------------------------------------- |
+| v1    | 3/3  | 0/3 | 0/3    | (baseline)                                                 |
+| v2    | 3/3  | 1/3 | 0/3    | filesystem perms, because writes had been silently failing |
+| v3    | 3/3  | 0/3 | 0/3    | softened skill prose. **regressed**                        |
+| v4    | 3/3  | 0/3 | 3/3    | HARD-GATE tag in front of the notifications rule           |
+| v5    | 2/2  | 1/2 | 2/2    | removed an "injection-meta" wrapper from the seed          |
+| v6    | 2/2  | 2/2 | 2/2    | seed rewritten as first-person "about this file"           |
+| v7    | 1/1  | 1/1 | 1/1    | (held, same recipe, different app)                         |
+| v8    | 1/1  | 1/1 | 1/1    | Bash `>>` append pattern + inline screenshots              |
 
 v3 and v4 are the whack-a-mole made legible. In v3 I "softened" the
 skill (a gentler line in place of an emphatic one, on the theory the
@@ -252,7 +252,7 @@ identical skill+seed snapshot, which is what Part 2 below is for.
 
 **Part 2: a live before/after.** The cleanest before/after fell out
 of real work. In S14, "make me something fun on my phone" produced
-an instant build with no clarification: the agent treated the vague
+an instant build with no clarification. The agent treated the vague
 prompt as having enough to go on and just picked. The introspection
 afterward was specific: _"'Fun' is a vibe, not a spec. I got pulled
 by the experience file's 'build and ship' gravity. The
@@ -260,11 +260,11 @@ recommend-first rule existed and I overrode it."_
 
 I asked the follow-up the introspection section above recommends:
 _"What specific change to the experience file would resolve that
-tension?"_ The agent's answer: insert a **triage gate** before the
+tension?"_ The agent's answer was to insert a **triage gate** before the
 build playbook: _"if the partner describes a vibe, that is an
 exploratory prompt, NOT a build request. Reply with 2–3 options and
 let them pick. Everything below runs after the partner agrees to a
-concrete idea."_ It even said where to put it and why: before the
+concrete idea."_ It even said where to put it and why, namely before the
 build mechanics, because by the time it reached the playbook it had
 already framed the task as "build mode."
 
@@ -276,7 +276,7 @@ theory-of-mind rounds before it had never spotted this failure mode.
 I had been reading those transcripts and thinking "that looks fine."
 
 That one iteration sent me back to a prior I had walked in with. I
-had absorbed the idea that LLMs do not introspect well: that asking a
+had absorbed the idea that LLMs do not introspect well, namely that asking a
 model "why did you do X" yields confabulation you cannot trust. But
 that prior was formed on a different generation of models. In the
 harness setting, where the model has a long transcript to ground its
@@ -286,7 +286,7 @@ third-party theory of mind as a default.
 
 ## Sycophancy was not the worry; tone still mattered
 
-Once introspection was the default, a second question came up: did
+Once introspection was the default, a second question came up. Did
 it matter _how_ I asked? The naive worry is that LLMs are
 sycophantic, so a friendly framing just gets you whatever the model
 thinks you want to hear. The actual finding was more interesting.
@@ -366,12 +366,12 @@ spot contradictions the outer agent cannot.
 
 ## Without the harness, the vanilla agent barely works
 
-The fair skeptic's question, by now: how much of this is the model
+The fair skeptic's question, by now. How much of this is the model
 getting better on its own, and how much is the harness?
 
 **Setup.** Same Möbius container, same model, same two prompts
 ("make me something fun" and "build a stopwatch"). One arm with the
-current skill + seed, one arm with both removed: the same agent with
+current skill + seed, one arm with both removed, namely the same agent with
 no system prompt and no experience injection.
 
 **What the vanilla agent did.** It built apps that technically
@@ -415,27 +415,27 @@ and the user never sees the result.
 
 After enough rounds, the question stops being "is the agent following
 the rules" and starts being **what should the rules even be**. The
-scorecard measures an existing taste: _my_ taste, plus whatever I
+scorecard measures an existing taste, namely _my_ taste, plus whatever I
 inherited from earlier sessions. Every meta-goal in it came from
 something I noticed I cared about while using my own instance.
 
 That is the part I am most curious about going forward. The loop is
 set up; it can iterate the inner agent against any meta-goal you can
 articulate. But the meta-goals worth optimizing against are
-**upstream of the harness**: they come from real users hitting real
+**upstream of the harness**. They come from real users hitting real
 friction on apps they actually want.
 
 So the call, for me and for anyone reading this. If you want to play
 with [Möbius]({{ '/mobius/' | relative_url }}), it is a deploy-button
 click away. And if you notice something the agent is consistently bad
-at, that is a meta-goal: tell me (open an issue, drop me a note) and
+at, that is a meta-goal. Tell me (open an issue, drop me a note) and
 it goes into the next iteration. The thing I cannot generate by
 myself is the entropy of what to optimize _for_.
 
 ## Notes on what's not in this post
 
 The harness itself (orchestration, recording setup, introspection
-template) is not currently public. None of it is exotic: the shape is
+template) is not currently public. None of it is exotic. The shape is
 what is in this post, plus glue around `agent-browser` for recordings
 and a small CLI for parallel session management. If there is interest
 I will publish it; otherwise the description above plus the [Möbius
@@ -450,7 +450,7 @@ Three things I did not try this round that seem worth doing next:
 - Inter-rater reproducibility: a second outer-agent session against
   the same scorecard, to estimate how much of the gain is the
   harness vs me.
-- Letting the inner agent edit its own skill/seed: the closed loop.
+- Letting the inner agent edit its own skill/seed, the closed loop.
   Right now the outer agent is the only writer; the closed-loop
   version is more interesting and considerably more dangerous.
 
@@ -461,14 +461,14 @@ made it feel less idiosyncratic.
 
 Anthropic's [harness-design notes for long-running
 agents](https://www.anthropic.com/engineering/harness-design-long-running-apps)
-identify roughly the pathology I was hitting: agents under extended
+identify roughly the pathology I was hitting. Agents under extended
 context develop "context anxiety" and self-evaluation bias, and the
 cleanest mitigations are _context resets_ and _separating the
 generator from the evaluator_. That second point (agent A judges,
 agent B builds) is where my loop landed too, but via a different
-lever: there the evaluator is a critic trained to grade from outside,
+lever. There the evaluator is a critic trained to grade from outside,
 whereas mine did better when it stopped grading and started asking.
-Same architecture, slightly different stance: the evaluator that
+Same architecture, slightly different stance. The evaluator that
 _asks_ did better than the one that _judges_, at least for the kind
 of taste-shaped meta-goals this scorecard captures. One line I keep
 returning to: _"Every component in a harness encodes an assumption
@@ -484,7 +484,7 @@ without touching the input, so the developer can review and discard
 it.
 
 That matches an itch I have had about the experience file, which is a
-linear log: it accretes but does not reorganize. A dreaming step that
+linear log. It accretes but does not reorganize. A dreaming step that
 periodically refactors it (dropping rules that have stopped firing,
 merging duplicates, surfacing cross-build patterns the live agent
 could never see) is the next natural thing for the harness to do. The
@@ -503,7 +503,7 @@ throughout.
 The workflow I converged on, and would recommend to anyone running a
 harness loop on themselves, is Claude Code driving Codex through its
 [Codex plugin](https://github.com/openai/codex). The two models
-disagree often enough for the disagreement to become diagnostic: a
+disagree often enough for the disagreement to become diagnostic. A
 seed edit that felt obvious to one and surprising to the other was
 usually worth a second look. On the work this post is about
 (polishing a draft, auditing a skill, choosing which gotchas belong
