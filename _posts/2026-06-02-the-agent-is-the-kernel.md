@@ -2,7 +2,7 @@
 layout: post
 title: The agent is the kernel
 date: 2026-06-02 12:00:00
-description: Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store: it is what an editable, recoverable, single-owner operating system lets the agent do for you.
+description: Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store but what an editable, recoverable, single-owner operating system lets the agent do for you.
 thumbnail: assets/img/mobius/covers/cover-post3.jpg
 categories: software
 keywords: self-hosted AI agent, AI agent that builds apps, AI app store, personal AI operating system, self-hosted PWA, agent-built mini-apps, Claude Code, Codex, Möbius
