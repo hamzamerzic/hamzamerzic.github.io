@@ -1,8 +1,8 @@
 ---
 layout: post
-title: The agent is the kernel
+title: An app store that adapts to you
 date: 2026-06-02 12:00:00
-description: Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store but what an editable, recoverable, single-owner operating system lets the agent do for you.
+description: Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store but that the agent does not build isolated apps, it grows a cross-app personal system that adapts to you over time.
 thumbnail: assets/img/mobius/covers/cover-post3.jpg
 categories: software
 keywords: self-hosted AI agent, AI agent that builds apps, AI app store, personal AI operating system, self-hosted PWA, agent-built mini-apps, Claude Code, Codex, Möbius
@@ -12,14 +12,15 @@ published: true
 ---
 
 <details class="tldr">
-<summary><strong>TL;DR.</strong> The agent is the kernel. Möbius grew an app store, but the store is just the visible part of an operating system you own and can reshape. A Möbius app is a public git repo with a manifest and one entry file. You install by pasting a URL, tweak it by asking the agent, save it to your home screen, and use it offline. Breaking something is cheap because the system is built around recovery.</summary>
+<summary><strong>TL;DR.</strong> Möbius grew an app store, and the store is the on-ramp. The real point is that the agent does not build isolated apps, it grows a cross-app personal system that adapts to you. Apps share a storage layer and a permission model, so the agent can compose them and reshape the whole thing around you over time. You install by pasting a URL, tweak by asking, run offline, save to your home screen, and break things cheaply because the system is built around recovery.</summary>
 
 <ul>
 <li><strong>The store</strong> is a curated starter pack, not a registry. A Möbius app is a public repo with a <code>mobius.json</code> and an <code>index.jsx</code> entry point. Sharing one means sharing a URL.</li>
+<li><strong>The bigger idea</strong> is a system, not a pile of apps. Shared storage and a shared permission model let the agent compose your apps and grow them around you.</li>
 <li><strong>Updates</strong> are URL-keyed. Bump the version upstream, the store shows "Update available", reinstalling patches the code and keeps your data.</li>
-<li><strong>Recovery</strong> is the philosophy made concrete. Atomic installs that cannot half-land, a <code>/recover</code> route, and a git history of your whole instance. Breaking is allowed because it is reversible.</li>
+<li><strong>Recovery</strong> makes breaking cheap. Atomic installs that cannot half-land, a <code>/recover</code> route, and a git history of your whole instance.</li>
 <li><strong>Offline plus home screen.</strong> Apps install to your home screen as standalone PWAs and keep working with no network. Writes queue and sync when you reconnect.</li>
-<li><strong>The honest edges.</strong> Cross-app composition and per-app rollback are not built yet, and I say so where it matters.</li>
+<li><strong>The honest edges.</strong> The full cross-app compose flow and per-app rollback are not built yet, and I say so where it matters.</li>
 </ul>
 
 </details>
@@ -29,55 +30,14 @@ a personalized AI agent you self-host. The [first
 post]({{ '/blog/2026/mobius-an-app-that-builds-itself/' | relative_url }})
 is about the agent building the tools you ask for and editing the
 interface around them. The [second]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }})
-is about the loop that makes it slowly better at doing that. This
+is about the loop the developers use to make the agent better at building them. This
 one is about what those apps became once they stopped being one-offs and grew a place to live.
 
-The through-line across all three is that Möbius has one job, to be as useful to you as it can. The first post built the tools; the second built the loop the developers use to make the agent better at building them; this one is about handing you that same reshaping power.
+The through-line across all three is that Möbius has one job, to be as useful to you as it can. This post hands you the same reshaping power, with an app store as the on-ramp.
 
-Calling it an app store undersells it. Underneath the surface you tap is a small operating system where the agent turns a request into software, and the apps, the data, the shell, and the rules are yours to keep, move, rewrite, or throw away.
+But the store is the small idea. The big one is that the agent does not build isolated apps. It grows a cross-app personal system that adapts to you. Your apps share a storage layer and a permission model, so the agent can compose them and reshape the whole thing around you over time. The store is how it starts. The agent living across all your apps is the point.
 
-<figure class="mb-diagram mb-hero">
-  <div class="mb-hero__inner">
-    <span class="mb-hero__eyebrow">Möbius · a self-hosted AI OS</span>
-    <h2 class="mb-hero__headline">The agent is the kernel.</h2>
-    <p class="mb-hero__sub">A self-hosted agent you grow from a single chat into apps, and from apps into an operating system you own.</p>
-    <div class="mb-hero__thesis mb-hero__thesis--stack">
-      <span class="mb-hero__claim"><span class="mb-hero__claim-key">The chat</span> is the system call</span>
-      <span class="mb-hero__claim"><span class="mb-hero__claim-key">Your apps</span> are user space</span>
-      <span class="mb-hero__claim accent"><span class="mb-hero__claim-key">The agent</span> is the kernel</span>
-    </div>
-  </div>
-  <figcaption>The framing, stated plainly.</figcaption>
-</figure>
-
-## The agent is the kernel
-
-In a normal operating system the kernel is the privileged core. It
-owns the hardware, schedules the work, and everything you use runs on
-top of it. Möbius keeps that shape and swaps the core. The privileged
-thing in the middle is not a scheduler. It is the agent. You describe
-what you want; it writes the app, installs it, schedules its
-background jobs, and wires it into the shell. The apps are user space.
-The chat is the system call.
-
-The analogy bends in places. A real kernel does not write your programs, and a system call is a fixed, narrow interface rather than an open conversation. What carries over is the part that matters. One privileged layer sits between you and the metal, everything routes through it, and nothing reaches your data or hardware except by asking it. This one also writes the software.
-
-<figure class="mb-diagram">
-  <div class="mb-stack">
-    <div class="mb-layer"><span class="mb-layer__name">Your apps</span><span class="mb-layer__role">user space · News, Workout, Atlas, …</span></div>
-    <div class="mb-layer"><span class="mb-layer__name">The shell</span><span class="mb-layer__role">chat · canvas · drawer · theme</span></div>
-    <div class="mb-layer kernel"><span class="mb-layer__name">The agent</span><span class="mb-layer__role">turns a request into running software</span></div>
-    <div class="mb-layer"><span class="mb-layer__name">Your server &amp; data</span><span class="mb-layer__role">one container · git history · storage</span></div>
-  </div>
-  <figcaption>The stack, with the agent where the kernel usually sits. The chat is the system call. You describe a thing, the agent builds it into the layer above, and it lands on the hardware you own at the bottom.</figcaption>
-</figure>
-
-That changes what the primitives are. An app is not a binary you
-trust and cannot inspect; it is a single file of source the agent (or
-you) can rewrite in place. An update is a new version of that file.
-Installing is a transaction the platform can roll back. The rest of
-this post walks those primitives one at a time, and marks where each
-is solid versus where it is still a plan.
+The primitives that make this work are small on purpose. An app is not a binary you trust and cannot inspect, it is a single file of source the agent (or you) can rewrite in place. An update is a new version of that file. Installing is a transaction the platform can roll back. The rest of this post walks those primitives one at a time, and marks where each is solid versus where it is still a plan.
 
 ## The store is a starter pack, not a registry
 
@@ -165,7 +125,7 @@ pass:
 
 </div>
 
-Each of those is a public git repo in the [`mobius-os`](https://github.com/mobius-os) organization, named `app-<something>`, with a `mobius.json` manifest, an `index.jsx` entry point, and a 1024×1024 icon. The smallest apps are that single file; larger ones pull in a few more, but the manifest plus an entry point is the whole contract. There is no submission queue, no review board, no registry to be blessed by. "Publishing" an app means making a repo public and sharing its manifest URL. The list above is a starter pack I picked. The install button takes any manifest URL you paste, and the store warns, but does not stop you, when it comes from a host it has not seen before.
+Each of those is a public git repo in the [`mobius-os`](https://github.com/mobius-os) organization, named `app-<something>`, with a `mobius.json` manifest, an `index.jsx` entry point, and a 1024×1024 icon. The smallest apps are that single file; larger ones pull in a few more, but the manifest plus an entry point is the whole contract. There is no submission queue and no registry to be blessed by. "Publishing" an app means making a repo public and sharing its manifest URL. The list above is a starter pack I picked. The install button takes any manifest URL you paste, and the store warns, but does not stop you, when it comes from a host it has not seen before.
 
 <figure class="mb-diagram">
   <div class="mb-stack mb-files">
@@ -191,11 +151,9 @@ Each of those is a public git repo in the [`mobius-os`](https://github.com/mobiu
 
 ### What "install" actually does
 
-When you tap Install, the work happens on the server in one transaction. The platform fetches the manifest (and because that URL can point anywhere, it refuses private networks and cloud metadata endpoints and re-checks every redirect), then the app's source, icon, background job, and any starter data it ships. It compiles off to the side and goes live only after the database row commits, so a half-written app is never something you can open. If anything fails, the whole thing rolls back and leaves nothing behind.
+When you tap Install, the work happens on the server in one transaction. The platform fetches the manifest (because that URL can point anywhere, it refuses private networks and cloud metadata endpoints and re-checks every redirect), then the app's source, icon, background job, and any starter data it ships. It compiles off to the side and goes live only after the database row commits, so a half-written app is never something you can open. If anything fails, the whole thing rolls back and leaves nothing behind.
 
-That all-or-nothing property is the foundation for the next two
-sections. It is what lets an update patch your app in place, and it
-is what lets recovery treat any break as something to undo.
+That all-or-nothing property is the foundation for the next two sections. It lets an update patch your app in place, and it lets recovery treat any break as something to undo.
 
 ## Updates: version bumps you can see, data you keep
 
@@ -235,15 +193,11 @@ notes.
   <figcaption>An update is a reinstall from the same URL. The platform patches the source, description, permissions, icon, and schedule, and leaves the data you have created untouched.</figcaption>
 </figure>
 
-One sharp edge worth naming. If you ask the agent to _customize_ an installed app and then tap Update, the update overwrites those customizations; there is no three-way merge. For a single-owner system that is a defensible default and a real trade-off. The direction I want is one git repo per installed app, so an update becomes a merge that carries your edits forward and a conflict becomes a chat where the agent resolves it. Designed, not built.
+One sharp edge is worth naming. If you ask the agent to _customize_ an installed app and then tap Update, the update overwrites those customizations; there is no three-way merge. For a single-owner system that is a defensible default and a real trade-off. The direction I want is one git repo per installed app, so an update becomes a merge that carries your edits forward and a conflict becomes a chat where the agent resolves it. Designed, not built.
 
 ## Recovery: breaking is allowed because it is reversible
 
-An agent that can rewrite its own interface will eventually ship a CSS
-rule that hides the composer or a layout change that buries the drawer.
-The answer is not to wrap it in enough guardrails that it can never
-make a mistake. The answer is to make mistakes cheap to undo. Recovery
-has three layers:
+An agent that can rewrite its own interface will eventually ship a CSS rule that hides the composer or a layout change that buries the drawer. The answer is not to wrap it in guardrails so it can never slip. The answer is to make mistakes cheap to undo. Recovery has three layers:
 
 - **A failed install cannot half-land.** The atomic transaction from
   earlier restores the previous working version of the app from a
@@ -288,20 +242,15 @@ Recovery paths should make agent mistakes cheap to inspect and repair.
 
 ## Your home screen, with or without Möbius
 
-An app you install is not trapped inside the chat. Each one is also
-served at its own address, with its own web manifest and icon, as a
-standalone progressive web app. Add it to your phone's home screen and
-it launches like any native app: full screen, no drawer, no chat. Gym
-opens straight to today's workout; Atlas opens to the globe.
+An app you install is not trapped inside the chat. Each one is also served at its own address, with its own web manifest and icon, as a standalone progressive web app. Add it to your phone's home screen and it launches like any native app: full screen, no drawer, no chat. Workout opens straight to today's session; Atlas opens to the globe.
 
-Run standalone, an app has no Möbius shell around it to supply shared libraries, so the page vendors its own copy of React from your server. Nothing it needs lives on a CDN, which is exactly what lets it render with the network off, the subject of the next section.
+Run standalone, an app has no Möbius shell around it to supply shared libraries, so the page vendors its own copy of React from your server. Nothing it needs lives on a CDN, which is what lets it render with the network off, the subject of the next section.
 
 ## Offline, and the sync that catches up
 
-"Works offline" is easy to claim and hard to land on a phone, so this
-is the part that got the most unglamorous engineering, and it holds.
+"Works offline" is easy to claim and hard to land on a phone, so this is the part that got the most unglamorous engineering, and it holds.
 
-When an app is marked offline-capable, a service worker caches the shell and the app's code, so opening it with the network off renders the real app, not the browser's offline page. Storage works offline for _every_ app, not just the offline-capable ones. Reads come instantly from a local cache and refresh in the background; writes you make offline queue in a local outbox and sync to your server the moment you reconnect.
+When an app is marked offline-capable, a service worker caches the shell and the app's code, so opening it with the network off renders the real app, not the browser's offline page. Storage works offline for _every_ app, not just the offline-capable ones. Reads come instantly from a local cache and refresh in the background; writes you make offline queue in a local outbox and sync the moment you reconnect.
 
 <figure class="mb-diagram">
   <div class="mb-flow">
@@ -323,19 +272,15 @@ When an app is marked offline-capable, a service worker caches the shell and the
   <figcaption>Log a set in airplane mode, mark a country from a plane, jot a note on the subway. The outbox catches up the moment you reconnect. Listing and chat deliberately stay online.</figcaption>
 </figure>
 
-So your data survives a dead connection, and I have checked it on a real phone, not a desktop pretending to be one. Two operations stay online by design (a cached _listing_ could resurrect things you deleted, and chat is online-only), and conflicts are last-write-wins per item, which is right for a single owner and needs more thought for a shared one.
+So your data survives a dead connection, and I have checked it on a real phone, not a desktop pretending to be one. Two operations stay online by design (a cached _listing_ could resurrect things you deleted, and chat is online-only). Conflicts are last-write-wins per item, which is right for a single owner and needs more thought for a shared one.
 
-## Tweaking an app, and the composition I have not built
+## One system, not a pile of apps
 
-**Tweaking an app you have is real and easy.** Open it, tell the agent
-what you want different (a darker palette, a new column, a weekly view
-instead of daily), and it edits the app's source in place and
-recompiles. No fork button, no project to set up; the app is one file,
-and the agent edits that file the same way it would write a new one. It
-is the same loop as building from scratch, pointed at something that
-already exists.
+Here is where the store stops being the point. Once your apps share a storage layer and a permission model, the agent is not stuck building each one in isolation. It can reach across them, compose them, and grow the whole thing around how you actually live.
 
-**Composing several apps into a new one is not a feature yet.** The idea is a health dashboard that reads across your workout tracker, calorie log, gratitude journal, and dream diary and surfaces the metrics you actually care about. The substrate exists. An app can declare that it reads another app's data, and the backend enforces the handshake on both sides. But almost nothing uses it today, each app's storage is scoped to itself by default, and there is no "build me an app that unifies these" flow. When I build it, this is the example I will build it against.
+**Tweaking an app you have is real and easy.** Open it, tell the agent what you want different (a darker palette, a new column, a weekly view instead of daily), and it edits the app's source in place and recompiles. No fork button, no project to set up; the app is one file, and the agent edits that file the same way it would write a new one. It is the same loop as building from scratch, pointed at something that already exists.
+
+**Composing several apps into a new one is the next rung, and the full flow is not built yet.** The idea is a health dashboard that reads across your workout tracker, calorie log, gratitude journal, and dream diary and surfaces the metrics you actually care about. The substrate exists. An app can declare that it reads another app's data, and the backend enforces the handshake on both sides. But almost nothing uses it today, each app's storage is scoped to itself by default, and there is no "build me an app that unifies these" flow. When I build it, this is the example I will build it against.
 
 <figure class="mb-diagram">
   <div class="mb-lanes">
@@ -355,19 +300,15 @@ already exists.
   <figcaption>The composition I want and have not built. The dashed box is a promise, not a feature.</figcaption>
 </figure>
 
+What actually drives this adaptation are the two apps I have barely touched here, Mind and Dreaming. Mind is the agent's memory of everything it has learned across every interaction and lesson, not a profile of you but a record of what works. Dreaming is the overnight job that interviews the day's work and feeds new lessons back in. Together they are how the agent gets sharper at fitting your system to you over time. They get their own post, [your agent improves itself]({{ '/blog/2026/your-agent-improves-itself/' | relative_url }}).
+
 ## Building a good one, in practice
 
-Two things make the difference when the goal is for the agent to build
-apps _well_, not just build them.
+Two things make the difference when the goal is for the agent to build apps _well_, not just build them.
 
-The first is the introspection loop from the [companion post on the
-harness]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }}):
-have the agent build one app, ask it _why_ it made the choices it did
-while the transcript is still in front of it, and fold the answer back
-into its system prompt. Iterating the instructions is the lever, and
-introspection is how I find the edit worth making.
+The first is the introspection loop from the [companion post on the harness]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }}). Have the agent build one app, ask it _why_ it made the choices it did while the transcript is still in front of it, and fold the answer back into its system prompt. Iterating the instructions is the lever, and introspection is how I find the edit worth making.
 
-The second is the design phase, where I do not let one model decide alone. I drive with Claude and use the [Codex plugin](https://github.com/openai/codex) to adversarially review the design before the build starts. Two models disagreeing about an interface, a data model, or an edge case surface the questions a single model tends to skip. The build is cheap, so the leverage is in the design.
+The second is the design phase, where I do not let one model decide alone. I drive with Claude and use the [Codex plugin](https://github.com/openai/codex) to adversarially review the design before the build starts. Two models disagreeing about an interface, a data model, or an edge case surface the questions a single model skips. The build is cheap, so the leverage is in the design.
 
 <figure class="mb-diagram">
   <div class="mb-lanes mb-lanes--pair">
@@ -398,32 +339,17 @@ The second is the design phase, where I do not let one model decide alone. I dri
 
 ## The philosophy under all of it
 
-**Code empowers the agent; it does not police it.** When the agent
-needs to install an app, write to your shell, or schedule a job, the
-platform's job is to make that _possible and reversible_, not to
-second-guess it. Validators show up only where a failure would be
-silent and catastrophic; everywhere else the lever is a clear contract
-and a good recovery path, not a wall.
+**Code empowers the agent; it does not police it.** When the agent needs to install an app, write to your shell, or schedule a job, the platform's job is to make that _possible and reversible_, not to second-guess it. Validators show up only where a failure would be silent and catastrophic; everywhere else the lever is a clear contract and a good recovery path, not a wall.
 
-**Low floor, high ceiling, no walls.** A personal tracker that stores
-a little data and works offline should take one sentence; the storage
-primitive is a convenience, not a cage, and an app that wants its own
-local database is free to reach for one. The one real wall right now
-is that apps cannot open arbitrary network connections to outside
-services, a deliberate security line I have not yet built a careful
-door through.
+**Low floor, high ceiling, no walls.** A personal tracker that stores a little data and works offline should take one sentence, and an app that wants its own local database is free to reach for one. The one real wall right now is that apps cannot open arbitrary network connections to outside services, a deliberate security line I have not yet built a careful door through.
 
 **You own all of it.** Your data is on a server you control. Your apps are files you can read. Your shell is a git repo you can revert. Nothing here is tuned to keep you engaged. The whole series has argued the opposite, an assistant whose one job is to be useful, that builds you the thing, gets out of the way, and leaves you holding something you can keep.
 
 ## Where this goes
 
-An app store was the obvious next thing once the agent could build apps reliably. The less obvious thing is what it turns Möbius into. A place where the unit of software is small enough for the agent to write, own, and repair, where installing and breaking are reversible, and where the privileged core turns "I wish I had a thing that…" into a thing that is there the next time you open your phone.
+An app store was the obvious next thing once the agent could build apps reliably. The less obvious thing is what it turns Möbius into. A system where the unit of software is small enough for the agent to write, own, and repair, where installing and breaking are reversible, and where the agent turns "I wish I had a thing that…" into a thing that is there the next time you open your phone, then keeps reshaping it around you.
 
-The apps above are a starter pack; the interesting ones do not exist
-yet. If you [deploy an instance]({{ '/mobius/' | relative_url }}) and
-build something, or tear one of these apart and rebuild it as
-something better, that is exactly the point, and I would love to see
-it.
+The apps above are a starter pack; the interesting ones do not exist yet. If you [deploy an instance]({{ '/mobius/' | relative_url }}) and build something, or tear one of these apart and rebuild it as something better, that is exactly the point, and I would love to see it.
 
 The source is on [GitHub](https://github.com/hamzamerzic/mobius), the
 app repos are under [`mobius-os`](https://github.com/mobius-os), and the
