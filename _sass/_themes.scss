@@ -28,7 +28,7 @@
   /* Accent colors */
   --global-theme-color: #{$theme-light-accent};
   --global-theme-color-bright: #{$theme-light-accent-bright};
-  --global-accent-tint: rgba(22, 163, 74, 0.08);
+  --global-accent-tint: rgba(21, 128, 61, 0.08);
   --global-hover-color: #{$theme-light-secondary};
   --global-hover-text-color: #{$white-color};
   --global-secondary-accent-color: #{$theme-light-secondary};
@@ -97,7 +97,7 @@ html[data-theme="dark"] {
   /* Accent colors */
   --global-theme-color: #{$theme-dark-accent};
   --global-theme-color-bright: #{$theme-dark-accent-bright};
-  --global-accent-tint: rgba(22, 163, 74, 0.1);
+  --global-accent-tint: rgba(31, 157, 84, 0.1);
   --global-hover-color: #{$theme-dark-accent-bright};
   --global-secondary-accent-color: #{$theme-dark-secondary};
 

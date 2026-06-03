@@ -43,11 +43,9 @@ rules are yours to keep, move, rewrite, or throw away.
     <span class="mb-hero__eyebrow">Möbius · a self-hosted AI OS</span>
     <h2 class="mb-hero__headline">The agent is the kernel.</h2>
     <p class="mb-hero__sub">A self-hosted agent you grow from a single chat into apps, and from apps into an operating system you own.</p>
-    <div class="mb-hero__thesis">
-      <span class="mb-hero__claim"><span class="mb-hero__claim-key">Apps</span> are user space</span>
-      <span class="mb-hero__dot">·</span>
+    <div class="mb-hero__thesis mb-hero__thesis--stack">
       <span class="mb-hero__claim"><span class="mb-hero__claim-key">The chat</span> is the system call</span>
-      <span class="mb-hero__dot">·</span>
+      <span class="mb-hero__claim"><span class="mb-hero__claim-key">Your apps</span> are user space</span>
       <span class="mb-hero__claim accent"><span class="mb-hero__claim-key">The agent</span> is the kernel</span>
     </div>
   </div>
@@ -64,9 +62,17 @@ what you want; it writes the app, installs it, schedules its
 background jobs, and wires it into the shell. The apps are user space.
 The chat is the system call.
 
+The analogy is not exact, and it is worth saying where it bends. A
+real kernel does not write your programs, and a system call is a
+fixed, narrow interface rather than an open conversation. What carries
+over is the part that matters. One privileged layer sits between you
+and the metal, everything routes through it, and nothing reaches your
+data or your hardware except by asking it. This one also happens to
+write the software.
+
 <figure class="mb-diagram">
   <div class="mb-stack">
-    <div class="mb-layer"><span class="mb-layer__name">Your apps</span><span class="mb-layer__role">user space · News, Gym, Visited, …</span></div>
+    <div class="mb-layer"><span class="mb-layer__name">Your apps</span><span class="mb-layer__role">user space · News, Workout, Visited, …</span></div>
     <div class="mb-layer"><span class="mb-layer__name">The shell</span><span class="mb-layer__role">chat · canvas · drawer · theme</span></div>
     <div class="mb-layer kernel"><span class="mb-layer__name">The agent</span><span class="mb-layer__role">turns a request into running software</span></div>
     <div class="mb-layer"><span class="mb-layer__name">Your server &amp; data</span><span class="mb-layer__role">one container · git history · storage</span></div>
@@ -91,7 +97,7 @@ channel hiding somewhere.
 <figure class="mb-diagram">
   <div class="mb-catalog">
     <div class="mb-app">
-      <span class="mb-app__icon" aria-hidden="true">📰</span>
+      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/news.png' | relative_url }}" alt="News app icon" loading="lazy" />
       <div class="mb-app__body">
         <div class="mb-app__head">
           <span class="mb-app__name">News</span>
@@ -101,7 +107,17 @@ channel hiding somewhere.
       </div>
     </div>
     <div class="mb-app">
-      <span class="mb-app__icon" aria-hidden="true">🌍</span>
+      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/gym.png' | relative_url }}" alt="Workout app icon" loading="lazy" />
+      <div class="mb-app__body">
+        <div class="mb-app__head">
+          <span class="mb-app__name">Workout</span>
+          <span class="mb-node__tag">on-device</span>
+        </div>
+        <span class="mb-app__desc">A natural-language workout logger. Type "3×5 deadlift at 100kg" and it parses the sets, all on your device.</span>
+      </div>
+    </div>
+    <div class="mb-app">
+      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/countries.png' | relative_url }}" alt="Visited app icon" loading="lazy" />
       <div class="mb-app__body">
         <div class="mb-app__head">
           <span class="mb-app__name">Visited</span>
@@ -111,33 +127,33 @@ channel hiding somewhere.
       </div>
     </div>
     <div class="mb-app">
-      <span class="mb-app__icon" aria-hidden="true">🏋️</span>
+      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/mind.png' | relative_url }}" alt="Mind app icon" loading="lazy" />
       <div class="mb-app__body">
         <div class="mb-app__head">
-          <span class="mb-app__name">Gym</span>
-          <span class="mb-node__tag">on-device / offline</span>
+          <span class="mb-app__name">Mind</span>
+          <span class="mb-node__tag">memory</span>
         </div>
-        <span class="mb-app__desc">A push/pull/legs tracker with a rest timer, PR table, and heatmap. No agent, no cloud, all on your device.</span>
+        <span class="mb-app__desc">An Obsidian-style graph of what Möbius has learned about you, the agent's own memory made browsable.</span>
       </div>
     </div>
     <div class="mb-app">
-      <span class="mb-app__icon" aria-hidden="true">📐</span>
+      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/latex.png' | relative_url }}" alt="LaTeX app icon" loading="lazy" />
       <div class="mb-app__body">
         <div class="mb-app__head">
           <span class="mb-app__name">LaTeX</span>
           <span class="mb-node__tag">AI</span>
         </div>
-        <span class="mb-app__desc">A math-first editor where an AI sub-agent writes <code>.tex</code> while you watch the typeset output render live.</span>
+        <span class="mb-app__desc">An Overleaf-style editor with a file drawer and a real tectonic engine, where an AI sub-agent writes <code>.tex</code> as you watch it typeset.</span>
       </div>
     </div>
     <div class="mb-app">
-      <span class="mb-app__icon" aria-hidden="true">🌙</span>
+      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/dreaming.png' | relative_url }}" alt="Dreaming app icon" loading="lazy" />
       <div class="mb-app__body">
         <div class="mb-app__head">
           <span class="mb-app__name">Dreaming</span>
           <span class="mb-node__tag">nightly</span>
         </div>
-        <span class="mb-app__desc">A nightly job reads yesterday's activity and writes you a one-page morning report, with a streak counter.</span>
+        <span class="mb-app__desc">Overnight, Möbius interviews the agents that worked that day and writes itself notes for tomorrow.</span>
       </div>
     </div>
   </div>
@@ -149,13 +165,14 @@ pass:
 
 <div class="table-wrap" markdown="1">
 
-| App          | What it does                                                                                                                        |
-| ------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
-| **News**     | A daily AI-curated digest. A background job wakes at 10:00, runs the agent with web search only, and writes the morning's report.   |
-| **Visited**  | A draggable 3D globe; tap the countries you have been to and the count climbs toward 195.                                           |
-| **Gym**      | A training-program tracker: push/pull/legs, rest timer, a personal-record table, a heatmap. No agent, no cloud, all on your device. |
-| **LaTeX**    | A math-first editor where an AI sub-agent writes `.tex` while you watch the typeset output render live.                             |
-| **Dreaming** | A nightly job that reads yesterday's activity and writes you a one-page morning report, with a streak counter.                      |
+| App          | What it does                                                                                                                                        |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **News**     | A daily AI-curated digest. A background job wakes at 10:00, runs the agent with web search only, and writes the morning's report.                   |
+| **Workout**  | A natural-language workout logger. Type what you did, like "3×5 deadlift at 100kg", and it parses the sets. No agent, no cloud, all on your device. |
+| **Visited**  | A draggable 3D globe; tap the countries you have been to and the count climbs toward 195.                                                           |
+| **Mind**     | An Obsidian-style graph of what Möbius has learned about you, the agent's own memory made browsable.                                                |
+| **LaTeX**    | An Overleaf-style editor with a file drawer and a real tectonic engine; an AI sub-agent writes `.tex` while you watch it typeset.                   |
+| **Dreaming** | Overnight, the agent interviews the day's work and writes itself notes, so it starts the next day a little sharper.                                 |
 
 </div>
 
