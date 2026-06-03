@@ -10,7 +10,7 @@ giscus_comments: true
 ---
 
 <p>
-  Mesh Cleaner is a tool that cleans 3D mesh files and computes their geometric properties such as volume, center of mass, and moments of inertia. The idea behind this project was to automate the tedious process of preparing 3D models for use in Gazebo—as explained in the <a href="https://classic.gazebosim.org/tutorials?tut=inertia" target="_blank">classic Gazebo tutorial</a>.
+  Mesh Cleaner is a tool that cleans 3D mesh files and computes their geometric properties such as volume, center of mass, and moments of inertia. The idea behind this project was to automate the tedious process of preparing 3D models for use in Gazebo, as explained in the <a href="https://classic.gazebosim.org/tutorials?tut=inertia" target="_blank">classic Gazebo tutorial</a>.
 </p>
 
 <p>Supported file formats: <strong>.stl, .obj, .dae</strong> (max size: 32MB)</p>
@@ -57,7 +57,7 @@ giscus_comments: true
 
 <p style="margin-top: 2em;">
   ✨ This tool was <a href="https://hamzamerzic.info/blog/2025/website-migration/">modernized</a> from my earlier WordPress website.<br />
-  If you notice any regressions or bugs, please reach out or comment below—I’d love to hear from you.
+  If you notice any regressions or bugs, please reach out or comment below. I’d love to hear from you.
 </p>
 
 <script>

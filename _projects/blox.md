@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Blox
-description: A small, functional neural network library for JAX — built to keep JAX's strengths visible instead of paper over them
+description: A small, functional neural network library for JAX, built to keep JAX's strengths visible instead of paper over them
 img: assets/img/blox-logo.png
 permalink: /blox/
 importance: 2
@@ -93,7 +93,7 @@ category: software
 
 <p class="lead">
   Abstractions shape how we think. JAX comes with strong abstractions of its
-  own — composable transformations over pure functions,
+  own: composable transformations over pure functions,
   <a href="https://docs.jax.dev/en/latest/stateful-computations.html">explicit
   state flow through function signatures</a>, an XLA compilation model that
   rewards clean code. A neural network library on top either keeps those
@@ -123,7 +123,7 @@ category: software
     <div class="p-3" style="background: rgba(127, 127, 127, 0.05); border-radius: 0.5rem; height: 100%;">
       <h5 class="mb-2">📘 Learners</h5>
       <p class="mb-0" style="font-size: 0.95em;">
-        No framework magic to reverse-engineer. What you read is what runs —
+        No framework magic to reverse-engineer. What you read is what runs,
         the cleanest way to understand how neural networks actually work at
         the JAX level.
       </p>
@@ -160,7 +160,7 @@ category: software
   <tbody>
     <tr>
       <th scope="row">Where parameters live</th>
-      <td>Inside the module — the module <em>is</em> the parameter tree.</td>
+      <td>Inside the module: the module <em>is</em> the parameter tree.</td>
       <td>Inside mutable <code>Module</code> instances as <code>Param</code> variables.</td>
       <td class="blox-col">In a separate <code>Params</code> container, passed in and out of the model.</td>
     </tr>
@@ -172,9 +172,9 @@ category: software
     </tr>
     <tr>
       <th scope="row">Params / graph separation</th>
-      <td>Coupled — params and module structure are the same tree.</td>
-      <td>Coupled — both live inside the <code>Module</code>.</td>
-      <td class="blox-col">Decoupled — static <code>Graph</code> describes structure, dynamic <code>Params</code> holds arrays.</td>
+      <td>Coupled: params and module structure are the same tree.</td>
+      <td>Coupled: both live inside the <code>Module</code>.</td>
+      <td class="blox-col">Decoupled: static <code>Graph</code> describes structure, dynamic <code>Params</code> holds arrays.</td>
     </tr>
     <tr>
       <th scope="row">Using JAX transforms</th>
@@ -185,7 +185,7 @@ category: software
     <tr>
       <th scope="row">Implicit / global state</th>
       <td>None.</td>
-      <td>None — RNGs and shapes are threaded by the user.</td>
+      <td>None: RNGs and shapes are threaded by the user.</td>
       <td class="blox-col">None. RNG counters live inside <code>Params</code> alongside the rest of the state.</td>
     </tr>
     <tr>
@@ -196,9 +196,9 @@ category: software
     </tr>
     <tr>
       <th scope="row">Surface area to learn</th>
-      <td>Small — modules, filtering, a handful of helpers.</td>
-      <td>Larger — Module system, Variables, split/merge, transform wrappers.</td>
-      <td class="blox-col">Small — <code>Graph</code>, <code>Module</code>, <code>Params</code>, <code>Rng</code>. Three source files.</td>
+      <td>Small: modules, filtering, a handful of helpers.</td>
+      <td>Larger: Module system, Variables, split/merge, transform wrappers.</td>
+      <td class="blox-col">Small: <code>Graph</code>, <code>Module</code>, <code>Params</code>, <code>Rng</code>. Three source files.</td>
     </tr>
   </tbody>
 </table>

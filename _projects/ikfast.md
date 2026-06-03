@@ -110,7 +110,7 @@ giscus_comments: true
 
 <p style="margin-top: 2em;">
   ✨ This tool was <a href="https://hamzamerzic.info/blog/2025/website-migration/">modernized</a> from my earlier WordPress website.<br />
-  If you notice any regressions or bugs, please reach out or comment below—I’d love to hear from you.
+  If you notice any regressions or bugs, please reach out or comment below. I’d love to hear from you.
 </p>
 
 <script>
