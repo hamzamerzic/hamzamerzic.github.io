@@ -10,57 +10,11 @@ related_posts: false
 published: true
 ---
 
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-
-<style>
-  /* .tldr lives in the shared Möbius post stylesheet (_sass/_mobius-modern). */
-  .swiper {
-    max-width: 320px;
-    margin: 2rem auto;
-    border-radius: 0.75rem;
-    overflow: hidden;
-  }
-  .swiper-slide {
-    aspect-ratio: 9 / 20;
-    background: var(--global-bg-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  .swiper-slide img {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
-  }
-  .swiper-slide video {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
-  }
-  .swiper-button-prev,
-  .swiper-button-next {
-    color: var(--global-theme-color);
-    opacity: 0.4;
-    transition: opacity 0.3s ease;
-  }
-  .swiper-button-prev:hover,
-  .swiper-button-next:hover {
-    opacity: 1;
-  }
-  .swiper-pagination-bullet-active {
-    background: var(--global-theme-color);
-  }
-</style>
-
 <details class="tldr">
 <summary><strong>TL;DR.</strong> Möbius is a personalized AI agent you can self-host. It builds the tools you need, edits the interface they sit in, and learns from use.</summary>
 
 <ul>
-<li><strong>The demo:</strong> I tore file upload out of the chat,
-asked the agent for it back, and got the full pipeline (backend
+<li><strong>The demo:</strong> asked the agent for file upload and got the full pipeline (backend
 route, message storage, drag-and-drop, image rendering) in one
 conversation.</li>
 <li><strong>Capabilities</strong> (file upload, notifications,
@@ -76,56 +30,41 @@ deploys in about three minutes.</li>
 
 </details>
 
-<p align="center">
-  <img src="{{ '/assets/img/moebius.png' | relative_url }}" width="120" alt="Möbius logo" />
-</p>
+## You grow it from a chat input
 
-## The demo
+Möbius starts as almost nothing: a chat on one side, an empty canvas
+on the other. No file upload, no scheduled jobs panel, no
+notifications button. What makes that interesting is that the agent
+can rewrite the thing it runs inside. So you grow it. Ask for file
+upload and it builds file upload. Ask for a new look and it restyles
+itself. Ask for an app and one appears on the canvas. The shell you
+end up with is the one you talked into being.
 
-Möbius's starting point is a deliberately small chat: no file
-upload, no scheduled jobs panel, no notifications button. To keep
-the claim honest rather than stage-managed, I picked file upload and
-tore the entire pipeline out: deleted the FastAPI route from `/app`,
-ripped the React component out of the shell, restarted the app. Then
-I sent a deliberately ordinary prompt: _"I'd like to send files and
-images along with my messages, pictures of stuff I want to talk
-about, the occasional document. Can you add file upload to the
-chat?"_
+Here is one of those moments, end to end. I sent a deliberately
+ordinary prompt: _"I'd like to send files and images along with my
+messages, pictures of stuff I want to talk about, the occasional
+document. Can you add file upload to the chat?"_ One conversation
+later there was a backend route, message storage, drag-and-drop, and
+image rendering, none of which existed when I asked.
 
-<div class="swiper">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/upload-02a-pristine.png' | relative_url }}"
-           alt="Top of the chat: the typed prompt asking for file upload, the agent's initial check, and a composer at the bottom with no paperclip."
-           loading="lazy" />
-    </div>
-    <div class="swiper-slide">
-      <img src="{{ '/assets/img/mobius/upload-04-in-use.png' | relative_url }}"
-           alt="The feature in use end to end: the Möbius logo attached inline in the sent message, with the agent reading off the symbolism."
-           loading="lazy" />
-    </div>
-  </div>
-  <div class="swiper-button-next"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-pagination"></div>
-</div>
+## The flip side: you can break it
 
-<div class="caption mt-2">
-  Instructing the agent to add file upload to chat: the prompt at
-  the top, the agent's first dig through the codebase. Chat upload
-  added: multipart endpoint, message storage, drag-and-drop
-  overlay, paste handler, chip row, image thumbnails, all written
-  from scratch in the same conversation.
-</div>
+The same power cuts both ways. Tell the agent to delete an app and it
+deletes it. Tell it to rip out a feature and the feature is gone. You
+can repaint the shell until the composer is hidden, restructure the
+navigation until the drawer is unreachable, paint yourself into a
+corner. That is not a flaw. It is the point. An interface you can
+grow in any direction is, by construction, an interface you can also
+break.
 
-The full walk-through is below, along with the rest of what Möbius
-does: themes the agent rewrites, navigation it restructures, a
-`/recover` route for when it paints itself into a corner. But the
-file-upload moment is the load-bearing claim, and I wanted it in the
-room before any framing. (One caveat: by default the agent gets
-read-write on `/data` and read-only on `/app`, so for this demo I
-temporarily loosened things to let it land that backend route on its
-own; more on why that is not the default in [The catch](#the-catch).)
+What makes that safe is that breaking is cheap to undo. `/recover`
+bounds the blast radius: it resets the shell to its seeded baseline
+while keeping your chats, your apps, and your data. It renders from a
+separate server-side codepath the agent does not edit, so it survives
+even a shell rewrite that hides everything else. Grow in any
+direction, break it, recover, try again. The goal is maximal
+personalization: software that bends to you instead of the other way
+around.
 
 ## Why I built this
 
@@ -242,23 +181,8 @@ instances of the same product:
     <img src="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" width="280" alt="Möbius theme cycle, baseline, cozy reading nook, drifting ambient, medieval manuscript" />
   </video>
   <figcaption class="caption mt-2" style="font-size: 0.85em;">
-    Same instance, four prompts: baseline; a cozy reading nook; an
-    ambient drifting mesh with glassy bubbles; and a medieval
-    manuscript in parchment cream. Each is CSS (sometimes plus a font
-    import or a keyframe) the agent wrote from one sentence. The clip
-    ends on the clean charcoal default it ships with today.
-  </figcaption>
-</figure>
-
-<figure style="text-align: center; margin: 2rem auto;">
-  <video src="{{ '/assets/img/mobius/theme-agent-transformations.mp4' | relative_url }}" width="280" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
-    <img src="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" width="280" alt="Möbius restyled from its default to a Claude-style theme to a meme theme" />
-  </video>
-  <figcaption class="caption mt-2" style="font-size: 0.85em;">
-    Or ask for a specific look. Same instance, restyled end to end:
-    the charcoal default, then <em>"make this look like the Claude
-    app"</em>, then <em>"go wild and meme-worthy"</em>. Two short
-    prompts; the agent rewrote the theme each time.
+    Different variations of the same instance, each from a single
+    prompt to the agent.
   </figcaption>
 </figure>
 
@@ -346,23 +270,37 @@ small storage primitive the agent already knows how to compose. New
 schemas, scheduled jobs, webhooks: these are the plumbing you would
 write yourself, except you describe it instead.
 
-## The catch
+## Recovery, so you can be fearless
 
-The sharp edge is permissions. By default the agent can write `/data`
-(your shell, apps, storage) but only read `/app` (the server code).
-The file-upload demo above temporarily loosened that, useful for
-showing what the agent can do, but not something I want as the
-default. Shipping write access to `/app` sits behind a
-staging-overlay + diff-review + controlled-promotion gate I have not
-yet built.
+An agent with write access to its own interface will occasionally
+ship a CSS rule that hides the composer, a layout change that makes
+the drawer unreachable, or a theme that paints text the same colour
+as the background. That is the cost of an interface you can reshape
+this freely, and it is a cost worth paying as long as it is
+reversible.
 
-Recovery exists because an agent with write access to its own
-interface will occasionally ship a CSS rule that hides the composer,
-a layout change that makes the drawer unreachable, or a theme that
-paints text the same colour as the background. `/recover` resets the
-shell to the seeded baseline while keeping your chats, apps, and
-data. It renders from a separate server-side codepath the agent does
-not edit, so it survives even a misbehaved shell rewrite.
+`/recover` is what makes it reversible. It resets the shell to the
+seeded baseline while keeping your chats, apps, and data. It renders
+from a separate server-side codepath the agent does not edit, so it
+survives even a misbehaved shell rewrite. The whole point of the
+route is to let you grow the thing without fear: any change you make
+is one you can roll back, so there is no edit too bold to try.
+
+## The agent is the server
+
+Step back and the loop closes. Möbius is one container you self-host.
+The agent inside it is not a chat bolted onto a finished product; it
+is the server. It builds the tools, edits the interface those tools
+sit in, runs scheduled jobs on a timer, fetches from the web when an
+app needs fresh data, and stores everything on a machine you control.
+The same thing that answers your message is the thing that ships the
+feature, mounts the app, and reshapes the shell around both.
+
+That is what makes the personalization compound. Requests become
+software, software becomes context, the next request lands sharper.
+Because the server is the agent, every app you grow and every layout
+you reshape is one more thing it can build on next time. The more you
+use it, the more it is yours.
 
 ## What's next
 
@@ -412,20 +350,3 @@ project page is [here]({{ '/mobius/' | relative_url }}), and the
 README's deploy button gets you a working instance in about three
 minutes. I would love to know what you build with it, and what you
 change _around_ what you build.
-
-<script>
-  document.querySelectorAll('.swiper').forEach((swiperEl) => {
-    new Swiper(swiperEl, {
-      loop: true,
-      spaceBetween: 16,
-      pagination: {
-        el: swiperEl.querySelector('.swiper-pagination'),
-        clickable: true,
-      },
-      navigation: {
-        nextEl: swiperEl.querySelector('.swiper-button-next'),
-        prevEl: swiperEl.querySelector('.swiper-button-prev'),
-      },
-    });
-  });
-</script>

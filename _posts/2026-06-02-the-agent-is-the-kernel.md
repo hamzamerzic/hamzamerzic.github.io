@@ -30,7 +30,7 @@ post]({{ '/blog/2026/mobius-an-app-that-builds-itself/' | relative_url }})
 is about the agent building the tools you ask for and editing the
 interface around them. The [second]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }})
 is about the loop that makes it slowly better at doing that. This
-one is about what happened when those apps stopped being one-offs
+one is about what those apps became once they stopped being one-offs
 and grew a place to live.
 
 Calling it an app store undersells it. The store is the surface you
@@ -38,11 +38,20 @@ tap; underneath it is a small operating system where the agent turns a
 request into software, and the apps, the data, the shell, and the
 rules are yours to keep, move, rewrite, or throw away.
 
-<figure class="text-center my-4">
-  <img src="{{ '/assets/img/mobius/os/os-hero.png' | relative_url }}"
-       alt="The Möbius OS landing page: the headline 'The agent is the kernel.' over a description of a self-hosted PWA where mini-apps are installed, customized, and rebuilt from a single chat surface."
-       loading="lazy" style="max-width:330px; width:100%; height:auto; border-radius:0.7rem;" />
-  <figcaption class="caption mt-2">The framing, stated plainly on the project's own front page.</figcaption>
+<figure class="mb-diagram mb-hero">
+  <div class="mb-hero__inner">
+    <span class="mb-hero__eyebrow">Möbius · a self-hosted AI OS</span>
+    <h2 class="mb-hero__headline">The agent is the kernel.</h2>
+    <p class="mb-hero__sub">A self-hosted agent you grow from a single chat into apps, and from apps into an operating system you own.</p>
+    <div class="mb-hero__thesis">
+      <span class="mb-hero__claim"><span class="mb-hero__claim-key">Apps</span> are user space</span>
+      <span class="mb-hero__dot">·</span>
+      <span class="mb-hero__claim"><span class="mb-hero__claim-key">The chat</span> is the system call</span>
+      <span class="mb-hero__dot">·</span>
+      <span class="mb-hero__claim accent"><span class="mb-hero__claim-key">The agent</span> is the kernel</span>
+    </div>
+  </div>
+  <figcaption>The framing, stated plainly.</figcaption>
 </figure>
 
 ## The agent is the kernel
@@ -69,21 +78,70 @@ That changes what the primitives are. An app is not a binary you
 trust and cannot inspect; it is a single file of source the agent (or
 you) can rewrite in place. An update is a new version of that file.
 Installing is a transaction the platform can roll back. The rest of
-this post is those primitives, one at a time, and where each is solid
-versus still aspirational.
+this post walks those primitives one at a time, and marks where each
+is solid versus where it is still a plan.
 
 ## The store is a starter pack, not a registry
 
 The app store is itself a Möbius app. On first boot the platform
 installs it through the exact same path you will use for everything
-else: the first sign that there is no privileged install channel
-hiding somewhere.
+else, which is the first sign that there is no privileged install
+channel hiding somewhere.
 
-<figure class="text-center my-4">
-  <img src="{{ '/assets/img/mobius/os/store-catalog.png' | relative_url }}"
-       alt="The Möbius OS curated app catalog: cards for News, Visited, Gym, LaTeX, and Dreaming, each with an icon, version number, description, and capability badges such as 'Works offline' and 'Runs daily'."
-       loading="lazy" style="max-width:340px; width:100%; height:auto; border-radius:0.7rem;" />
-  <figcaption class="caption mt-2">The curated catalog: the same starter-pack apps the in-app store installs.</figcaption>
+<figure class="mb-diagram">
+  <div class="mb-catalog">
+    <div class="mb-app">
+      <span class="mb-app__icon" aria-hidden="true">📰</span>
+      <div class="mb-app__body">
+        <div class="mb-app__head">
+          <span class="mb-app__name">News</span>
+          <span class="mb-node__tag">runs daily</span>
+        </div>
+        <span class="mb-app__desc">An AI-curated morning digest, written for you by a background job at 10:00.</span>
+      </div>
+    </div>
+    <div class="mb-app">
+      <span class="mb-app__icon" aria-hidden="true">🌍</span>
+      <div class="mb-app__body">
+        <div class="mb-app__head">
+          <span class="mb-app__name">Visited</span>
+          <span class="mb-node__tag">offline</span>
+        </div>
+        <span class="mb-app__desc">A draggable 3D globe; tap the countries you have been to and watch the count climb toward 195.</span>
+      </div>
+    </div>
+    <div class="mb-app">
+      <span class="mb-app__icon" aria-hidden="true">🏋️</span>
+      <div class="mb-app__body">
+        <div class="mb-app__head">
+          <span class="mb-app__name">Gym</span>
+          <span class="mb-node__tag">on-device / offline</span>
+        </div>
+        <span class="mb-app__desc">A push/pull/legs tracker with a rest timer, PR table, and heatmap. No agent, no cloud, all on your device.</span>
+      </div>
+    </div>
+    <div class="mb-app">
+      <span class="mb-app__icon" aria-hidden="true">📐</span>
+      <div class="mb-app__body">
+        <div class="mb-app__head">
+          <span class="mb-app__name">LaTeX</span>
+          <span class="mb-node__tag">AI</span>
+        </div>
+        <span class="mb-app__desc">A math-first editor where an AI sub-agent writes <code>.tex</code> while you watch the typeset output render live.</span>
+      </div>
+    </div>
+    <div class="mb-app">
+      <span class="mb-app__icon" aria-hidden="true">🌙</span>
+      <div class="mb-app__body">
+        <div class="mb-app__head">
+          <span class="mb-app__name">Dreaming</span>
+          <span class="mb-node__tag">nightly</span>
+        </div>
+        <span class="mb-app__desc">A nightly job reads yesterday's activity and writes you a one-page morning report, with a streak counter.</span>
+      </div>
+    </div>
+  </div>
+  <figcaption>The curated catalog: the starter-pack apps the in-app store installs.</figcaption>
 </figure>
 
 What is in it today is a hand-picked set, not a gate you have to
@@ -108,22 +166,30 @@ are that single file; larger ones pull in a few more, but the manifest
 plus an entry point is the whole contract. There is no submission
 queue, no review board, no registry to be blessed by. "Publishing" an
 app means making a repo public and sharing the URL to its manifest.
-The curated list above is a starter pack I picked; the install button
-takes any manifest URL you paste, and the store warns, but does not
-stop you, if it comes from a host it has not seen before.
+The list above is a starter pack I picked; the install button takes
+any manifest URL you paste, and the store warns, but does not stop
+you, if it comes from a host it has not seen before.
 
-<figure class="text-center my-4">
-  <img src="{{ '/assets/img/mobius/os/app-repo.png' | relative_url }}"
-       alt="The app-gym repository on GitHub: a flat list of files including mobius.json, index.jsx, and icon.png alongside a README and a couple of support files."
-       loading="lazy" style="max-width:100%; height:auto;" />
-  <figcaption class="caption mt-2">One app's repo. The manifest, the entry point, and the icon are the contract; everything else is the app's own code. Here the agent has been rebuilding the Gym tracker.</figcaption>
-</figure>
-
-<figure class="text-center my-4">
-  <img src="{{ '/assets/img/mobius/os/app-gallery.jpg' | relative_url }}"
-       alt="Three Möbius apps running on a phone, side by side: a habit tracker with streaks and weekly grids, a notes app with markdown and wikilinks, and a Snake game."
-       loading="lazy" style="max-width:100%; height:auto; border-radius:0.5rem;" />
-  <figcaption class="caption mt-2">Not mock-ups: three of the apps, running on a phone. A habit tracker, a markdown notebook, and a game, each a single public repo you install by pasting its URL.</figcaption>
+<figure class="mb-diagram">
+  <div class="mb-stack mb-files">
+    <div class="mb-layer kernel">
+      <span class="mb-layer__name"><code>index.jsx</code></span>
+      <span class="mb-layer__role">the app itself: one React component the agent wrote</span>
+    </div>
+    <div class="mb-layer">
+      <span class="mb-layer__name"><code>mobius.json</code></span>
+      <span class="mb-layer__role">the manifest: name, version, what it may reach</span>
+    </div>
+    <div class="mb-layer">
+      <span class="mb-layer__name"><code>icon.png</code></span>
+      <span class="mb-layer__role">a 1024×1024 icon</span>
+    </div>
+    <div class="mb-layer ghost">
+      <span class="mb-layer__name"><code>job.js</code><span class="mb-badge">optional</span></span>
+      <span class="mb-layer__role">a background job, if the app has one</span>
+    </div>
+  </div>
+  <figcaption>What an app is, in full. One component, a manifest, an icon, an optional job. No build config, no server, no framework to learn; make the repo public and its URL is installable.</figcaption>
 </figure>
 
 ### What "install" actually does
@@ -183,10 +249,10 @@ notes.
   <figcaption>An update is a reinstall from the same URL. The platform patches the source, description, permissions, icon, and schedule, and leaves the data you have created untouched.</figcaption>
 </figure>
 
-One sharp edge I would rather name than hide: if you ask the agent to
+There is one sharp edge worth naming. If you ask the agent to
 _customize_ an installed app and then tap Update, the update overwrites
-those customizations. There is no three-way merge. For a single-owner
-system that is a defensible default, but it is a real trade-off. The
+those customizations; there is no three-way merge. For a single-owner
+system that is a defensible default, and it is a real trade-off. The
 direction I want is one git repo per installed app, so an update
 becomes a merge that carries your edits forward and a conflict becomes
 a chat where the agent resolves it. That is designed, not built.
@@ -235,8 +301,8 @@ has three layers:
 </figure>
 
 There is no one-click "roll back this app to last week's version"
-button; recovery today is uninstall-and-reinstall, plus `/recover`,
-plus the git history. So when an update breaks something, you tell the
+button yet; recovery today is uninstall-and-reinstall, plus `/recover`,
+plus the git history. When an update breaks something, you tell the
 agent what went wrong and it walks the commit log back to the working
 version: the recovery path the third layer describes, run for you.
 
@@ -260,8 +326,8 @@ section.
 
 ## Offline, and the sync that catches up
 
-This is the part I spent the most unglamorous engineering on, because
-"works offline" is easy to claim and hard to actually land on a phone.
+"Works offline" is easy to claim and hard to land on a phone, so this
+is the part that got the most unglamorous engineering, and it holds.
 
 When an app is marked offline-capable, a service worker caches the
 shell and the app's code, so opening it with the network off still
@@ -291,12 +357,12 @@ server the moment you reconnect.
   <figcaption>Log a set in airplane mode, mark a country from a plane, jot a note on the subway: the outbox catches up the moment you reconnect. Listing and chat deliberately stay online.</figcaption>
 </figure>
 
-So your own data survives a dead connection. A couple of operations
-stay online by design (a cached _listing_ could resurrect things you
+So your own data survives a dead connection, and I have checked it on
+a real phone, not a desktop pretending to be one. Two operations stay
+online by design (a cached _listing_ could resurrect things you
 deleted, and chat is online-only), and conflicts are last-write-wins
 per item, which is right for a single owner and needs more thought for
-a shared one. But the common case works, and I have checked it on a
-real phone, not a desktop pretending to be one.
+a shared one. The common case just works.
 
 ## Tweaking an app, and the composition I have not built
 
@@ -338,7 +404,7 @@ not. When I build it, this is the example I will build it against.
 
 ## Building a good one, in practice
 
-Two things made the difference when the goal is for the agent to build
+Two things make the difference when the goal is for the agent to build
 apps _well_, not just build them.
 
 The first is the introspection loop from the [companion post on the
@@ -412,8 +478,8 @@ An app store was the obvious next thing once the agent could build
 apps reliably. The less obvious thing is what it turns Möbius into: a
 place where the unit of software is small enough for the agent to
 write, own, and repair, where installing and breaking are reversible,
-and where the privileged core can turn "I wish I had a thing that…"
-into a thing that is there the next time you open your phone.
+and where the privileged core turns "I wish I had a thing that…" into a
+thing that is there the next time you open your phone.
 
 The apps above are a starter pack; the interesting ones do not exist
 yet. If you [deploy an instance]({{ '/mobius/' | relative_url }}) and
@@ -424,3 +490,5 @@ it.
 The source is on [GitHub](https://github.com/hamzamerzic/mobius), the
 app repos are under [`mobius-os`](https://github.com/mobius-os), and the
 deploy button gets you a working instance in about three minutes.
+</content>
+</invoke>
