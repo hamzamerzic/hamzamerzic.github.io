@@ -173,44 +173,31 @@ ship you the new file-upload feature without trampling your
 wood-paneled reading-room theme, because the two changes live in
 different layers.
 
-The cheap-to-vary axis is visual. Four prompts, four different
-instances of the same product:
+The cheap-to-vary axis is visual. Ask the agent to restyle the whole
+shell and it rewrites the CSS, swaps the fonts, and repaints the
+background. There is no build step you wait on: the new look is live
+the moment the agent saves, and you watch it change as it works.
 
-<figure style="text-align: center; margin: 2rem auto;">
-  <video src="{{ '/assets/img/mobius/theme-cycle.mp4' | relative_url }}" width="280" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
-    <img src="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" width="280" alt="Möbius theme cycle, baseline, cozy reading nook, drifting ambient, medieval manuscript" />
-  </video>
-  <figcaption class="caption mt-2" style="font-size: 0.85em;">
-    Different variations of the same instance, each from a single
-    prompt to the agent.
-  </figcaption>
-</figure>
-
-<figure class="shot-row">
+<figure class="shot-row shot-row--flow">
   <div class="shot">
-    <img src="{{ '/assets/img/mobius/theme-07-dynamic-prompt.png' | relative_url }}"
-         alt="Build chat moment: the agent has scrolled the playful-theme prompt out of view, the warm-rose-tinted background is already running while it reads files and stages CSS edits, tool blocks visible below."
+    <img src="{{ '/assets/img/mobius/newchat-default.png' | relative_url }}"
+         alt="The Möbius new-chat screen in the default charcoal theme: the logo, the heading 'What's on your mind?', and a message composer."
          loading="lazy" />
-    <span class="shot__label">mid-build: the agent stages CSS edits, live</span>
+    <span class="shot__label">the default</span>
   </div>
+  <span class="shot-arrow" aria-hidden="true">→</span>
   <div class="shot">
-    <video src="{{ '/assets/img/mobius/theme-07-dynamic.mp4' | relative_url }}"
-           autoplay
-           loop
-           muted
-           playsinline
-           preload="metadata"
-           poster="{{ '/assets/img/mobius/theme-07-dynamic-built.png' | relative_url }}"
-           aria-label="The finished playful theme in motion: bubbles drifting up, star silhouettes shifting position, the warm-cool gradient slowly cycling."></video>
-    <span class="shot__label">the finished theme, in motion</span>
+    <img src="{{ '/assets/img/mobius/newchat-meme.png' | relative_url }}"
+         alt="The same new-chat screen restyled into a meme theme: a hot-pink canvas with a rainbow, floating unicorns and emoji, and a comic-font heading."
+         loading="lazy" />
+    <span class="shot__label">one prompt later</span>
   </div>
 </figure>
 
 <div class="caption mt-2">
-  One chat. The agent stages CSS edits while the page updates live, and
-  the result is a "playful room" of drifting bubbles over a slowly
-  cycling gradient, with a <code>prefers-reduced-motion</code> guard,
-  all from a single prompt.
+  The same new-chat screen, before and after one prompt. The agent
+  rewrote the whole look, the background, the type, the buttons, and
+  scattered in a few unicorns for good measure.
 </div>
 
 <figure style="text-align: center; margin: 2rem auto;">
@@ -224,7 +211,8 @@ instances of the same product:
 
 The harder axis is _layout_: where things are, not how they look.
 Same conversation, same chat box: ask the agent to rewrite the
-navigation model and it does. The default is drawer-first; one
+navigation model and it does, and the new layout is live immediately,
+the same way a theme change is. The default is drawer-first; one
 prompt later it is a bottom-nav app with Chat / Apps / Settings as
 tabs:
 
