@@ -208,11 +208,12 @@ category: software
   are comfortable reaching for <code>filter_</code> variants when non-array
   fields show up. Flax NNX is the right pick if mutable, PyTorch-style module
   objects feel natural and you don't mind learning when to cross into the
-  functional API. Blox optimises for a different thing: keeping the model
-  graph and the parameter tree as two separate objects, so the same params
-  can drive different graphs (actor and learner, static and dynamic scan,
-  train and eval), and so every JAX transform applies to a plain function
-  with no library-specific wrapper in the way.
+  functional API, and it has a large community and a strong development team
+  behind it. Blox optimises for a different thing. It keeps the model graph
+  and the parameter tree as two separate objects, so the same params can
+  drive different graphs (actor and learner, static and dynamic scan, train
+  and eval), and every JAX transform applies to a plain function with no
+  library-specific wrapper in the way.
 </p>
 
 <h3 class="mt-5">Install</h3>
