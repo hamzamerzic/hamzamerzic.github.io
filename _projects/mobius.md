@@ -107,12 +107,11 @@ category: software
   </div>
   <div class="col-md-6 mb-4">
     <figure>
-      <video src="{{ '/assets/img/mobius/theme-cycle.mp4' | relative_url }}" width="240" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-        <img src="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" width="240" alt="Möbius theme cycle" />
-      </video>
+      <img src="{{ '/assets/img/mobius/newchat-default.png' | relative_url }}" width="240" alt="The Möbius new-chat screen in its default charcoal theme" style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15);" />
       <figcaption class="caption mt-2" style="font-size: 0.85em;">
-        Different variations of the same instance, each from a single
-        prompt. The colors, fonts, and layout are CSS the agent wrote.
+        The default look. Ask the agent to restyle the shell, the colors,
+        fonts, and layout are CSS it rewrites, and the change is live
+        immediately.
       </figcaption>
     </figure>
   </div>
