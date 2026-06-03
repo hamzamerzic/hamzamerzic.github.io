@@ -121,11 +121,11 @@ category: software
 </div>
 
 <figure class="text-center my-4">
-  <video src="{{ '/assets/img/mobius/theme-meme-motion.mp4' | relative_url }}" width="240" autoplay loop muted playsinline poster="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
-    <img src="{{ '/assets/img/mobius/theme-00-baseline.png' | relative_url }}" width="240" alt="Möbius restyled into a meme theme: rainbow canvas, floating unicorns, bouncing emoji" />
+  <video src="{{ '/assets/img/mobius/theme-meme-motion.mp4' | relative_url }}" width="240" autoplay loop muted playsinline poster="{{ '/assets/img/mobius/newchat-meme.png' | relative_url }}" style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0,0,0,0.15);">
+    <img src="{{ '/assets/img/mobius/newchat-meme.png' | relative_url }}" width="240" alt="Möbius restyled into a meme theme, a rainbow canvas with floating unicorns and bouncing emoji" />
   </video>
   <figcaption class="caption mt-2" style="font-size: 0.85em;">
-    Or go fully meme-worthy: a rainbow canvas with floating unicorns and bouncing emoji, all from one prompt. The agent does not judge your taste.
+    And the meme theme is alive. The rainbow drifts and the unicorns and emoji bounce across the screen, all from one prompt. The agent does not judge your taste.
   </figcaption>
 </figure>
 
