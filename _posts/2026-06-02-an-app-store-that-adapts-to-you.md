@@ -4,6 +4,7 @@ title: An app store that adapts to you
 date: 2026-06-02 12:00:00
 description: Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store but that the agent does not build isolated apps, it grows a cross-app personal system that adapts to you over time.
 thumbnail: assets/img/mobius/covers/cover-post3.jpg
+thumbnail_2x: assets/img/mobius/covers/cover-post3-2x.jpg
 categories: software
 keywords: self-hosted AI agent, AI agent that builds apps, AI app store, personal AI operating system, self-hosted PWA, agent-built mini-apps, Claude Code, Codex, Möbius
 giscus_comments: true

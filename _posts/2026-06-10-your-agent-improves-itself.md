@@ -4,6 +4,7 @@ title: Your agent improves itself, while you sleep
 date: 2026-06-10 12:00:00
 description: The Mind is the agent's memory of everything it has learned with you, and Dreaming is the nightly loop that tidies it, anticipates what you will need, and audits your instance, all on your own server.
 thumbnail: assets/img/mobius/covers/cover-post4.jpg
+thumbnail_2x: assets/img/mobius/covers/cover-post4-2x.jpg
 categories: software
 keywords: self-hosted AI agent, agent memory, knowledge graph, nightly agent loop, self-improving AI, Möbius, Mind, Dreaming, Claude Code, Codex
 giscus_comments: true

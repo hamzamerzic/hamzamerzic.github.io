@@ -4,6 +4,7 @@ title: The self-improvement harness behind Möbius
 date: 2026-04-26 13:00:00
 description: An outer agent talks to an inner agent and tries to make it more helpful. Notes on what we measured, what surprised us, and where the bottleneck moved to.
 thumbnail: assets/img/mobius/covers/cover-post2.jpg
+thumbnail_2x: assets/img/mobius/covers/cover-post2-2x.jpg
 categories: software, research
 giscus_comments: true
 related_posts: false

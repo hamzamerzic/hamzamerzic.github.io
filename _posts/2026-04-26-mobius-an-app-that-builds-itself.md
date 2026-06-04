@@ -4,6 +4,7 @@ title: An agent that adapts to you
 date: 2026-04-26 12:00:00
 description: A personalized AI agent you can self-host. It builds the tools you need, edits the interface around them, and adapts both its functionality and its presentation to how you actually use it.
 thumbnail: assets/img/mobius/covers/cover-post1.jpg
+thumbnail_2x: assets/img/mobius/covers/cover-post1-2x.jpg
 categories: software
 giscus_comments: true
 related_posts: false
