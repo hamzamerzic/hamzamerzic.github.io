@@ -38,7 +38,7 @@ ninja.data = [{
         section: "Posts",
         handler: () => {
           
-            window.location.href = "/blog/2026/the-agent-is-the-kernel/";
+            window.location.href = "/blog/2026/an-app-store-that-adapts-to-you/";
           
         },
       },{id: "post-the-self-improvement-harness-behind-möbius",
