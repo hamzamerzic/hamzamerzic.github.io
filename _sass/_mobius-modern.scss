@@ -144,6 +144,103 @@ nav.navbar {
   }
 }
 
+/* Blog card grid. The /blog/ index (_pages/blog.md) renders each post through
+   _includes/blog-card.liquid into this grid. Scoped to .blog-card* so tag and
+   category archives are untouched. */
+.blog-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1.25rem;
+  margin: 1.75rem 0 2.5rem;
+  padding: 0;
+}
+
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--global-card-bg-color);
+  border: 1px solid var(--global-border-color);
+  border-radius: 0.75rem;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.22s ease,
+    border-color 0.18s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--global-theme-color);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--global-bg-color) 70%, transparent);
+  }
+}
+
+.blog-card__media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-bottom: 1px solid var(--global-border-color);
+  background:
+    linear-gradient(135deg, var(--global-accent-tint), transparent),
+    var(--global-surface-elevated);
+}
+
+.blog-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 !important;
+  box-shadow: none;
+  transition: transform 0.22s ease;
+}
+
+.blog-card:hover .blog-card__media img {
+  transform: scale(1.025);
+}
+
+.blog-card__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1rem;
+}
+
+.blog-card__date {
+  margin: 0;
+  font-family: var(--global-font-mono);
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--global-text-color-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.blog-card__title {
+  margin: 0.45rem 0 0.6rem;
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.22;
+  overflow-wrap: break-word;
+
+  a {
+    color: var(--global-text-color);
+    text-decoration: none;
+    &:hover {
+      color: var(--global-theme-color);
+    }
+  }
+}
+
+.blog-card__description {
+  margin: 0;
+  color: var(--global-text-color-light);
+  font-size: 0.93rem;
+  line-height: 1.55;
+  overflow-wrap: break-word;
+}
+
 /* Buttons that already exist in post/page CSS get a consistent emerald
    primary when they opt into .btn-primary (Bootstrap). */
 .btn-primary {
