@@ -1,0 +1,39 @@
+{% assign post = include.post %}
+{% assign post_description = post.description | default: post.excerpt | strip_html | truncate: 180 %}
+{% assign post_url = post.url | relative_url %}
+{% assign is_external = false %}
+{% if post.redirect != blank %}
+  {% if post.redirect contains '://' %}
+    {% assign post_url = post.redirect %}
+    {% assign is_external = true %}
+  {% else %}
+    {% assign post_url = post.redirect | relative_url %}
+  {% endif %}
+{% endif %}
+{% if post.external_source == blank %}
+  {% assign read_time = post.content | number_of_words | divided_by: 180 | plus: 1 %}
+{% else %}
+  {% assign read_time = post.feed_content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
+{% endif %}
+
+<article class="blog-card">
+  {% if post.thumbnail %}
+    <a class="blog-card__media" href="{{ post_url }}" aria-label="{{ post.title | escape }}" {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+      <img src="{{ post.thumbnail | relative_url }}" alt="{{ post.title | escape }} cover" loading="lazy">
+    </a>
+  {% else %}
+    <div class="blog-card__media blog-card__media--placeholder" aria-hidden="true"></div>
+  {% endif %}
+
+  <div class="blog-card__body">
+    <p class="blog-card__date">
+      <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%B %d, %Y' }}</time> &middot; {{ read_time }} min read
+    </p>
+    <h2 class="blog-card__title">
+      <a href="{{ post_url }}" {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>{{ post.title }}</a>
+    </h2>
+    {% if post_description != blank %}
+      <p class="blog-card__description">{{ post_description }}</p>
+    {% endif %}
+  </div>
+</article>
