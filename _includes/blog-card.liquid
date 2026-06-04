@@ -5,6 +5,7 @@
   {% assign post_description = post.excerpt | strip_html | truncate: 320 %}
 {% endif %}
 {% assign post_url = post.url | relative_url %}
+{% assign thumbnail_src = post.thumbnail_2x | default: post.thumbnail %}
 {% assign is_external = false %}
 {% if post.redirect != blank %}
   {% if post.redirect contains '://' %}
@@ -31,10 +32,7 @@
       {% endif %}
     >
       <img
-        src="{{ post.thumbnail | relative_url }}"
-        {% if post.thumbnail_2x %}
-          srcset="{{ post.thumbnail | relative_url }} 1x, {{ post.thumbnail_2x | relative_url }} 2x"
-        {% endif %}
+        src="{{ thumbnail_src | relative_url }}"
         decoding="async"
         alt="{{ post.title | escape }} cover"
         loading="lazy"
