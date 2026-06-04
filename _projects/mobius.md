@@ -55,19 +55,22 @@ category: software
 </style>
 
 <p class="lead">
-  <strong>Möbius</strong> is a personalized AI agent you self-host.
-  A chat on one side, a canvas on the other, and a coding agent
-  inside that builds the tools you ask for as small apps right
-  next to the chat (a news aggregator, a habit tracker, a 3D ISS
-  viewer) without a page reload. Each app can store data, run on
-  a schedule, fetch from the web, and use AI on its own. The same
-  coding agent can also rewrite the interface itself: theme,
-  layout, shell features.
+  <strong>Möbius</strong> is a personal AI agent you self-host whose
+  one job is to be as useful to you as it can. It actively helps by
+  building the tools you ask for as small apps right next to the chat
+  (a news aggregator, a habit tracker, a 3D ISS viewer) without a page
+  reload. Each app can store data, run on a schedule, fetch from the
+  web, and use AI on its own. The same coding agent can also rewrite
+  the interface those apps sit in, from theme and layout to shell
+  features.
 </p>
 
 <p class="mt-3 mb-4">
-  It runs in a single Docker container, installs to your phone
-  like a native app, and your data stays on a server you control.
+  It runs in a single Docker container, comes with a starter app store,
+  installs to your phone like a native app, and keeps your data on a
+  server you control. Over time, the Mind and Dreaming loop give it a
+  memory to improve from, although the deeper self-audit pieces are
+  still shallow.
 </p>
 
 <figure class="shot-row shot-row--flow" style="margin: 1.75rem auto 0.4rem;">

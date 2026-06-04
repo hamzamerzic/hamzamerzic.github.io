@@ -11,7 +11,7 @@ published: true
 ---
 
 <details class="tldr">
-<summary><strong>TL;DR.</strong> Möbius is a personalized AI agent you can self-host. It builds the tools you need, edits the interface they sit in, and learns from use.</summary>
+<summary><strong>TL;DR.</strong> Möbius is a personal AI agent you can self-host whose one job is to be as useful to you as it can. It actively helps by building the tools you ask for as small apps next to the chat, editing the interface they sit in, and learning from use while your data stays on a machine you control.</summary>
 
 <ul>
 <li><strong>The demo.</strong> Asked the agent for file upload and got the full pipeline (backend
@@ -32,13 +32,13 @@ deploys in about three minutes.</li>
 
 ## You grow it from a chat input
 
-Möbius starts as almost nothing: a chat on one side, an empty canvas
-on the other. No file upload, no scheduled jobs panel, no
-notifications button. What makes that interesting is that the agent
-can rewrite the thing it runs inside. So you grow it. Ask for file
-upload and it builds file upload. Ask for a new look and it restyles
-itself. Ask for an app and one appears on the canvas. The shell you
-end up with is the one you talked into being.
+Möbius starts as almost nothing, a chat on one side and an empty
+canvas on the other. No file upload, no scheduled jobs panel, no
+notifications button. What makes that interesting is that the agent can rewrite the
+thing it runs inside. So you grow it. Ask for file upload and it
+builds file upload. Ask for a new look and it restyles itself. Ask for
+an app and one appears on the canvas. The shell you end up with is the
+one you talked into being.
 
 Here is one of those moments, end to end. I sent a deliberately
 ordinary prompt. _"I'd like to send files and images along with my
