@@ -101,7 +101,7 @@ pagination:
 
 {% endif %}
 
-  <div class="blog-card-grid">
+  <ul class="post-list">
 
     {% if page.pagination.enabled %}
       {% assign postlist = paginator.posts %}
@@ -110,12 +110,92 @@ pagination:
     {% endif %}
 
     {% for post in postlist %}
-      {% include blog-card.liquid post=post %}
+      {% if post.external_source == blank %}
+        {% assign read_time = post.content | number_of_words | divided_by: 180 | plus: 1 %}
+      {% else %}
+        {% assign read_time = post.feed_content | strip_html | number_of_words | divided_by: 180 | plus: 1 %}
+      {% endif %}
+      {% assign year = post.date | date: "%Y" %}
+      {% assign tags = post.tags | join: "" %}
+      {% assign categories = post.categories | join: "" %}
+
+      {% assign post_url = post.url | relative_url %}
+      {% assign is_external = false %}
+      {% if post.redirect != blank %}
+        {% if post.redirect contains '://' %}
+          {% assign post_url = post.redirect %}
+          {% assign is_external = true %}
+        {% else %}
+          {% assign post_url = post.redirect | relative_url %}
+        {% endif %}
+      {% endif %}
+
+      <li>
+        {% if post.thumbnail %}
+          <div class="row align-items-center">
+            <div class="post-summary-col">
+        {% endif %}
+        <h3>
+          <a class="post-title" href="{{ post_url }}" {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>{{ post.title }}</a>
+          {% if is_external %}
+            <svg width="2rem" height="2rem" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17 13.5v6H5v-12h6m3-3h6v6m0-6-9 9" class="icon_svg-stroke" stroke="#999" stroke-width="1.5" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          {% endif %}
+        </h3>
+        <p>{{ post.description }}</p>
+        <p class="post-meta">
+          {{ read_time }} min read &nbsp; &middot; &nbsp;
+          {{ post.date | date: '%B %d, %Y' }}
+          {% if post.external_source %}
+            &nbsp; &middot; &nbsp; {{ post.external_source }}
+          {% endif %}
+        </p>
+        <p class="post-tags">
+          <a href="{{ year | prepend: '/blog/' | relative_url }}"> <i class="fa-solid fa-calendar fa-sm"></i> {{ year }} </a>
+          {% if tags != "" %}
+            &nbsp; &middot; &nbsp;
+            {% for tag in post.tags %}
+              <a href="{{ tag | slugify | prepend: '/blog/tag/' | relative_url }}"> <i class="fa-solid fa-hashtag fa-sm"></i> {{ tag }}</a>
+              {% unless forloop.last %}
+                &nbsp;
+              {% endunless %}
+            {% endfor %}
+          {% endif %}
+          {% if categories != "" %}
+            &nbsp; &middot; &nbsp;
+            {% for category in post.categories %}
+              <a href="{{ category | slugify | prepend: '/blog/category/' | relative_url }}"> <i class="fa-solid fa-tag fa-sm"></i> {{ category }}</a>
+              {% unless forloop.last %}
+                &nbsp;
+              {% endunless %}
+            {% endfor %}
+          {% endif %}
+        </p>
+
+        {% if post.thumbnail %}
+          </div>
+
+          <div class="post-thumbnail-col">
+            <a href="{{ post_url }}" class="thumbnail-link d-block" {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+              <img
+                class="card-img"
+                src="{{ post.thumbnail | relative_url }}"
+                style="width: 100%; height: auto; border-radius: 0.5rem;"
+                loading="lazy"
+                alt="{{ post.title | escape }}"
+              >
+            </a>
+          </div>
+        </div>
+        {% endif %}
+      </li>
+
     {% endfor %}
 
-  </div>
+  </ul>
 
-  {% if page.pagination.enabled %}
+{% if page.pagination.enabled %}
 {% include pagination.liquid %}
 {% endif %}
 

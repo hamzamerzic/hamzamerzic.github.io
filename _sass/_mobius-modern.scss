@@ -181,9 +181,7 @@ nav.navbar {
   aspect-ratio: 16 / 9;
   overflow: hidden;
   border-bottom: 1px solid var(--global-border-color);
-  background:
-    linear-gradient(135deg, var(--global-accent-tint), transparent),
-    var(--global-surface-elevated);
+  background: linear-gradient(135deg, var(--global-accent-tint), transparent), var(--global-surface-elevated);
 }
 
 .blog-card__media img {
@@ -825,19 +823,23 @@ details.tldr {
   }
 }
 
-/* Catalog: a responsive grid of app cards. Auto-fills 2-3 per row on wide
-   screens, collapses to a single column on mobile. Each card is a .mb-node
-   relative (elevated surface, hairline border) with an emoji icon column. */
+/* Catalog: a responsive grid of app cards. The summary sits below the icon
+   and title row so longer app descriptions can wrap without being squeezed. */
 .mb-catalog {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 0.7rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr));
+  gap: 0.85rem;
 
   .mb-app {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.7rem;
-    padding: 0.85rem 0.9rem;
+    display: grid;
+    grid-template-columns: 3rem minmax(0, 1fr);
+    grid-template-areas:
+      "icon head"
+      "desc desc";
+    align-items: start;
+    gap: 0.65rem 0.8rem;
+    min-width: 0;
+    padding: 1rem;
     background: var(--global-surface-elevated);
     border: 1px solid var(--global-border-color);
     border-radius: 0.6rem;
@@ -851,35 +853,45 @@ details.tldr {
     }
   }
   .mb-app__icon {
+    grid-area: icon;
     flex: 0 0 auto;
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 3rem;
+    height: 3rem;
     border-radius: 0.55rem;
     object-fit: cover;
-    font-size: 1.6rem; /* emoji fallback */
+    font-size: 1.8rem; /* emoji fallback */
     line-height: 1.1;
   }
   .mb-app__body {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
+    display: contents;
     min-width: 0;
   }
   .mb-app__head {
+    grid-area: head;
     display: flex;
     align-items: baseline;
     flex-wrap: wrap;
     gap: 0.35rem 0.5rem;
+    min-width: 0;
   }
   .mb-app__name {
     font-weight: 600;
     font-size: 0.95rem;
     letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+  }
+  .mb-node__tag {
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
   .mb-app__desc {
-    font-size: 0.8rem;
-    line-height: 1.4;
+    grid-area: desc;
+    display: block;
+    overflow: visible;
+    font-size: 0.84rem;
+    line-height: 1.48;
     color: var(--global-text-color-light);
+    overflow-wrap: anywhere;
     code {
       font-size: 0.92em;
     }
