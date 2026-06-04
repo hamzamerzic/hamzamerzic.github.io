@@ -29,7 +29,7 @@ a personal AI agent you self-host. The
 is about the agent building the tools you ask for. The
 [second]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }})
 is about the loop the developers run to make it better at that. The
-[third]({{ '/blog/2026/the-agent-is-the-kernel/' | relative_url }}) is
+[third]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}) is
 about the app store and the cross-app system those builds grew into.
 This one is about the part of Möbius that improves
 itself for you.
@@ -92,7 +92,7 @@ anyone.
 
 And because it is just a graph of markdown notes on your server, it is
 browsable. The **Mind** app, one of the starter-pack apps from the
-[last post]({{ '/blog/2026/the-agent-is-the-kernel/' | relative_url }}),
+[last post]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}),
 renders it as an Obsidian-style web of nodes and links. You can open it,
 see what the agent thinks it knows, follow a thread from one lesson to a
 related one, and read any note in full. There is nothing hidden behind

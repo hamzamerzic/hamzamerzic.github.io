@@ -32,7 +32,7 @@ This is a companion post to [An agent that adapts to you]({{
 '/blog/2026/mobius-an-app-that-builds-itself/' | relative_url }}),
 which is about the agent itself. This one is about the loop that
 makes it slowly better, and what falls out of running that loop on
-yourself. A [third post]({{ '/blog/2026/the-agent-is-the-kernel/' | relative_url }})
+yourself. A [third post]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }})
 covers the app store and OS those builds grew into.
 
 ## The setup
@@ -344,7 +344,7 @@ produces a _new_ store (duplicates merged, stale entries replaced,
 fresh insights surfaced) without touching the input, for the developer
 to review and discard.
 
-That matches an itch I have about the experience file, a linear log that accretes but never reorganizes. The harness improves the agent during development, and these lessons are what the [Dreaming app]({{ '/blog/2026/the-agent-is-the-kernel/' | relative_url }}) productizes for the user. It runs the same reflect-and-refactor step on your own instance, against the agent's own memory of everything it has learned with you, dropping rules that have stopped firing, merging duplicates, surfacing cross-build patterns the live agent could never see. The version Möbius is heading toward is self-hosted, the input log never touched, the output yours to keep.
+That matches an itch I have about the experience file, a linear log that accretes but never reorganizes. The harness improves the agent during development, and these lessons are what the [Dreaming app]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}) productizes for the user. It runs the same reflect-and-refactor step on your own instance, against the agent's own memory of everything it has learned with you, dropping rules that have stopped firing, merging duplicates, surfacing cross-build patterns the live agent could never see. The version Möbius is heading toward is self-hosted, the input log never touched, the output yours to keep.
 
 ## On models
 

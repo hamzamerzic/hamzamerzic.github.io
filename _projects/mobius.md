@@ -161,5 +161,6 @@ category: software
 <ul>
   <li><a href="{{ '/blog/2026/mobius-an-app-that-builds-itself/' | relative_url }}"><strong>An agent that adapts to you</strong></a>: what Möbius is, and why an editable shell matters.</li>
   <li><a href="{{ '/blog/2026/the-self-improvement-harness/' | relative_url }}"><strong>The self-improvement harness behind it</strong></a>: how an outer agent makes the inner one progressively better at building.</li>
-  <li><a href="{{ '/blog/2026/the-agent-is-the-kernel/' | relative_url }}"><strong>The agent is the kernel</strong></a>: the app store, updates and recovery, offline apps, and Möbius as an operating system you own.</li>
+  <li><a href="{{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}"><strong>An app store that adapts to you</strong></a>: the app store, updates and recovery, offline apps, and the cross-app system the agent grows around you.</li>
+  <li><a href="{{ '/blog/2026/your-agent-improves-itself/' | relative_url }}"><strong>Your agent improves itself, while you sleep</strong></a>: the Mind and the nightly Dreaming loop, how the agent gets better for you over time.</li>
 </ul>

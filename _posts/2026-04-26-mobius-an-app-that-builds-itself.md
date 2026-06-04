@@ -321,7 +321,7 @@ closer look.
 Since this was written, the apps the agent builds grew a place to
 live: an app store, and the start of an operating system around it
 where you install, update, tweak, and recover apps on your own instance.
-That is its own [companion post]({{ '/blog/2026/the-agent-is-the-kernel/' | relative_url }}).
+That is its own [companion post]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}).
 
 The source is on [GitHub](https://github.com/hamzamerzic/mobius), the
 project page is [here]({{ '/mobius/' | relative_url }}), and the
