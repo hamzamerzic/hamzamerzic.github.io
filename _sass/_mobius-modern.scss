@@ -178,7 +178,7 @@ nav.navbar {
 .blog-card__media {
   display: block;
   width: 100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 40 / 21;
   overflow: hidden;
   border-bottom: 1px solid var(--global-border-color);
   background: linear-gradient(135deg, var(--global-accent-tint), transparent), var(--global-surface-elevated);
@@ -191,11 +191,6 @@ nav.navbar {
   object-fit: cover;
   border-radius: 0 !important;
   box-shadow: none;
-  transition: transform 0.22s ease;
-}
-
-.blog-card:hover .blog-card__media img {
-  transform: scale(1.025);
 }
 
 .blog-card__body {

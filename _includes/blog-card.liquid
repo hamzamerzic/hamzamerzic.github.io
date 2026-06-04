@@ -1,5 +1,9 @@
 {% assign post = include.post %}
-{% assign post_description = post.description | default: post.excerpt | strip_html | truncate: 260 %}
+{% if post.description %}
+  {% assign post_description = post.description | strip_html %}
+{% else %}
+  {% assign post_description = post.excerpt | strip_html | truncate: 320 %}
+{% endif %}
 {% assign post_url = post.url | relative_url %}
 {% assign is_external = false %}
 {% if post.redirect != blank %}
@@ -26,7 +30,15 @@
         target="_blank" rel="noopener noreferrer"
       {% endif %}
     >
-      <img src="{{ post.thumbnail | relative_url }}" alt="{{ post.title | escape }} cover" loading="lazy">
+      <img
+        src="{{ post.thumbnail | relative_url }}"
+        {% if post.thumbnail_2x %}
+          srcset="{{ post.thumbnail | relative_url }} 1x, {{ post.thumbnail_2x | relative_url }} 2x"
+        {% endif %}
+        decoding="async"
+        alt="{{ post.title | escape }} cover"
+        loading="lazy"
+      >
     </a>
   {% else %}
     <div class="blog-card__media blog-card__media--placeholder" aria-hidden="true"></div>
