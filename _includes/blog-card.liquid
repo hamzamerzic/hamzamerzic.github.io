@@ -18,7 +18,14 @@
 
 <article class="blog-card">
   {% if post.thumbnail %}
-    <a class="blog-card__media" href="{{ post_url }}" aria-label="{{ post.title | escape }}" {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>
+    <a
+      class="blog-card__media"
+      href="{{ post_url }}"
+      aria-label="{{ post.title | escape }}"
+      {% if is_external %}
+        target="_blank" rel="noopener noreferrer"
+      {% endif %}
+    >
       <img src="{{ post.thumbnail | relative_url }}" alt="{{ post.title | escape }} cover" loading="lazy">
     </a>
   {% else %}
@@ -30,7 +37,14 @@
       <time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%B %d, %Y' }}</time> &middot; {{ read_time }} min read
     </p>
     <h2 class="blog-card__title">
-      <a href="{{ post_url }}" {% if is_external %}target="_blank" rel="noopener noreferrer"{% endif %}>{{ post.title }}</a>
+      <a
+        href="{{ post_url }}"
+        {% if is_external %}
+          target="_blank" rel="noopener noreferrer"
+        {% endif %}
+      >
+        {{- post.title -}}
+      </a>
     </h2>
     {% if post_description != blank %}
       <p class="blog-card__description">{{ post_description }}</p>
