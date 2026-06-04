@@ -696,36 +696,6 @@ footer.sticky-bottom {
       display: unset;
     }
   }
-
-  .post-summary-col,
-  .post-thumbnail-col {
-    position: relative;
-    width: 100%;
-    padding-right: 15px;
-    padding-left: 15px;
-  }
-
-  .post-summary-col {
-    flex: 0 0 64%;
-    max-width: 64%;
-  }
-
-  .post-thumbnail-col {
-    flex: 0 0 36%;
-    max-width: 36%;
-  }
-
-  @media (max-width: 575px) {
-    .post-summary-col,
-    .post-thumbnail-col {
-      flex: 0 0 100%;
-      max-width: 100%;
-    }
-
-    .post-thumbnail-col {
-      margin-top: 1rem;
-    }
-  }
 }
 
 .pagination {
