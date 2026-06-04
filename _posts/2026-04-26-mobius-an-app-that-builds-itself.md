@@ -24,7 +24,7 @@ inherits them.</li>
 only on your volume and stays yours.</li>
 <li><strong><code>/recover</code></strong> resets the shell when
 the agent paints itself into a corner.</li>
-<li>Source on <a href="https://github.com/hamzamerzic/mobius">GitHub</a>;
+<li>Source on <a href="https://github.com/mobius-os/mobius">GitHub</a>;
 deploys in about three minutes.</li>
 </ul>
 
@@ -323,7 +323,7 @@ live: an app store, and the start of an operating system around it
 where you install, update, tweak, and recover apps on your own instance.
 That is its own [companion post]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}).
 
-The source is on [GitHub](https://github.com/hamzamerzic/mobius), the
+The source is on [GitHub](https://github.com/mobius-os/mobius), the
 project page is [here]({{ '/mobius/' | relative_url }}), and the
 README's deploy button gets you a working instance in about three
 minutes. I would love to know what you build with it, and what you

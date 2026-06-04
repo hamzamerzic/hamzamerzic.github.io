@@ -294,7 +294,7 @@ yours, that improves itself in the direction of being useful to you
 specifically, and that keeps every trace of that on hardware you own.
 
 [Möbius]({{ '/mobius/' | relative_url }}) is a deploy-button click away,
-the source is on [GitHub](https://github.com/hamzamerzic/mobius), and the
+the source is on [GitHub](https://github.com/mobius-os/mobius), and the
 apps are under [`mobius-os`](https://github.com/mobius-os). Deploy one,
 use it for a week, and open the Mind app some morning to see what your
 agent learned overnight.

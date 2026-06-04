@@ -351,7 +351,7 @@ An app store was the obvious next thing once the agent could build apps reliably
 
 The apps above are a starter pack; the interesting ones do not exist yet. If you [deploy an instance]({{ '/mobius/' | relative_url }}) and build something, or tear one of these apart and rebuild it as something better, that is exactly the point, and I would love to see it.
 
-The source is on [GitHub](https://github.com/hamzamerzic/mobius), the
+The source is on [GitHub](https://github.com/mobius-os/mobius), the
 app repos are under [`mobius-os`](https://github.com/mobius-os), and the
 deploy button gets you a working instance in about three minutes.
 </content>

@@ -310,7 +310,7 @@ myself is the entropy of what to optimize _for_.
 
 ## Notes on what's not in this post
 
-The harness itself (orchestration, recording setup, introspection template) is not currently public, and none of it is exotic. The shape is what is in this post, plus glue around `agent-browser` and a small CLI for parallel sessions. If there is interest I will publish it; otherwise the description above plus the [Möbius source](https://github.com/hamzamerzic/mobius) should be enough to re-implement.
+The harness itself (orchestration, recording setup, introspection template) is not currently public, and none of it is exotic. The shape is what is in this post, plus glue around `agent-browser` and a small CLI for parallel sessions. If there is interest I will publish it; otherwise the description above plus the [Möbius source](https://github.com/mobius-os/mobius) should be enough to re-implement.
 
 Three things I did not try this round that seem worth doing next.
 

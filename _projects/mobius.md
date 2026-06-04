@@ -141,10 +141,10 @@ category: software
 </ul>
 
 <div class="action-row">
-  <a class="action-btn primary" href="https://github.com/hamzamerzic/mobius" target="_blank" rel="noopener">
+  <a class="action-btn primary" href="https://github.com/mobius-os/mobius" target="_blank" rel="noopener">
     <i class="fab fa-github"></i> View on GitHub
   </a>
-  <a class="action-btn ghost" href="https://github.com/hamzamerzic/mobius#get-started" target="_blank" rel="noopener">
+  <a class="action-btn ghost" href="https://github.com/mobius-os/mobius#get-started" target="_blank" rel="noopener">
     <i class="fas fa-rocket"></i> Deploy in 3 minutes
   </a>
 </div>
