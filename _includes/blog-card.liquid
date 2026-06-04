@@ -1,5 +1,5 @@
 {% assign post = include.post %}
-{% assign post_description = post.description | default: post.excerpt | strip_html | truncate: 180 %}
+{% assign post_description = post.description | default: post.excerpt | strip_html | truncate: 260 %}
 {% assign post_url = post.url | relative_url %}
 {% assign is_external = false %}
 {% if post.redirect != blank %}
