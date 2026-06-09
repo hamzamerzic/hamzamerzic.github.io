@@ -60,9 +60,9 @@ This morning a piece of it broke. The fix was small, but it forced me to write t
 
 ## A small server
 
-One 8 GB VPS at Hetzner, in Nuremberg. Around €7 a month. Pick whatever's geographically close to you; mine's a couple of hops away and the latency hasn't been an issue. The box runs a normal Ubuntu, nothing exotic.
+One 16 GB VPS at Hetzner, in Nuremberg. Around €16 a month. Pick whatever's geographically close to you; mine's a couple of hops away and the latency hasn't been an issue. The box runs a normal Ubuntu, nothing exotic.
 
-The sizing matters more than I thought. 4 GB gets cramped the moment you run more than one agent. Each `claude` process holds 200–500 MB of working set, and I usually have four going. With 8 GB I have headroom. If you can afford 16, do that and skip the swap-thrash story below.
+The sizing matters more than I thought. 4 GB gets cramped the moment you run more than one agent. Each `claude` process holds 200–500 MB of working set, and I usually have four going. If you can afford 16 GB, get it and skip the swap dance entirely. I ran on 8 GB for a while and leaned on swap instead, with a swapfile on a second cheap volume bringing the total to 24 GB. It worked, but the volume was its own small tax, an extra disk to mount and reason about, and one morning it filled up and took a service down with it. So I eventually rescaled the box to 16 GB and dropped the volume. Real RAM beats swap, and one disk is one fewer thing to think about. I still keep swap on the main disk, because it won't make a small box fast, but it's the line between a spike that thrashes for a minute and one that kills an agent.
 
 ## code-server, bound to localhost
 
@@ -99,6 +99,8 @@ Cloudflare Access is the bit that turns "code-server on a tunnel" into "code-ser
 That's the whole auth setup. There is no on-box config. Every request that reaches code-server has already been validated by Cloudflare; if you're not me, you see a Google sign-in page that rejects you, and code-server never gets the request.
 
 This is the part that took longest to get right in my head. I kept reaching for VPNs and SSH-over-something. Cloudflare Access is just better for this: standard browser flow, every device, no client to install, no key to lose, audit log in the dashboard.
+
+The one setting that decides whether this is pleasant or a chore is the Access session duration. Out of the box it's 24 hours, so you sign in with Google once a day, every day. It lives in two places. There's a per-application duration under Access, and a global one under Access settings that governs how often you re-authenticate with the identity provider itself; the shorter of the two wins, so raise both. I set mine to a week. A month is the ceiling. With that changed the daily sign-in went away, and the "leave it running for years" part finally held.
 
 ## Persistent shells with `shpool`
 
@@ -153,12 +155,28 @@ systemctl --user enable --now shpool.service
 
 The same trick generalises. If you want X to outlive the thing that started it, X should be a `--user` systemd unit, not a process started from a shell. `tmux` has the same trap. Anything you launch from inside code-server has the same trap. The cgroup is the unit of persistence on Linux, not the daemonisation.
 
+## The editor window has its own clock
+
+`shpool` keeps the terminal agents alive. The editor window is a separate thing with a separate clock, and it took me a while to keep the two straight in my head.
+
+If you run an agent as a VS Code extension rather than in a terminal, the Claude Code sidebar being the obvious one, it lives inside code-server's extension host. That host is tied to the browser connection, not to `shpool`. code-server keeps a disconnected window alive for `reconnection-grace-time` and then lets it go. The default is three hours. Close the laptop at lunch, come back after dinner, and you reconnect to a fresh window. New extension host, old agent gone, the conversation cold-resumed from disk if you're lucky. For a while I thought the agents were "stopping" on their own; they were being torn down on a timer I didn't know was there.
+
+One line in the same config file moves the timer:
+
+```yaml
+reconnection-grace-time: 86400
+```
+
+A day instead of three hours. The trade is that an abandoned window holds its extension host, a few hundred MB, for that whole day, so don't set it to a week on a small box. The sturdier answer is to not depend on the window at all. Anything I want running while I'm gone goes in `shpool`, in a terminal, where its life is decoupled from the browser. The extension is for when I'm sitting there watching it work.
+
 ## Small habits that paid off
 
 A few one-liners that I wouldn't have bothered with three months ago and now wouldn't go without:
 
 - `default_dir = "."` in `~/.config/shpool/config.toml`, so new sessions inherit the calling directory instead of dumping you in `$HOME`.
-- A `docker-prune.timer` user unit running `docker system prune --filter until=72h` daily. This morning's build cache was 14.6 GB.
+- A ceiling on Docker's disk use. I started with a `docker-prune.timer` user unit running `docker system prune --filter until=72h` daily, and one morning's 14.6 GB build cache showed why I wanted it. But a time-based prune doesn't save you when a single day of cache plus a few superseded images fill the disk to 100%, which is what eventually happened, and a service that needed to write to that disk fell over. What actually holds is a ceiling the daemon enforces on its own, a `builder.gc` block in `/etc/docker/daemon.json` with `maxUsedSpace` set, so the cache can't outgrow the disk no matter how busy the day was.
+- `earlyoom` as a system service, so a runaway can't freeze the box waiting on the kernel's own OOM killer, which is slow and picks badly. earlyoom steps in first and takes the biggest process, with `sshd` and the tunnel on a do-not-touch list so I never lock myself out.
+- A `MemoryHigh=5G` drop-in on the code-server unit, so the editor throttles under pressure instead of ballooning into everything else. It had quietly peaked at 6.8 GB.
 - A persistent `MEMORY.md` plus per-fact files in `~/.claude/projects/...` for things I'd otherwise forget — credential locations, deployment routines, the names of every weird flag I had to learn the hard way. Claude reads it on every session.
 
 ## What you get
