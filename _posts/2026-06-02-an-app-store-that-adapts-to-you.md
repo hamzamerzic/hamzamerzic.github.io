@@ -34,11 +34,11 @@ interface around them. The [second]({{ '/blog/2026/the-self-improvement-harness/
 is about the loop the developers use to make the agent better at building them. This
 one is about what those apps became once they stopped being one-offs and grew a place to live.
 
-The through-line across all three is that Möbius has one job, to be as useful to you as it can. This post hands you the same reshaping power, with an app store as the on-ramp.
+The through-line is that Möbius has one job, to be as useful to you as it can. This post hands you the same reshaping power, with an app store as the on-ramp.
 
-But the store is the small idea. The big one is that the agent does not build isolated apps. It grows a cross-app personal system that adapts to you. Your apps share a storage layer and a permission model, so the agent can compose them and reshape the whole thing around you over time. The store is how it starts. The agent living across all your apps is the point.
+The store is the small idea. The bigger one is that the agent does not build isolated apps. It grows a cross-app personal system that adapts to you. Your apps share a storage layer and a permission model, so the agent can compose them and reshape the whole thing around you over time. The store is how it starts. The agent living across all your apps is the point.
 
-The primitives that make this work are small on purpose. An app is not a binary you trust and cannot inspect, it is a single file of source the agent (or you) can rewrite in place. An update is a new version of that file. Installing is a transaction the platform can roll back. The rest of this post walks those primitives one at a time, and marks where each is solid versus where it is still a plan.
+The primitives that make this work are small on purpose. An app is not a binary you trust and cannot inspect; it is a single file of source the agent (or you) can rewrite in place. An update is a new version of that file. Installing is a transaction the platform can roll back. The rest of this post walks those primitives one at a time, and marks where each is solid versus where it is still a plan.
 
 ## The store is a starter pack, not a registry
 
@@ -202,9 +202,9 @@ An agent that can rewrite its own interface will eventually ship a CSS rule that
 
 - **A failed install cannot half-land.** The atomic transaction from
   earlier restores the previous working version of the app from a
-  snapshot. You do not get a corrupted app; you get the old one back.
+  snapshot.
 - **`/recover` is the bookmark you keep.** It is a route rendered by
-  a separate, server-side codepath the agent does not edit. It resets
+  a separate, server-side path the agent does not edit. It resets
   the shell to its baseline while keeping your chats, apps, and data.
   If a theme paints text the same color as the background, that page
   still works, because it does not go through the shell at all.
@@ -273,13 +273,13 @@ When an app is marked offline-capable, a service worker caches the shell and the
   <figcaption>Log a set in airplane mode, mark a country from a plane, jot a note on the subway. The outbox catches up the moment you reconnect. Listing and chat deliberately stay online.</figcaption>
 </figure>
 
-So your data survives a dead connection, and I have checked it on a real phone, not a desktop pretending to be one. Two operations stay online by design (a cached _listing_ could resurrect things you deleted, and chat is online-only). Conflicts are last-write-wins per item, which is right for a single owner and needs more thought for a shared one.
+Your data survives a dead connection, and I have checked it on a real phone, not a desktop pretending to be one. Two operations stay online by design (a cached _listing_ could resurrect things you deleted, and chat is online-only). Conflicts are last-write-wins per item, which is right for a single owner and needs more thought for a shared one.
 
 ## One system, not a pile of apps
 
 Here is where the store stops being the point. Once your apps share a storage layer and a permission model, the agent is not stuck building each one in isolation. It can reach across them, compose them, and grow the whole thing around how you actually live.
 
-**Tweaking an app you have is real and easy.** Open it, tell the agent what you want different (a darker palette, a new column, a weekly view instead of daily), and it edits the app's source in place and recompiles. No fork button, no project to set up; the app is one file, and the agent edits that file the same way it would write a new one. It is the same loop as building from scratch, pointed at something that already exists.
+**Tweaking an app you have is real and easy.** Open it, tell the agent what you want different (a darker palette, a new column, a weekly view instead of daily), and it edits the app's source in place and recompiles. No fork button, no project to set up; the app is one file, and the agent edits that file the same way it would write a new one.
 
 **Composing several apps into a new one is the next rung, and the full flow is not built yet.** The idea is a health dashboard that reads across your workout tracker, calorie log, gratitude journal, and dream diary and surfaces the metrics you actually care about. The substrate exists. An app can declare that it reads another app's data, and the backend enforces the handshake on both sides. But almost nothing uses it today, each app's storage is scoped to itself by default, and there is no "build me an app that unifies these" flow. When I build it, this is the example I will build it against.
 
@@ -355,5 +355,3 @@ The apps above are a starter pack; the interesting ones do not exist yet. If you
 The source is on [GitHub](https://github.com/mobius-os/mobius), the
 app repos are under [`mobius-os`](https://github.com/mobius-os), and the
 deploy button gets you a working instance in about three minutes.
-</content>
-</invoke>

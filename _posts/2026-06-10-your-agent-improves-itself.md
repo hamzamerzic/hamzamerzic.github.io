@@ -61,7 +61,7 @@ any transcript. That structure is the **Mind**, a knowledge graph of
 everything the agent has picked up across every interaction. Notes link
 to related notes, the important ones are indexed, and the whole thing
 is small enough to load into the agent's context at the start of a
-session. So instead of re-reading ten conversations to remember a
+session. Instead of re-reading ten conversations to remember a
 gotcha it hit last week, the agent reads one note.
 
 Here is the framing people get wrong. The Mind is the
@@ -96,8 +96,7 @@ browsable. The **Mind** app, one of the starter-pack apps from the
 [last post]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}),
 renders it as an Obsidian-style web of nodes and links. You can open it,
 see what the agent thinks it knows, follow a thread from one lesson to a
-related one, and read any note in full. There is nothing hidden behind
-the memory. It is a folder you own, and the app is a window onto it.
+related one, and read any note in full. It is a folder you own, and the app is a window onto it.
 
 This is the same itch I described at the end of the harness post. The
 old experience file was a flat log that only grew. It accreted and
@@ -238,16 +237,7 @@ nightly loop runs on, the input log left alone, a fresh memory produced
 beside it, the output yours to keep. Möbius's version is self-hosted,
 your own scheduler and model, running on a graph you actually own.
 
-And that ownership is the whole point of doing it this way. A
-self-improving agent that runs in someone else's cloud means your memory,
-your patterns, and your nightly review all live on their machine. Here
-they do not. The dream runs in the same single container as the rest of
-Möbius, reads from `/data` on your server, writes back to it, and never
-sends any of it anywhere. The agent gets sharper about you specifically,
-and the record of that is a folder you can read, back up, or delete.
-Self-improvement and self-hosting turn out to fit together better than
-either does alone. The thing that learns you the most deeply is the thing
-you most want to keep on hardware you control.
+That ownership is the point. A self-improving agent running in someone else's cloud means your memory, your patterns, and your nightly review all live on their machine. Here they do not. The dream runs in the same single container as the rest of Möbius, reads from `/data` on your server, writes back to it, and never sends any of it anywhere. The agent gets sharper about you specifically, and the record of that is a folder you can read, back up, or delete.
 
 ## What is shipped and what is still shallow
 

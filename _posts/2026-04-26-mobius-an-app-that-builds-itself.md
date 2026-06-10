@@ -61,7 +61,7 @@ break.
 What makes that safe is that breaking is cheap to undo. `/recover`
 bounds the blast radius. It resets the shell to its seeded baseline
 while keeping your chats, your apps, and your data. It renders from a
-separate server-side codepath the agent does not edit, so it survives
+separate server-side path the agent does not edit, so it survives
 even a shell rewrite that hides everything else. Grow in any
 direction, break it, recover, try again. The goal is maximal
 personalization, software that bends to you instead of the other way
@@ -231,9 +231,8 @@ Apps / Settings as tabs.
 <div class="caption mt-2">
   Default vs reshaped. The drawer-first shell, chats and apps tucked
   behind a toggle, becomes a bottom-nav app with Chat / Apps / Settings
-  as a persistent strip. It is not a re-skin; the navigation model of
-  the whole instance changed, and Settings is shared across both
-  layouts.
+  as a persistent strip. The navigation model of the whole instance
+  changed, not just the skin.
 </div>
 
 The reshaped Settings tab is also where the provider choice lives.
@@ -260,7 +259,7 @@ reversible.
 
 `/recover` is what makes it reversible. It resets the shell to the
 seeded baseline while keeping your chats, apps, and data. It renders
-from a separate server-side codepath the agent does not edit, so it
+from a separate server-side path the agent does not edit, so it
 survives even a misbehaved shell rewrite. The whole point of the
 route is to let you grow the thing without fear. Any change you make
 is one you can roll back, so there is no edit too bold to try.
@@ -278,8 +277,7 @@ feature, mounts the app, and reshapes the shell around both.
 That is what makes the personalization compound. Requests become
 software, software becomes context, the next request lands sharper.
 Because the server is the agent, every app you grow and every layout
-you reshape is one more thing it can build on next time. The more you
-use it, the more it is yours.
+you reshape is one more thing it can build on next time.
 
 ## What's next
 
