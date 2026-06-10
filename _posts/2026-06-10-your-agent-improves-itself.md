@@ -18,7 +18,7 @@ published: true
 <ul>
 <li><strong>The Mind</strong> is the agent's memory, not a profile of you. It is what the agent has learned about building, about the platform, and about working with you, organized as a browsable graph instead of a chat log.</li>
 <li><strong>Dreaming</strong> runs overnight. It tidies and reorganizes the Mind, anticipates what you will need next, suggests apps and features worth building, and audits your instance for weak spots.</li>
-<li><strong>The tie-back.</strong> Dreaming is the harness from the last post, productized. The reflect-and-refactor loop the developers ran by hand now runs on your instance, against the agent's own memory, on your schedule and your model.</li>
+<li><strong>The tie-back.</strong> Dreaming is the harness from the last post, built in. The reflect-and-refactor loop the developers ran by hand now runs on your instance, against the agent's own memory, on your schedule and your model.</li>
 <li><strong>Honest edges.</strong> The Mind and the nightly loop are real and shipped. Several of the things a dream can produce are wired but still shallow, and I say which.</li>
 </ul>
 
@@ -199,7 +199,7 @@ is never touched. The dream produces a new memory beside the old one and
 the old one stays recoverable. That is what makes it safe to let an
 agent rewrite its own memory while no one is watching.
 
-## Dreaming is the harness, productized
+## Dreaming is the harness, built in
 
 If the loop in that last diagram looks familiar, it should. It is the
 harness from the [second post]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }}),
