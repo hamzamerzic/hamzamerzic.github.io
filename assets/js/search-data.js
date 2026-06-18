@@ -30,7 +30,18 @@ ninja.data = [{
           handler: () => {
             window.location.href = "/blog/";
           },
-        },{id: "post-an-app-store-that-adapts-to-you",
+        },{id: "post-your-agent-improves-itself-while-you-sleep",
+        
+          title: "Your agent improves itself, while you sleep",
+        
+        description: "The Mind is the agent&#39;s memory of everything it has learned with you, and Dreaming is the nightly loop that tidies it, anticipates what you will need, and audits your instance, all on your own server.",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/your-agent-improves-itself/";
+          
+        },
+      },{id: "post-an-app-store-that-adapts-to-you",
         
           title: "An app store that adapts to you",
         
