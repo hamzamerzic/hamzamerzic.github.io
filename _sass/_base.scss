@@ -465,9 +465,23 @@ ul.task-list input[type="checkbox"] {
   border: 0;
   background-color: inherit;
   color: var(--global-text-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:hover {
     color: var(--global-hover-color);
+  }
+}
+
+// On the expanded (desktop) navbar the toggle button is shorter than the text
+// links, so it rides high in the row — centre it. Left off below the
+// navbar-expand-sm breakpoint, where the menu is a right-aligned column and this
+// would pull the toggle out of that alignment.
+@media (min-width: 576px) {
+  .toggle-container {
+    display: inline-flex;
+    align-items: center;
   }
 }
 
