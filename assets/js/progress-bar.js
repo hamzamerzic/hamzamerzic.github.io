@@ -47,6 +47,14 @@ function getCurrentScrollPosition() {
 
 function initializeProgressElement() {
   let navbarHeight = $("#navbar").outerHeight(true);
+  // #navbarNav (the collapsible mobile menu) lives inside #navbar. When it is
+  // expanded its height is included above, but it overlays the page rather than
+  // pushing it, so adding it to body padding-top opens a gap below the bar (a
+  // race when the menu is toggled around load). Measure the bar without it.
+  const $menu = $("#navbarNav");
+  if ($menu.hasClass("show")) {
+    navbarHeight -= $menu.outerHeight(true);
+  }
   $("body").css({ "padding-top": navbarHeight });
   $("progress-container").css({ "padding-top": navbarHeight });
   progressBar.css({ top: navbarHeight });
