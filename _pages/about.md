@@ -1,7 +1,7 @@
 ---
 layout: about
 title: about
-description: Hamza Merzić — Staff Research Engineer at Google DeepMind and UCL PhD researcher in multimodal AI. Builder of Möbius, a self-hosted personal AI agent that builds apps.
+description: Hamza Merzić, Staff Research Engineer at Google DeepMind and UCL PhD researcher in multimodal AI. Builds tools that help people learn and work more productively.
 permalink: /
 subtitle:
 
@@ -19,4 +19,4 @@ Before AI, I worked on control theory and robotics. I did my Bachelor's at the [
 
 I founded [ANNT](https://annt.ba/) to help connect Bosnian science and tech talent worldwide. Last year I organised [EEML 2025](https://www.eeml.eu) in Sarajevo, with 350 participants from 50 countries, the largest in-person edition so far (the [wrap-up post]({% post_url 2025-08-08-eeml-wrap-up %}) has the full story).
 
-I also love building tools, especially educational ones. Lately that has meant [Möbius](/mobius/), a personalized AI agent you self-host that builds the apps you ask for and the interface around them. A handful of others, both old robotics tools and newer experiments, live on the [projects page](/projects/).
+I also love building tools, especially educational ones, and increasingly the kind that help people get more done day to day. A handful, from older robotics utilities to newer experiments, live on the [projects page](/projects/).

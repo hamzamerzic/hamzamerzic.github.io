@@ -169,6 +169,14 @@ reconnection-grace-time: 86400
 
 A day instead of three hours. The trade is that an abandoned window holds its extension host, a few hundred MB, for that whole day, so don't set it to a week on a small box. The sturdier answer is to not depend on the window at all. Anything I want running while I'm gone goes in `shpool`, in a terminal, where its life is decoupled from the browser. The extension is for when I'm sitting there watching it work.
 
+## Surviving the disconnect isn't the same as working through it
+
+Keeping the window alive gets you a live agent. It doesn't get you a working one, and that gap cost me a few mornings. I'd hand off a long task, close the laptop, and come back to an agent that had done three or four steps and stopped. It looked like it had hit a wall and given up. It hadn't. It had asked me a question with nobody in the room.
+
+Most of what an agent does is gated by default, like editing a file, taking a screenshot, or running a shell command it hasn't run before. When I'm watching, each gate is one tap. When I've closed the laptop, the approval prompt has nowhere to go, and after a moment it comes back to the agent as a refusal. The agent reads that as "the owner said no" and stops. From my end it's an agent that quit a few steps in; really it's an agent waiting on an answer that can't arrive.
+
+The fix is to decide ahead of time which tools you trust and put them on the `allow` list in Claude Code's `settings.json`, so they stop asking (`Read`, `Edit`, `Write`, and the shell commands the agent leans on all day). The trust has to be broad enough that it doesn't trip a gate halfway through; the first un-listed command it hits while you're gone is where it stalls. The other half of the bargain is a `deny` list for the handful of things that should never run unattended (`rm -rf`, a force-push, anything that pipes the internet into a shell), and `deny` wins over `allow`, so "let it run while I'm asleep" can't quietly become "let it run `rm -rf` while I'm asleep." Get the two lists right and the laptop-closed, finished-by-morning workflow this whole post is selling actually holds. Get them wrong and the persistent shells just keep a stalled agent warm.
+
 ## Small habits that paid off
 
 A few one-liners that I wouldn't have bothered with three months ago and now wouldn't go without:
@@ -177,7 +185,7 @@ A few one-liners that I wouldn't have bothered with three months ago and now wou
 - A ceiling on Docker's disk use. I started with a `docker-prune.timer` user unit running `docker system prune --filter until=72h` daily, and one morning's 14.6 GB build cache showed why I wanted it. But a time-based prune doesn't save you when a single day of cache plus a few superseded images fill the disk to 100%, which is what eventually happened, and a service that needed to write to that disk fell over. What actually holds is a ceiling the daemon enforces on its own, a `builder.gc` block in `/etc/docker/daemon.json` with `maxUsedSpace` set, so the cache can't outgrow the disk no matter how busy the day was.
 - `earlyoom` as a system service, so a runaway can't freeze the box waiting on the kernel's own OOM killer, which is slow and picks badly. earlyoom steps in first and takes the biggest process, with `sshd` and the tunnel on a do-not-touch list so I never lock myself out.
 - A `MemoryHigh=5G` drop-in on the code-server unit, so the editor throttles under pressure instead of ballooning into everything else. It had quietly peaked at 6.8 GB.
-- A persistent `MEMORY.md` plus per-fact files in `~/.claude/projects/...` for things I'd otherwise forget — credential locations, deployment routines, the names of every weird flag I had to learn the hard way. Claude reads it on every session.
+- A persistent `MEMORY.md` plus per-fact files in `~/.claude/projects/...` for things I'd otherwise forget, like credential locations, deployment routines, and the names of every weird flag I had to learn the hard way. Claude reads it on every session.
 
 ## What you get
 
