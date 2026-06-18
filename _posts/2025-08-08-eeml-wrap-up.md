@@ -33,6 +33,10 @@ related_posts: false
     height: 100%;
     display: block;
   }
+  /* let the <picture> wrapper collapse so its <img> stays the flex child */
+  .swiper-slide picture {
+    display: contents;
+  }
   .img-cover img {
     object-fit: cover;
   }
@@ -65,13 +69,22 @@ So, how did it happen so fast? Even after joining the EEML team in Serbia last y
 <div class="swiper">
   <div class="swiper-wrapper">
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/eeml2024.jpeg' | relative_url }}" alt="The official design for EEML 2024 in Novi Sad, Serbia." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/eeml2024-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/eeml2024-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/eeml2024-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/eeml2024.jpeg' | relative_url }}" alt="The official design for EEML 2024 in Novi Sad, Serbia." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/eeml2024lectureslides.png' | relative_url }}" alt="A slide from the author's reinforcement learning presentation at EEML 2024." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/eeml2024lectureslides-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/eeml2024lectureslides-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/eeml2024lectureslides-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/eeml2024lectureslides.png' | relative_url }}" alt="A slide from the author's reinforcement learning presentation at EEML 2024." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/eeml2024lecture.jpg' | relative_url }}" alt="The author standing at a podium giving a reinforcement learning lecture at EEML 2024." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/eeml2024lecture-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/eeml2024lecture-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/eeml2024lecture-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/eeml2024lecture.jpg' | relative_url }}" alt="The author standing at a podium giving a reinforcement learning lecture at EEML 2024." loading="lazy" />
+      </picture>
     </div>
   </div>
   <div class="swiper-button-next"></div>
@@ -107,19 +120,34 @@ To maintain this balance, for every new sponsor we brought in, we also had to ac
 <div class="swiper">
   <div class="swiper-wrapper">
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/tshirts and chairs.jpg' | relative_url }}" alt="A stack of EEML 2025 T-shirts next to rows of lecture chairs with fold-out tables." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/tshirts and chairs-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/tshirts and chairs-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/tshirts and chairs-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/tshirts and chairs.jpg' | relative_url }}" alt="A stack of EEML 2025 T-shirts next to rows of lecture chairs with fold-out tables." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/locations.png' | relative_url }}" alt="A map of Sarajevo showing the key choices for the EEML 2025 summer school." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/locations-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/locations-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/locations-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/locations.png' | relative_url }}" alt="A map of Sarajevo showing the key choices for the EEML 2025 summer school." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/mef.jpg' | relative_url }}" alt= "The large lecture hall of the Mechanical Engineering Faculty building, a potential venue for the school." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/mef-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/mef-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/mef-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/mef.jpg' | relative_url }}" alt= "The large lecture hall of the Mechanical Engineering Faculty building, a potential venue for the school." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/holiday_sarajevo.jpg' | relative_url }}" alt="The exterior of the iconic Hotel Holiday in Sarajevo, the chosen venue for EEML 2025." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/holiday_sarajevo-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/holiday_sarajevo-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/holiday_sarajevo-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/holiday_sarajevo.jpg' | relative_url }}" alt="The exterior of the iconic Hotel Holiday in Sarajevo, the chosen venue for EEML 2025." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/chairs.png' | relative_url }}" alt="The chairs with fold-out tables that we found at SSST." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/chairs-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/chairs-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/chairs-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/chairs.png' | relative_url }}" alt="The chairs with fold-out tables that we found at SSST." loading="lazy" />
+      </picture>
     </div>
   </div>
   <div class="swiper-button-next"></div>
@@ -149,46 +177,88 @@ The week itself was a marathon with daily lectures, tutorials, and a packed soci
 <div class="swiper">
   <div class="swiper-wrapper">
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/suad rector president and I.jpg' | relative_url }}" alt="The author pictured with local dignitaries, including a university rector and an association president." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/suad rector president and I-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/suad rector president and I-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/suad rector president and I-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/suad rector president and I.jpg' | relative_url }}" alt="The author pictured with local dignitaries, including a university rector and an association president." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/viorica organizing team.jpg' | relative_url }}" alt="Viorica's opening slide showing the organizing team members." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/viorica organizing team-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/viorica organizing team-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/viorica organizing team-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/viorica organizing team.jpg' | relative_url }}" alt="Viorica's opening slide showing the organizing team members." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/speakers and topics.jpg' | relative_url }}" alt="The author's slide introducing the speakers and their corresponding topics." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/speakers and topics-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/speakers and topics-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/speakers and topics-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/speakers and topics.jpg' | relative_url }}" alt="The author's slide introducing the speakers and their corresponding topics." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/organizers and volunteers.jpg' | relative_url }}" alt="The (almost) full team of EEML 2025 organizers and volunteers smiling together." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/organizers and volunteers-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/organizers and volunteers-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/organizers and volunteers-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/organizers and volunteers.jpg' | relative_url }}" alt="The (almost) full team of EEML 2025 organizers and volunteers smiling together." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/ferenc.jpg' | relative_url }}" alt="Speaker Ferenc Huszár giving his Intro to Deep Learning lecture to a full audience at EEML 2025." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/ferenc-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/ferenc-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/ferenc-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/ferenc.jpg' | relative_url }}" alt="Speaker Ferenc Huszár giving his Intro to Deep Learning lecture to a full audience at EEML 2025." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/tutorial.jpg' | relative_url }}" alt="Participants working on their laptops during a hands-on tutorial session." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/tutorial-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/tutorial-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/tutorial-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/tutorial.jpg' | relative_url }}" alt="Participants working on their laptops during a hands-on tutorial session." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/welcome drinks.jpg' | relative_url }}" alt="Attendees mingling and networking during the welcome drinks reception." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/welcome drinks-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/welcome drinks-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/welcome drinks-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/welcome drinks.jpg' | relative_url }}" alt="Attendees mingling and networking during the welcome drinks reception." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/spica.jpg' | relative_url }}" alt="Participants in the bar area of the poster session." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/spica-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/spica-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/spica-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/spica.jpg' | relative_url }}" alt="Participants in the bar area of the poster session." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/posters.jpg' | relative_url }}" alt="Attendees discussing research during the EEML 2025 poster session." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/posters-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/posters-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/posters-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/posters.jpg' | relative_url }}" alt="Attendees discussing research during the EEML 2025 poster session." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/panel.JPG' | relative_url }}" alt="A panel of speakers on stage answering questions from the audience." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/panel-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/panel-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/panel-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/panel.JPG' | relative_url }}" alt="A panel of speakers on stage answering questions from the audience." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/estimathon.jpg' | relative_url }}" alt="Participants collaborating in teams during the Jane Street Estimathon competition." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/estimathon-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/estimathon-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/estimathon-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/estimathon.jpg' | relative_url }}" alt="Participants collaborating in teams during the Jane Street Estimathon competition." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/speaker_dinner.jpg' | relative_url }}" alt="The speakers, organizers, and TAs enjoying a quiet dinner together." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/speaker_dinner-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/speaker_dinner-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/speaker_dinner-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/speaker_dinner.jpg' | relative_url }}" alt="The speakers, organizers, and TAs enjoying a quiet dinner together." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/gala dinner.jpg' | relative_url }}" alt="A view from the EEML 2025 gala dinner." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/gala dinner-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/gala dinner-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/gala dinner-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/gala dinner.jpg' | relative_url }}" alt="A view from the EEML 2025 gala dinner." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/certificates.JPG' | relative_url }}" alt="The organizing team awarding certificates of appreciation at the end of the school." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/certificates-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/certificates-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/certificates-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/certificates.JPG' | relative_url }}" alt="The organizing team awarding certificates of appreciation at the end of the school." loading="lazy" />
+      </picture>
     </div>
   </div>
   <div class="swiper-button-next"></div>
@@ -204,58 +274,112 @@ The last day was shorter, with final lectures and student project presentations.
 <div class="swiper">
   <div class="swiper-wrapper">
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/best memes award.jpg' | relative_url }}" alt="The organizing team awarding the best meme award." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/best memes award-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/best memes award-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/best memes award-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/best memes award.jpg' | relative_url }}" alt="The organizing team awarding the best meme award." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/president.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/president-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/president-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/president-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/president.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/lanyards.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/lanyards-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/lanyards-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/lanyards-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/lanyards.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/lectures.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/lectures-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/lectures-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/lectures-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/lectures.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/questions.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/questions-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/questions-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/questions-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/questions.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/lobby music.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/lobby music-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/lobby music-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/lobby music-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/lobby music.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/zmaj.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/zmaj-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/zmaj-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/zmaj-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/zmaj.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/ice cream.jpg' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/ice cream-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/ice cream-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/ice cream-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/ice cream.jpg' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/ice cream 2.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/ice cream 2-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/ice cream 2-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/ice cream 2-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/ice cream 2.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/poster.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/poster-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/poster-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/poster-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/poster.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/razvan.jpg' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/razvan-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/razvan-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/razvan-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/razvan.jpg' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/wifi.jpg' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/wifi-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/wifi-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/wifi-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/wifi.jpg' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/road to gala dinner.jpg' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/road to gala dinner-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/road to gala dinner-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/road to gala dinner-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/road to gala dinner.jpg' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/sgd.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/sgd-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/sgd-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/sgd-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/sgd.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/cevapi.jpg' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/cevapi-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/cevapi-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/cevapi-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/cevapi.jpg' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/headache.png' | relative_url }}" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/headache-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/headache-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/headache-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/headache.png' | relative_url }}" alt="EEML 2025 meme" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/adna.png' | relative_url }}" alt="Old site blog" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/adna-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/adna-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/adna-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/adna.png' | relative_url }}" alt="Old site blog" loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/memes/end of eeml.jpg' | relative_url }}" alt="Old site blog" loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/memes/end of eeml-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/memes/end of eeml-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/memes/end of eeml-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/memes/end of eeml.jpg' | relative_url }}" alt="Old site blog" loading="lazy" />
+      </picture>
     </div>
   </div>
   <div class="swiper-button-next"></div>
@@ -283,13 +407,22 @@ Of course, this would have been completely impossible without the army of people
 <div class="swiper">
   <div class="swiper-wrapper">
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/eeml participants.jpeg' | relative_url }}" alt="A large group photo of all the EEML 2025 participants." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/eeml participants-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/eeml participants-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/eeml participants-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/eeml participants.jpeg' | relative_url }}" alt="A large group photo of all the EEML 2025 participants." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/organizers with certificates.JPG' | relative_url }}" alt="The main organizers smiling and holding their certificates of appreciation." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/organizers with certificates-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/organizers with certificates-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/organizers with certificates-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/organizers with certificates.JPG' | relative_url }}" alt="The main organizers smiling and holding their certificates of appreciation." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-cover">
-      <img src="{{ '/assets/img/eeml/gdm org team.jpg' | relative_url }}" alt="A photo of the author with the core Google DeepMind organizing team." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/gdm org team-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/gdm org team-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/gdm org team-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/gdm org team.jpg' | relative_url }}" alt="A photo of the author with the core Google DeepMind organizing team." loading="lazy" />
+      </picture>
     </div>
   </div>
   <div class="swiper-button-next"></div>
@@ -305,22 +438,40 @@ This last year was not what I had in mind a year ago. But I like to say that mos
 <div class="swiper">
   <div class="swiper-wrapper">
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/eeml landing.png' | relative_url }}" alt="The official landing page graphic for EEML 2025 in Sarajevo, Bosnia and Herzegovina." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/eeml landing-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/eeml landing-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/eeml landing-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/eeml landing.png' | relative_url }}" alt="The official landing page graphic for EEML 2025 in Sarajevo, Bosnia and Herzegovina." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/Sarajevo panorama.jpg' | relative_url }}" alt="A beautiful panoramic view of the city of Sarajevo." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/Sarajevo panorama-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/Sarajevo panorama-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/Sarajevo panorama-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/Sarajevo panorama.jpg' | relative_url }}" alt="A beautiful panoramic view of the city of Sarajevo." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/sebilj.jpeg' | relative_url }}" alt="A photo of the iconic Sebilj wooden fountain in Sarajevo's Baščaršija old town with the EEML logo." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/sebilj-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/sebilj-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/sebilj-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/sebilj.jpeg' | relative_url }}" alt="A photo of the iconic Sebilj wooden fountain in Sarajevo's Baščaršija old town with the EEML logo." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/country of origin.jpg' | relative_url }}" alt="Pie chart showing the breakdown of EEML 2025 participants by country of origin." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/country of origin-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/country of origin-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/country of origin-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/country of origin.jpg' | relative_url }}" alt="Pie chart showing the breakdown of EEML 2025 participants by country of origin." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/education level.jpg' | relative_url }}" alt="Bar chart showing the educational background of participants (e.g., PhD, Masters, undergrad)." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/education level-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/education level-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/education level-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/education level.jpg' | relative_url }}" alt="Bar chart showing the educational background of participants (e.g., PhD, Masters, undergrad)." loading="lazy" />
+      </picture>
     </div>
     <div class="swiper-slide img-contain">
-      <img src="{{ '/assets/img/eeml/gender identity.jpg' | relative_url }}" alt="Pie chart showing the gender identity breakdown of EEML 2025 participants." loading="lazy" />
+      <picture>
+        <source type="image/webp" srcset="{{ '/assets/img/eeml/gender identity-480.webp' | relative_url | replace: ' ', '%20' }} 480w, {{ '/assets/img/eeml/gender identity-800.webp' | relative_url | replace: ' ', '%20' }} 800w, {{ '/assets/img/eeml/gender identity-1400.webp' | relative_url | replace: ' ', '%20' }} 1400w" sizes="(max-width: 575px) 92vw, 720px" />
+        <img src="{{ '/assets/img/eeml/gender identity.jpg' | relative_url }}" alt="Pie chart showing the gender identity breakdown of EEML 2025 participants." loading="lazy" />
+      </picture>
     </div>
   </div>
   <div class="swiper-button-next"></div>

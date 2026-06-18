@@ -79,9 +79,9 @@ $code-bg-color-dark: #1a1a1a !default;
 
 // Font awesome location
 $fa-font-path: "../webfonts";
-
-// Tabler icons location
-$ti-font-path: "../fonts";
+// Swap (not the FA default `block`) so icons render with a fallback box period
+// of 0 instead of staying invisible while the icon webfont downloads.
+$fa-font-display: swap;
 
 // Back To Top button config
 $back-to-top-z-index: 10;

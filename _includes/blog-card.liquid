@@ -5,7 +5,6 @@
   {% assign post_description = post.excerpt | strip_html | truncate: 320 %}
 {% endif %}
 {% assign post_url = post.url | relative_url %}
-{% assign thumbnail_src = post.thumbnail_2x | default: post.thumbnail %}
 {% assign is_external = false %}
 {% if post.redirect != blank %}
   {% if post.redirect contains '://' %}
@@ -23,6 +22,9 @@
 
 <article class="blog-card">
   {% if post.thumbnail %}
+    {% comment %} 1x src for standard screens, 2x via srcset density for retina (spaces %20-encoded so srcset parses) {% endcomment %}
+    {% assign thumb_1x = post.thumbnail | relative_url | replace: ' ', '%20' %}
+    {% assign thumb_2x = post.thumbnail_2x | default: post.thumbnail | relative_url | replace: ' ', '%20' %}
     <a
       class="blog-card__media"
       href="{{ post_url }}"
@@ -32,7 +34,8 @@
       {% endif %}
     >
       <img
-        src="{{ thumbnail_src | relative_url }}"
+        src="{{ thumb_1x }}"
+        srcset="{{ thumb_1x }} 1x, {{ thumb_2x }} 2x"
         decoding="async"
         alt="{{ post.title | escape }} cover"
         loading="lazy"
