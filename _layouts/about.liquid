@@ -16,21 +16,6 @@ layout: default
 
 <div class="post">
   <header class="post-header">
-    <!--
-      Mobile-only name (visual duplicate of the desktop H1 below; hidden from
-      assistive tech so the page exposes exactly one H1)
-    -->
-    <div class="mobile-name">
-      <div class="post-title" aria-hidden="true">
-        {% if site.title == 'blank' %}
-          <span class="font-weight-bold">{{ site.first_name }}</span> {{ site.middle_name }}
-          {{ site.last_name }}
-        {% else %}
-          {{ site.title }}
-        {% endif %}
-      </div>
-    </div>
-
     <div class="profile-wrapper">
       <!-- Image and social section -->
       <div class="profile">
@@ -149,16 +134,7 @@ layout: default
     border-left: 1px solid var(--global-divider-color);
   }
 
-  .mobile-name {
-    display: none;
-  }
-
   @media (max-width: 575px) {
-    .mobile-name {
-      display: block;
-      margin-bottom: 2rem;
-    }
-
     .desktop-name {
       display: none;
     }
