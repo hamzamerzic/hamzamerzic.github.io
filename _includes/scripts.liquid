@@ -266,6 +266,11 @@
   <script defer src="{{ '/assets/js/progress-bar.js' | relative_url | bust_file_cache }}" type="text/javascript"></script>
 {% endif %}
 
+{% if page.pagination.enabled %}
+  <!-- Infinite scroll for the paginated blog listing (progressive enhancement) -->
+  <script defer src="{{ '/assets/js/blog-infinite-scroll.js' | relative_url | bust_file_cache }}" type="text/javascript"></script>
+{% endif %}
+
 {% if page.images %}
   <!-- Image Layouts -->
   {% if page.images.compare %}

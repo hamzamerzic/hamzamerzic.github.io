@@ -479,6 +479,13 @@ ul.task-list input[type="checkbox"] {
   vertical-align: -0.2em;
 }
 
+// The filled sun/moon glyphs carry less visual mass than the search outline, so
+// at an equal box they read as too small — size the theme toggle a touch larger.
+#light-toggle .nav-svg-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 // Social (bottom)
 
 .social {
