@@ -561,6 +561,17 @@ details.tldr {
     }
     .mb-arrow {
       transform: rotate(90deg);
+
+      /* The arrow span rotates so its glyph points down between stacked nodes,
+         but that also turns any text label vertical and spills it across the
+         cards. Counter-rotate the label back to horizontal. */
+      .mb-arrow__label {
+        display: inline-block;
+        transform: rotate(-90deg);
+        transform-origin: center;
+        white-space: nowrap;
+        margin-left: 0;
+      }
     }
   }
 }
@@ -655,6 +666,15 @@ details.tldr {
     .mb-node {
       flex: 1 1 0;
     }
+  }
+}
+
+/* The pair join carries a text caption, so the mobile rotate that the plain
+   single-glyph join uses would turn the caption vertical and overlap the node
+   below. Keep this one upright. */
+@media (max-width: 575px) {
+  .mb-lanes--pair .mb-lanes__join {
+    transform: none;
   }
 }
 
