@@ -115,14 +115,14 @@ pass:
 
 <div class="table-wrap" markdown="1">
 
-| App          | What it does                                                                                                                                        |
-| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **News**     | A daily AI-curated digest. A background job wakes at 10:00, runs the agent with web search only, and writes the morning's report.                   |
-| **Workout**  | A natural-language workout logger. Type what you did, like "3×5 deadlift at 100kg", and it parses the sets. No agent, no cloud, all on your device. |
-| **Atlas**    | A draggable 3D globe; tap the countries you have been to and the count climbs toward 195.                                                           |
-| **Memory**   | An Obsidian-style graph of everything the agent has learned, every interaction and lesson, made browsable.                                          |
-| **LaTeX**    | An Overleaf-style editor with a file drawer and a real tectonic engine; an AI sub-agent writes `.tex` while you watch it typeset.                   |
-| **Reflection** | Overnight, the agent reviews the day's work and leaves a one-page morning brief, so it starts the next day a little sharper.                       |
+| App            | What it does                                                                                                                                        |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **News**       | A daily AI-curated digest. A background job wakes at 10:00, runs the agent with web search only, and writes the morning's report.                   |
+| **Workout**    | A natural-language workout logger. Type what you did, like "3×5 deadlift at 100kg", and it parses the sets. No agent, no cloud, all on your device. |
+| **Atlas**      | A draggable 3D globe; tap the countries you have been to and the count climbs toward 195.                                                           |
+| **Memory**     | An Obsidian-style graph of everything the agent has learned, every interaction and lesson, made browsable.                                          |
+| **LaTeX**      | An Overleaf-style editor with a file drawer and a real tectonic engine; an AI sub-agent writes `.tex` while you watch it typeset.                   |
+| **Reflection** | Overnight, the agent reviews the day's work and leaves a one-page morning brief, so it starts the next day a little sharper.                        |
 
 </div>
 
