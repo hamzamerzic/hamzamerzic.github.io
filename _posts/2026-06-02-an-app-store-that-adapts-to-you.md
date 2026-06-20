@@ -77,10 +77,10 @@ The app store is itself a Möbius app. On first boot the platform installs it th
       </div>
     </div>
     <div class="mb-app">
-      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/mind.png' | relative_url }}" alt="Mind app icon" loading="lazy" />
+      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/mind.png' | relative_url }}" alt="Memory app icon" loading="lazy" />
       <div class="mb-app__body">
         <div class="mb-app__head">
-          <span class="mb-app__name">Mind</span>
+          <span class="mb-app__name">Memory</span>
           <span class="mb-node__tag">memory</span>
         </div>
         <span class="mb-app__desc">An Obsidian-style graph of everything the agent has learned, every interaction and lesson, made browsable.</span>
@@ -97,13 +97,13 @@ The app store is itself a Möbius app. On first boot the platform installs it th
       </div>
     </div>
     <div class="mb-app">
-      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/dreaming.png' | relative_url }}" alt="Dreaming app icon" loading="lazy" />
+      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/dreaming.png' | relative_url }}" alt="Reflection app icon" loading="lazy" />
       <div class="mb-app__body">
         <div class="mb-app__head">
-          <span class="mb-app__name">Dreaming</span>
+          <span class="mb-app__name">Reflection</span>
           <span class="mb-node__tag">nightly</span>
         </div>
-        <span class="mb-app__desc">Overnight, Möbius interviews the agents that worked that day and writes itself notes for tomorrow.</span>
+        <span class="mb-app__desc">Overnight, Möbius reviews the day's work and leaves a one-page morning brief.</span>
       </div>
     </div>
   </div>
@@ -120,9 +120,9 @@ pass:
 | **News**     | A daily AI-curated digest. A background job wakes at 10:00, runs the agent with web search only, and writes the morning's report.                   |
 | **Workout**  | A natural-language workout logger. Type what you did, like "3×5 deadlift at 100kg", and it parses the sets. No agent, no cloud, all on your device. |
 | **Atlas**    | A draggable 3D globe; tap the countries you have been to and the count climbs toward 195.                                                           |
-| **Mind**     | An Obsidian-style graph of everything the agent has learned, every interaction and lesson, made browsable.                                          |
+| **Memory**   | An Obsidian-style graph of everything the agent has learned, every interaction and lesson, made browsable.                                          |
 | **LaTeX**    | An Overleaf-style editor with a file drawer and a real tectonic engine; an AI sub-agent writes `.tex` while you watch it typeset.                   |
-| **Dreaming** | Overnight, the agent interviews the day's work and writes itself notes, so it starts the next day a little sharper.                                 |
+| **Reflection** | Overnight, the agent reviews the day's work and leaves a one-page morning brief, so it starts the next day a little sharper.                       |
 
 </div>
 
@@ -289,7 +289,7 @@ Here is where the store stops being the point. Once your apps share a storage la
       <div class="mb-node"><span class="mb-node__title">Gym</span><span class="mb-node__sub">workouts, PRs</span></div>
       <div class="mb-node"><span class="mb-node__title">Calories</span><span class="mb-node__sub">intake</span></div>
       <div class="mb-node"><span class="mb-node__title">Gratitude</span><span class="mb-node__sub">daily notes</span></div>
-      <div class="mb-node"><span class="mb-node__title">Dreaming</span><span class="mb-node__sub">sleep, streaks</span></div>
+      <div class="mb-node"><span class="mb-node__title">Sleep</span><span class="mb-node__sub">sleep, streaks</span></div>
     </div>
     <div class="mb-lanes__join">⟶</div>
     <div class="mb-node ghost">
@@ -301,7 +301,7 @@ Here is where the store stops being the point. Once your apps share a storage la
   <figcaption>The composition I want and have not built. The dashed box is a promise, not a feature.</figcaption>
 </figure>
 
-What actually drives this adaptation are the two apps I have barely touched here, Mind and Dreaming. Mind is the agent's memory of everything it has learned across every interaction and lesson, not a profile of you but a record of what works. Dreaming is the overnight job that interviews the day's work and feeds new lessons back in. Together they are how the agent gets sharper at fitting your system to you over time. They get their own post, [your agent improves itself]({{ '/blog/2026/your-agent-improves-itself/' | relative_url }}).
+What actually drives this adaptation are the two apps I have barely touched here, Memory and Reflection. Memory is what the agent has learned across every interaction and lesson, not a profile of you but a record of what works. Reflection is the overnight job that reviews the day's work and feeds new lessons back in. Together they are how the agent gets sharper at fitting your system to you over time. They get their own post, [your agent improves itself]({{ '/blog/2026/your-agent-improves-itself/' | relative_url }}).
 
 ## Building a good one, in practice
 

@@ -68,7 +68,7 @@ category: software
 <p class="mt-3 mb-4">
   It runs in a single Docker container, comes with a starter app store,
   installs to your phone like a native app, and keeps your data on a
-  server you control. Over time, the Mind and Dreaming loop give it a
+  server you control. Over time, the Memory and Reflection loop give it a
   memory to improve from, although the deeper self-audit pieces are
   still shallow.
 </p>
@@ -165,5 +165,5 @@ category: software
   <li><a href="{{ '/blog/2026/mobius-an-app-that-builds-itself/' | relative_url }}"><strong>An agent that adapts to you</strong></a>: what Möbius is, and why an editable shell matters.</li>
   <li><a href="{{ '/blog/2026/the-self-improvement-harness/' | relative_url }}"><strong>The self-improvement harness behind it</strong></a>: how an outer agent makes the inner one progressively better at building.</li>
   <li><a href="{{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}"><strong>An app store that adapts to you</strong></a>: the app store, updates and recovery, offline apps, and the cross-app system the agent grows around you.</li>
-  <li><a href="{{ '/blog/2026/your-agent-improves-itself/' | relative_url }}"><strong>Your agent improves itself, while you sleep</strong></a>: the Mind and the nightly Dreaming loop, how the agent gets better for you over time.</li>
+  <li><a href="{{ '/blog/2026/your-agent-improves-itself/' | relative_url }}"><strong>Your agent improves itself, while you sleep</strong></a>: the Memory and the nightly Reflection loop, how the agent gets better for you over time.</li>
 </ul>

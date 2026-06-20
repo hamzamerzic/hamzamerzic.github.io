@@ -24,7 +24,7 @@ published: true
 <li><strong>Experience does.</strong> An agent reflecting on its own session, with the transcript still in context, understands and self-corrects better than the larger agent watching from outside.</li>
 <li><strong>Collaboration beats a single bigger model.</strong> Agents that build, check, and question each other outscore any one agent working solo.</li>
 <li><strong>Coaching plus experience compounds.</strong> The harness earned 10 of the 12 scorecard points the vanilla agent leaves on the floor.</li>
-<li><strong>The bottleneck moves to meta-goals.</strong> Once the loop works, the limit is no longer the model but whatever behaviours you decide are worth optimizing for, upstream of the harness. The same lessons are what the Dreaming app productizes for you at runtime.</li>
+<li><strong>The bottleneck moves to meta-goals.</strong> Once the loop works, the limit is no longer the model but whatever behaviours you decide are worth optimizing for, upstream of the harness. The same lessons are what the Reflection app productizes for you at runtime.</li>
 </ul>
 
 </details>
@@ -345,7 +345,7 @@ produces a _new_ store (duplicates merged, stale entries replaced,
 fresh insights surfaced) without touching the input, for the developer
 to review and discard.
 
-That matches an itch I have about the experience file, a linear log that accretes but never reorganizes. The harness improves the agent during development, and these lessons are what the [Dreaming app]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}) productizes for the user. It runs the same reflect-and-refactor step on your own instance, against the agent's own memory of everything it has learned with you, dropping rules that have stopped firing, merging duplicates, surfacing cross-build patterns the live agent could never see. The version Möbius is heading toward is self-hosted, the input log never touched, the output yours to keep.
+That matches an itch I have about the experience file, a linear log that accretes but never reorganizes. The harness improves the agent during development, and these lessons are what the [Reflection app]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}) productizes for the user. It runs the same reflect-and-refactor step on your own instance, against the agent's own memory of everything it has learned with you, dropping rules that have stopped firing, merging duplicates, surfacing cross-build patterns the live agent could never see. The version Möbius is heading toward is self-hosted, the input log never touched, the output yours to keep.
 
 ## On models
 

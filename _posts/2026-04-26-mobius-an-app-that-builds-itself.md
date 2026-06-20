@@ -289,7 +289,7 @@ shows. Four directions:
 - **A knowledge graph.** Structured memory growing from every
   interaction, separate from the chat transcript, so the agent can
   reason about your patterns without re-reading every conversation.
-- **Dreaming.** A scheduled background pass that consolidates and
+- **Reflection.** A scheduled background pass that consolidates and
   reorganises the graph while you are away. Anthropic previewed
   something similar for managed agents; the Möbius version is the
   self-hosted, user-controllable one.
