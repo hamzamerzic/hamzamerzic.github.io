@@ -495,9 +495,18 @@ ul.task-list input[type="checkbox"] {
 
 // The filled sun/moon glyphs carry less visual mass than the search outline, so
 // at an equal box they read as too small — size the theme toggle a touch larger.
+// On the denser desktop navbar keep it close to the 1.2rem search; mobile (the
+// large expanded menu) keeps the bigger 1.5rem.
 #light-toggle .nav-svg-icon {
   width: 1.5rem;
   height: 1.5rem;
+}
+
+@media (min-width: 576px) {
+  #light-toggle .nav-svg-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
 }
 
 // Social (bottom)
@@ -526,6 +535,18 @@ ul.task-list input[type="checkbox"] {
         }
       }
 
+      // Inline SVG social icons (GitHub/LinkedIn/Scholar/email) render instantly
+      // with no icon webfont, so no tofu boxes flash in on slow connections. Size
+      // in em so they track the responsive .contact-icons font-size like the old
+      // glyphs; this overrides the .contact-icons a svg rule above for these.
+      svg.social-svg-icon {
+        width: auto;
+        height: 0.85em;
+        margin-bottom: 0;
+        fill: var(--global-text-color);
+        transition: fill 0.2s ease-in-out;
+      }
+
       i::before {
         color: var(--global-text-color);
         transition-property: all 0.2s ease-in-out;
@@ -536,6 +557,10 @@ ul.task-list input[type="checkbox"] {
 
         i::before {
           color: var(--global-theme-color);
+        }
+
+        svg.social-svg-icon {
+          fill: var(--global-theme-color);
         }
       }
     }
