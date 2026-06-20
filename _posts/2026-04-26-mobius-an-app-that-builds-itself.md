@@ -21,10 +21,11 @@ conversation.</li>
 <li><strong>Capabilities</strong> (file upload, notifications,
 settings panels) are candidates for upstreaming so the next install
 inherits them.</li>
-<li><strong>Presentation</strong> (your theme, layout, fonts) lives
-only on your volume and stays yours.</li>
-<li><strong><code>/recover</code></strong> resets the shell when
-the agent paints itself into a corner.</li>
+<li><strong>Presentation</strong> (your theme, layout, fonts) stays
+on your volume and remains yours.</li>
+<li><strong><code>/recover</code></strong> is a separate recovery
+page that brings the instance back when the agent paints itself into a
+corner.</li>
 <li>Source on <a href="https://github.com/mobius-os/mobius">GitHub</a>;
 deploys in about three minutes.</li>
 </ul>
@@ -34,77 +35,74 @@ deploys in about three minutes.</li>
 ## You grow it from a chat input
 
 Möbius starts as almost nothing, a chat on one side and an empty
-canvas on the other. No file upload, no scheduled jobs panel, no
-notifications button. What makes that interesting is that the agent can rewrite the
-thing it runs inside. So you grow it. Ask for file upload and it
-builds file upload. Ask for a new look and it restyles itself. Ask for
-an app and one appears on the canvas. The shell you end up with is the
-one you talked into being.
+canvas on the other. File upload and scheduled jobs have to be added;
+so does the notifications button. The agent can rewrite the thing it runs inside,
+so you grow it. Ask for file upload and it builds file upload. Ask for
+an app and one appears on the canvas. You end up with the shell you
+asked for.
 
-Here is one of those moments, end to end. I sent a deliberately
-ordinary prompt. _"I'd like to send files and images along with my
-messages, pictures of stuff I want to talk about, the occasional
-document. Can you add file upload to the chat?"_ One conversation
-later there was a backend route, message storage, drag-and-drop, and
-image rendering, none of which existed when I asked.
+One of those moments looked like this, end to end. I sent a
+deliberately ordinary prompt. _"I'd like to send files and images along
+with my messages, pictures of stuff I want to talk about, the
+occasional document. Can you add file upload to the chat?"_ One
+conversation later the agent had added a backend route, message
+storage, drag-and-drop, and image rendering.
 
-## The flip side: you can break it
+## You can break it
 
 The same power cuts both ways. Tell the agent to delete an app and it
 deletes it. Tell it to rip out a feature and the feature is gone. You
-can repaint the shell until the composer is hidden, restructure the
-navigation until the drawer is unreachable, paint yourself into a
-corner. That is not a flaw. It is the point. An interface you can
-grow in any direction is, by construction, an interface you can also
-break.
+can repaint the shell until the composer is hidden or restructure the
+navigation until the drawer is unreachable. That comes with the
+territory. An interface you can grow in any direction can also break in
+any direction.
 
-What makes that safe is that breaking is cheap to undo. `/recover`
-bounds the blast radius. It resets the shell to its seeded baseline
-while keeping your chats, your apps, and your data. It renders from a
-separate server-side path the agent does not edit, so it survives
-even a shell rewrite that hides everything else. Grow in any
-direction, break it, recover, try again. The goal is maximal
-personalization, software that bends to you instead of the other way
-around.
+Recovery keeps that cheap. `/recover` is a separate page served outside
+the editable shell, rendered straight from the server, so it loads even
+when the shell it would normally live in is broken. From there a
+recovery chat can reset the shell to its seeded baseline, roll back to a
+backup, reinstall an app, or patch whatever broke, then restart, all
+while keeping your chats, your apps, and your data. That lets you
+break it, recover, and try again.
+
+The rest of this series stays with that trade. The agent can touch
+the apps, the interface, and the data on your own machine because that
+lets it be genuinely useful, and recovery keeps the cost close to zero.
+I want software that bends to you.
 
 ## Why I built this
 
-Most software asks you to adapt to it. AI assistants make this worse
-with time: preferences leak between tasks, memory accumulates in the
-wrong places, the thing that was helpful yesterday becomes an
+Most software asks you to adapt to it. Over time, AI assistants make
+this worse. Preferences leak between tasks, memory accumulates in the
+wrong places, and the thing that was helpful yesterday becomes an
 invisible constraint today. The model in front of you is usually
-capable of writing the tool you want, but the product around it can
-only talk about the tool. You ask for a workflow and get advice. You
+capable of writing the tool you want. The product around it still stops
+at talking about the tool. You ask for a workflow and get advice. You
 describe a tool and get a mockup, a snippet, or a plan. The
 assistant stays on one side of the glass.
 
-The premise of Möbius is to put it on the other side, to shorten the
-distance between wanting, making, using, and correcting until they
-happen in one place. Requests become software, software becomes
-context, the next request lands somewhere sharper. The platform has
-to be editable for that to work. If the agent can only talk about
-the work, you still have to carry the system in your head.
+Möbius puts the assistant inside the product around it. Asking for a
+tool, using it, and correcting it happen in one place. The platform has
+to be editable for that to work. If the agent stops at describing the
+work, you still have to carry the system in your head.
 
-The name is from Möbius strips. Each app the agent builds does not
-sit somewhere external; it lands in the shell the chat lives in, and
-becomes part of the surface the next conversation happens on. The
-shell the chat runs in was, once, written by a different version of
-the same chat.
+The name is from Möbius strips. Each app the agent builds shows up in
+the shell the chat lives in, and the next conversation happens with
+that app available. A different version of the same chat once wrote the
+shell the chat runs in.
 
 ## How it works
 
-The most obvious adaptive surface is the apps the agent builds. The
-interesting surface is everything around them, and it splits along a
-useful axis: **capabilities** (general features like file upload or
-notifications, candidates for upstreaming so the next install
-inherits them) and **presentation** (your theme, layout, fonts,
-which live only on your volume and stay yours). The harness treats
-those two stacks differently.
+Apps are the obvious adaptive surface. The surrounding shell matters
+too, and the harness separates **capabilities**
+(general features like file upload or notifications, candidates for
+upstreaming so the next install inherits them) from **presentation**
+(your theme, layout, fonts, which stay confined to your volume and
+stay yours).
 
-### Capabilities: the part that grows the platform
+### Capabilities grow the platform
 
-Walk through that file-upload chat from the top. The order is the
-point.
+Walk through that file-upload chat from the top, in order.
 
 <figure class="shot-row shot-row--flow">
   <div class="shot">
@@ -133,14 +131,14 @@ point.
   The build starts from an empty composer. The agent checks the
   codebase, surfaces three real decisions (file types, affordances,
   size cap), then writes the endpoint, the schema, the picker, and the
-  paperclip, none of which existed when I asked. By the end of the same
-  chat I attach the Möbius logo and the agent on the other side reads it
-  back. One conversation, from empty composer to working feature.
+  paperclip. By the end of the same chat I attach the Möbius logo and
+  the agent on the other side reads it back. One conversation, from
+  empty composer to working feature.
 </div>
 
-File upload is one capability the agent can build. The same loop
-produces apps, too, actual mini-applications that land on the canvas
-next to the chat and persist there.
+File upload is one capability the agent can build. The same loop also
+produces actual mini-applications that appear on the canvas next to the
+chat and persist there.
 
 <figure style="text-align: center; margin: 2rem auto;">
   <video src="{{ '/assets/img/mobius/apps-cycle.mp4' | relative_url }}" width="280" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
@@ -150,34 +148,34 @@ next to the chat and persist there.
     A few of the apps Möbius has built me, each from a single
     prompt: a live ISS tracker, a Brazil trip planner, a daily
     news digest, a Hacker News dashboard, an earthquake monitor, a
-    habit tracker, and a drum machine. The agent wrote the JSX,
-    compiled it, mounted it, and the app lives in the same shell
-    the chat does.
+    habit tracker, and a drum machine. The agent wrote the JSX and
+    mounted the compiled app in the same shell the chat uses.
   </figcaption>
 </figure>
 
-This is how general capabilities land (notifications, scheduled
-jobs, a web-search button, voice mode, a richer settings panel). The
-agent builds it when you ask. A second loop sits above the first, a
-harness that watches the inner agent and periodically asks _was this
-change generally useful, or was it just for me?_ The generally useful
-diffs become candidates for upstreaming into the shipped image, a
-promotion step I still review.
+General capabilities get added this way too. Notifications, scheduled
+jobs, a web-search button, voice mode, and a richer settings panel all
+fit the same path. The agent builds the feature when you ask. A second
+loop sits above the first, a harness that watches the inner agent and
+periodically asks
+_was this change generally useful, or specific to my instance?_ The
+generally useful diffs become candidates for upstreaming into the
+shipped image, a promotion step I still review.
 
-### Presentation: the part that stays yours
+### Presentation stays yours
 
-Capabilities are general; _taste_ is the opposite. The shell ships
-with one default theme, but the same agent that built file upload can
-rewrite the CSS, swap fonts, add background animation, restructure
-the layout, and that diff lives only on your volume. A redeploy can
-ship you the new file-upload feature without trampling your
-wood-paneled reading-room theme, because the two changes live in
-different layers.
+General capabilities can move upstream. _Taste_ belongs to the
+instance. The shell ships with one default theme. The same agent that
+built file upload can rewrite the CSS, swap fonts, add background
+animation, restructure the layout, and keep that diff confined to your
+volume. A redeploy can
+ship you the new file-upload feature while your wood-paneled reading-room
+theme stays put, because the two changes live in different layers.
 
-The cheap-to-vary axis is visual. Ask the agent to restyle the whole
+Visual changes are cheap to vary. Ask the agent to restyle the whole
 shell and it rewrites the CSS, swaps the fonts, and repaints the
-background. There is no build step you wait on. The new look is live
-the moment the agent saves, and you watch it change as it works.
+background. The new look is live the moment the agent saves, and you
+watch it change as it works.
 
 <figure style="text-align: center; margin: 2rem auto;">
   <video src="{{ '/assets/img/mobius/theme-switch.mp4' | relative_url }}" width="260" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);">
@@ -195,17 +193,16 @@ the moment the agent saves, and you watch it change as it works.
   <video src="{{ '/assets/img/mobius/theme-meme-motion.mp4' | relative_url }}" width="280" autoplay loop muted playsinline style="border-radius: 0.75rem; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);"></video>
   <figcaption class="caption mt-2" style="font-size: 0.85em;">
     And it moves. The meme theme is live CSS, so the rainbow drifts and
-    the unicorns and emoji bounce across the screen. The agent does not
-    judge your taste.
+    the unicorns and emoji bounce across the screen. The agent keeps its
+    opinions to itself.
   </figcaption>
 </figure>
 
-The harder axis is _layout_, where things are, not how they look. It
-is the same conversation and the same chat box. Ask the agent to
-rewrite the navigation model and it does, and the new layout is live
-immediately, the same way a theme change is. The default is
-drawer-first; one prompt later it is a bottom-nav app with Chat /
-Apps / Settings as tabs.
+_Layout_ is harder because it moves the controls themselves. It is the
+same conversation and the same chat box. Ask the agent to rewrite the
+navigation model and it does, with the new layout live immediately.
+The default is drawer-first. One prompt later it is a bottom-nav app
+with Chat / Apps / Settings as tabs.
 
 <figure class="shot-row">
   <div class="shot">
@@ -229,101 +226,82 @@ Apps / Settings as tabs.
 </figure>
 
 <div class="caption mt-2">
-  Default vs reshaped. The drawer-first shell, chats and apps tucked
-  behind a toggle, becomes a bottom-nav app with Chat / Apps / Settings
-  as a persistent strip. The navigation model of the whole instance
-  changed, not just the skin.
+  The drawer-first shell, chats and apps tucked behind a toggle, becomes
+  a bottom-nav app with Chat / Apps / Settings as a persistent strip.
+  The navigation model of the whole instance changed along with the
+  surface treatment.
 </div>
 
-The reshaped Settings tab is also where the provider choice lives.
-The same settings panel switches the coding agent between Claude Code
-and Codex, with Gemini for image generation. The next message in any
-chat uses the new provider. Different models have different tastes
+The reshaped Settings tab is also where you connect the coding agents,
+Claude Code and Codex, and the image model, Gemini. From there a chat
+can run on whichever one fits. Different models have different tastes
 (Codex tends to be terser, Claude tends to spell out its reasoning),
 so you can pick the one that matches what you are building, or switch
-mid-thread if a turn goes sideways.
+if a turn goes sideways.
 
-The same plainness applies to app data. Apps store data through a
-small storage primitive the agent already knows how to compose. New
-schemas, scheduled jobs, webhooks are the plumbing you would
-write yourself, except you describe it instead.
-
-## Recovery, so you can be fearless
-
-An agent with write access to its own interface will occasionally
-ship a CSS rule that hides the composer, a layout change that makes
-the drawer unreachable, or a theme that paints text the same colour
-as the background. That is the cost of an interface you can reshape
-this freely, and it is a cost worth paying as long as it is
-reversible.
-
-`/recover` is what makes it reversible. It resets the shell to the
-seeded baseline while keeping your chats, apps, and data. It renders
-from a separate server-side path the agent does not edit, so it
-survives even a misbehaved shell rewrite. The whole point of the
-route is to let you grow the thing without fear. Any change you make
-is one you can roll back, so there is no edit too bold to try.
+App data follows the same pattern. Apps store data through a small
+storage primitive the agent already knows how to compose. New schemas
+and scheduled jobs are the plumbing you would write yourself, except
+you describe it instead.
 
 ## The agent is the server
 
-Step back and the loop closes. Möbius is one container you self-host.
-The agent inside it is not a chat bolted onto a finished product; it
-is the server. It builds the tools, edits the interface those tools
-sit in, runs scheduled jobs on a timer, fetches from the web when an
-app needs fresh data, and stores everything on a machine you control.
-The same thing that answers your message is the thing that ships the
-feature, mounts the app, and reshapes the shell around both.
+Möbius is one container you self-host, and the agent inside it is the
+server. It builds the tools, edits the interface those tools sit in,
+runs scheduled jobs on a timer, fetches from the web when an app needs
+fresh data, and stores everything on a machine you control. The same
+thing that answers your message ships the feature, mounts the app, and
+reshapes the shell around both.
 
-That is what makes the personalization compound. Requests become
-software, software becomes context, the next request lands sharper.
-Because the server is the agent, every app you grow and every layout
-you reshape is one more thing it can build on next time.
+Requests become software, so personalization compounds, and that
+software gives the next request more useful context. Every app you grow
+and every layout you reshape gives the agent one more thing to build on
+next time.
 
 ## What's next
 
 Memory is the next thing to take seriously. The experience file the
 agent appends to is a linear log, enough to make my instance diverge
-from yours after a few months, but it does not reorganise, and it
-shows. Four directions:
+from yours after a few months. It keeps appending chronologically, and
+it shows. I had four directions in mind:
 
 - **A knowledge graph.** Structured memory growing from every
-  interaction, separate from the chat transcript, so the agent can
-  reason about your patterns without re-reading every conversation.
+  interaction, separate from the chat transcript, so pattern queries
+  start from structured memory and skip a full scan of every
+  conversation.
 - **Reflection.** A scheduled background pass that consolidates and
-  reorganises the graph while you are away. Anthropic previewed
-  something similar for managed agents; the Möbius version is the
-  self-hosted, user-controllable one.
-- **Discretion.** Noticing stale apps, suggesting something worth
-  learning, asking before interrupting, proactive in service of
-  the user, not engagement.
+  reorganises the graph while you are away, the self-hosted version of
+  an agent that tidies up after itself on its own time.
+- **Discretion.** Noticing stale apps and suggesting something worth
+  learning before it interrupts, with the user's interest as the
+  constraint.
 - **Help that seeks you out.** The part I want most and am least
-  sure how to land. An agent that notices you have been reading
+  sure how to ship. An agent that notices you have been reading
   distributed-systems papers three Tuesdays in a row and builds you
-  a swipe-style recommender, without being asked. Most products
-  in this space are tuned to maximise engagement; the goal here is
-  the opposite, a system that shows up because it knows you, not
-  because it is trying to keep you.
+  a swipe-style recommender on its own. Most products
+  in this space are tuned to maximise engagement; I want a system that
+  shows up because it knows you and respects your attention.
 
-None of those ship yet. The loop that makes them possible is the
-subject of a [companion post on the self-improvement
+When this was written, all four were still future work. Since then, the
+Memory graph and Reflection have shipped, covered in a [later post in
+this series]({{ '/blog/2026/your-agent-improves-itself/' | relative_url }});
+discretion and help that seeks you out are still open. The loop that
+makes any of them possible is the subject of a [companion post on the
+self-improvement
 harness]({{ '/blog/2026/the-self-improvement-harness/' | relative_url }}),
-an outer agent that watches the inner one build, asks it questions,
-and rewrites its instructions to make it less brittle next time.
+an outer agent that watches the inner one build, asks it questions, and
+rewrites its instructions to make it less brittle next time.
 
-A note on the agent itself. For the iteration work behind this post I
-have been letting Claude drive Codex through its [Codex
-plugin](https://github.com/openai/codex). The disagreements between
-the two models were the useful part. When they pulled in different
-directions on an edit, that was usually a sign the edit was worth a
-closer look.
-
-Since this was written, the apps the agent builds grew a place to
-live: an app store, and the start of an operating system around it
-where you install, update, tweak, and recover apps on your own instance.
-That is its own [companion post]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}).
+Since this was written, the apps the agent builds got an app store and
+the start of an operating system around it where you
+install, update, tweak, and recover apps on your own instance. I cover
+that in a [companion post]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}).
 
 The source is on [GitHub](https://github.com/mobius-os/mobius), the
 project page is [here]({{ '/mobius/' | relative_url }}), and the
 README's deploy button gets you a working instance in about three
-minutes. I would love to know what you build with it, and what you
-change _around_ what you build.
+minutes. It runs for roughly five dollars a month on hosting you
+control, against your own Claude or Codex account, and your data stays
+on the machine you deployed it to. The free Codex plan is already
+enough to do a lot. I would love to know what you build with it, and
+what you change _around_ what you build.
