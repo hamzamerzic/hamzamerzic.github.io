@@ -34,7 +34,7 @@ ninja.data = [{
         
           title: "Your agent improves itself, while you sleep",
         
-        description: "The Mind is the agent&#39;s memory of everything it has learned with you, and Dreaming is the nightly loop that tidies it, anticipates what you will need, and audits your instance, all on your own server.",
+        description: "Memory is the agent&#39;s knowledge graph of everything it has learned with you, and Reflection is the nightly loop that tidies it, anticipates what you will need, and audits your instance, all on your own server.",
         section: "Posts",
         handler: () => {
           
