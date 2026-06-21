@@ -34,7 +34,7 @@ ninja.data = [{
         
           title: "Your agent improves itself, while you sleep",
         
-        description: "Memory is the agent&#39;s knowledge graph of everything it has learned with you, and Reflection is the nightly loop that tidies it, anticipates what you will need, and audits your instance, all on your own server.",
+        description: "Memory is the agent&#39;s knowledge graph of what it has learned about working with you, and Reflection is the nightly loop that tidies it, anticipates what you will need, and reviews your instance for weak spots, all on your own server.",
         section: "Posts",
         handler: () => {
           
@@ -45,7 +45,7 @@ ninja.data = [{
         
           title: "An app store that adapts to you",
         
-        description: "Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The interesting part is not the store but that the agent does not build isolated apps, it grows a cross-app personal system that adapts to you over time.",
+        description: "Möbius grew an app store. Install an app by pasting a URL, tweak it by asking, run it offline, save it to your home screen. The store is the on-ramp; the bigger shift is the agent growing a cross-app personal system that adapts to you over time.",
         section: "Posts",
         handler: () => {
           
