@@ -55,22 +55,27 @@ category: software
 </style>
 
 <p class="lead">
-  <strong>Möbius</strong> is a personal AI agent you self-host whose
-  one job is to be as useful to you as it can. It actively helps by
-  building the tools you ask for as small apps right next to the chat
-  (a news aggregator, a habit tracker, a 3D ISS viewer) without a page
+  A Möbius strip is a surface with no inside or outside and no
+  beginning or end. That is the idea behind <strong>Möbius</strong>, a
+  self-improving personal AI agent you self-host that loops back on
+  itself, with the agent, the server it runs on, and the apps it builds
+  working as one system to be as useful to you as it can. Ask for a
+  tool and the coding agent builds it as a small app right next to the
+  chat (a news aggregator, a habit tracker, a 3D ISS viewer), no page
   reload. Each app can store data, run on a schedule, fetch from the
-  web, and use AI on its own. The same coding agent can also rewrite
-  the interface those apps sit in, from theme and layout to shell
-  features.
+  web, and use AI on its own, and the same agent can rewrite the
+  interface those apps sit in, from theme and layout to the controls
+  around them.
 </p>
 
 <p class="mt-3 mb-4">
   It runs in a single Docker container, comes with a starter app store,
   installs to your phone like a native app, and keeps your data on a
-  server you control. Over time, the Memory and Reflection loop give it a
-  memory to improve from, although the deeper self-audit pieces are
-  still shallow.
+  server you control. Fully recursive self-improvement is not here yet,
+  a person stays in the loop. What works today is the agent and you
+  improving it together, with the Memory and Reflection loop giving it
+  a memory to build from, though the deeper self-audit pieces are still
+  shallow.
 </p>
 
 <figure class="shot-row shot-row--flow" style="margin: 1.75rem auto 0.4rem;">

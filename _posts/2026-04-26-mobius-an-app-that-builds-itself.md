@@ -32,14 +32,18 @@ deploys in about three minutes.</li>
 
 </details>
 
+A Möbius strip is a surface with no inside or outside and no beginning
+or end. That is the idea behind Möbius, an agent that loops back on
+itself, building the tools you use and improving them as it goes.
+
 ## You grow it from a chat input
 
 Möbius starts as almost nothing, a chat on one side and an empty
-canvas on the other. File upload and scheduled jobs have to be added;
-so does the notifications button. The agent can rewrite the thing it runs inside,
-so you grow it. Ask for file upload and it builds file upload. Ask for
-an app and one appears on the canvas. You end up with the shell you
-asked for.
+canvas on the other. Because the agent can rewrite the thing it runs
+inside, you grow it from there. File upload and scheduled jobs have to
+be added; so does the notifications button. Ask for file upload and it
+builds file upload. Ask for an app and one appears on the canvas. You
+end up with the shell you asked for.
 
 One of those moments looked like this, end to end. I sent a
 deliberately ordinary prompt. _"I'd like to send files and images along
@@ -50,12 +54,11 @@ storage, drag-and-drop, and image rendering.
 
 ## You can break it
 
-The same power cuts both ways. Tell the agent to delete an app and it
-deletes it. Tell it to rip out a feature and the feature is gone. You
-can repaint the shell until the composer is hidden or restructure the
-navigation until the drawer is unreachable. That comes with the
-territory. An interface you can grow in any direction can also break in
-any direction.
+The same power works against you too. Tell the agent to delete an app
+and it deletes it. Tell it to rip out a feature and the feature is
+gone. You can repaint the shell until the composer is hidden or
+restructure the navigation until the drawer is unreachable. Anything
+you can build, you can also break.
 
 Recovery keeps that cheap. `/recover` is a separate page served outside
 the editable shell, rendered straight from the server, so it loads even
@@ -75,21 +78,15 @@ I want software that bends to you.
 Most software asks you to adapt to it. Over time, AI assistants make
 this worse. Preferences leak between tasks, memory accumulates in the
 wrong places, and the thing that was helpful yesterday becomes an
-invisible constraint today. The model in front of you is usually
-capable of writing the tool you want. The product around it still stops
-at talking about the tool. You ask for a workflow and get advice. You
-describe a tool and get a mockup, a snippet, or a plan. The
-assistant stays on one side of the glass.
+invisible constraint today. The model in front of you can usually write
+the tool you want, but the product around it stops at talking about it.
+Ask for a workflow and you get advice; describe a tool and you get a
+mockup or a plan. It never crosses over into building the thing.
 
-Möbius puts the assistant inside the product around it. Asking for a
+Möbius puts the assistant inside the product. Asking for a
 tool, using it, and correcting it happen in one place. The platform has
 to be editable for that to work. If the agent stops at describing the
 work, you still have to carry the system in your head.
-
-The name is from Möbius strips. Each app the agent builds shows up in
-the shell the chat lives in, and the next conversation happens with
-that app available. A different version of the same chat once wrote the
-shell the chat runs in.
 
 ## How it works
 
@@ -270,8 +267,8 @@ it shows. I had four directions in mind:
   start from structured memory and skip a full scan of every
   conversation.
 - **Reflection.** A scheduled background pass that consolidates and
-  reorganises the graph while you are away, the self-hosted version of
-  an agent that tidies up after itself on its own time.
+  reorganises the graph while you are away, so the agent maintains its
+  own memory on its own schedule.
 - **Discretion.** Noticing stale apps and suggesting something worth
   learning before it interrupts, with the user's interest as the
   constraint.
@@ -279,8 +276,9 @@ it shows. I had four directions in mind:
   sure how to ship. An agent that notices you have been reading
   distributed-systems papers three Tuesdays in a row and builds you
   a swipe-style recommender on its own. Most products
-  in this space are tuned to maximise engagement; I want a system that
-  shows up because it knows you and respects your attention.
+  in this space are tuned to maximise engagement. I want one that
+  surfaces a suggestion only when it has a real reason to, and
+  otherwise leaves you alone.
 
 When this was written, all four were still future work. Since then, the
 Memory graph and Reflection have shipped, covered in a [later post in
@@ -301,7 +299,7 @@ The source is on [GitHub](https://github.com/mobius-os/mobius), the
 project page is [here]({{ '/mobius/' | relative_url }}), and the
 README's deploy button gets you a working instance in about three
 minutes. It runs for roughly five dollars a month on hosting you
-control, against your own Claude or Codex account, and your data stays
-on the machine you deployed it to. The free Codex plan is already
+control, signing in with your own Claude or Codex account, and your
+data stays on the machine you deployed it to. The free Codex plan is already
 enough to do a lot. I would love to know what you build with it, and
 what you change _around_ what you build.

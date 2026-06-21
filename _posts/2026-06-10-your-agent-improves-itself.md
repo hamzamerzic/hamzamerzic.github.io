@@ -39,9 +39,9 @@ through scenarios, ask it why it did what it did, and rewrite its
 instructions between sessions. That loop lives outside your instance, and
 you never see it. I want to talk now about the version of that loop that
 runs _inside_ your instance, on your data, on your schedule, with the
-agent watching its own work. You go to bed, and your copy of Möbius
-spends part of the night trying to be a little more useful to you by
-morning.
+agent watching its own work. You go to bed, and overnight your instance
+does a pass over the day's work so it is in better shape when you wake
+up.
 
 Two pieces make that work: a memory worth improving and a loop that keeps
 improving it.
@@ -70,8 +70,8 @@ doing that job _for you_. A note might say that a certain compile step
 fails silently if you skip a flag, or that the offline cache needs
 priming a particular way, or that when you say "make it cleaner" you
 usually mean denser rather than more whitespace. The first two are
-platform craft. The third is about you, and the agent keeps it the way a
-good collaborator remembers how you like things.
+platform craft. The third is about you, and the agent holds onto that
+so it does not have to relearn it next time.
 
 <figure class="mb-diagram">
   <div class="mb-flow">
@@ -93,8 +93,8 @@ it. The **Memory** app, one of the starter-pack apps from the
 [last post]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}),
 renders it as an Obsidian-style web of nodes and links. You can open it,
 see what the agent thinks it knows, follow a thread from one lesson to a
-related one, and read any note in full. The notes are a folder you own,
-and the app is a window onto it.
+related one, and read any note in full. The notes are just a folder of
+markdown on your server, and the Memory app is a viewer for it.
 
 This answers the itch I described at the end of the harness post. The
 old experience file was a flat log that only grew. It accreted and never
@@ -106,12 +106,12 @@ Reflection handles that part.
 ## Reflection keeps it fresh
 
 Every night, on a schedule you set, Möbius reflects. The **Reflection**
-agent wakes up while you are away from the system, reviews the day, and
-works to be more useful to you tomorrow. It is a scheduled agent like
+agent runs while you are away, reads back over the day, and tidies what
+the agent learned before the next morning. It is a scheduled agent like
 any other on the platform, a background job that runs the coding agent
 with a particular brief, and that brief covers the instance as a whole.
 
-A reflection run leaves a one-page brief after four checks.
+A reflection run does four things, then leaves a one-page brief.
 
 **It tidies Memory.** I trust this part most, it's the harness move I've
 seen work. The nightly run reads the current memory and the day's
@@ -277,11 +277,10 @@ post moves the _improvement_ loop itself onto your instance. The agent
 that builds your tools now also tends its own memory of how to build
 them, on your server, while you sleep.
 
-I actually want this version of a personal assistant. Most of them get
-more generic the longer you use them, tuned to keep you engaged, with
-their memory of you locked in someone else's cloud. I want one that
-learns your preferences and keeps that record where you can inspect it,
-on hardware you own.
+I actually want this kind of assistant. Most of them drift toward
+generic as you use them, and whatever they remember about you sits in
+someone else's cloud. I want one that learns your preferences and keeps
+that record where you can inspect it, on hardware you own.
 
 [Möbius]({{ '/mobius/' | relative_url }}) is a deploy-button click away,
 the source is on [GitHub](https://github.com/mobius-os/mobius), and the

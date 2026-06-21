@@ -13,11 +13,11 @@ published: true
 ---
 
 <details class="tldr">
-<summary><strong>TL;DR.</strong> Möbius grew an app store, and the store is the on-ramp. The real point is that the agent does not build isolated apps, it grows a cross-app personal system that adapts to you. Apps share a storage layer and a permission model, so the agent can compose them and reshape the whole thing around you over time. You install by pasting a URL, tweak by asking, run offline, save to your home screen, and break things cheaply because the system is built around recovery.</summary>
+<summary><strong>TL;DR.</strong> Möbius grew an app store, and the store is the on-ramp. The bigger idea is that the agent grows a cross-app personal system around you, rather than a heap of one-off apps. Apps share a storage layer and a permission model, so the agent can compose them and reshape the whole thing around you over time. You install by pasting a URL, tweak by asking, run offline, save to your home screen, and break things cheaply because the system is built around recovery.</summary>
 
 <ul>
-<li><strong>The store</strong> is a curated starter pack, not a registry. A Möbius app is a public repo with a <code>mobius.json</code> and an <code>index.jsx</code> entry point. Sharing one means sharing a URL.</li>
-<li><strong>The bigger idea</strong> is a system, not a pile of apps. Shared storage and a shared permission model let the agent compose your apps and grow them around you.</li>
+<li><strong>The store</strong> is a curated starter pack rather than an open registry. A published app is a public repo with a <code>mobius.json</code> and an <code>index.jsx</code> entry point, and sharing one means sharing a URL.</li>
+<li><strong>The bigger idea</strong> is one connected system. Shared storage and a shared permission model let the agent compose your apps and grow them around you.</li>
 <li><strong>Updates</strong> are URL-keyed and three-way merged. Bump the version upstream, the store shows "Update available", and reinstalling merges the new code with any tweaks you made and keeps your data; on a real conflict the old version keeps running while the agent resolves it with you.</li>
 <li><strong>Recovery</strong> makes breaking cheap. Atomic installs that cannot half-land, a <code>/recover</code> route, and a git history of your whole instance.</li>
 <li><strong>Offline plus home screen.</strong> Apps install to your home screen as standalone PWAs and keep working with no network. Writes queue and sync when you reconnect.</li>
@@ -34,7 +34,7 @@ interface around them. The [second]({{ '/blog/2026/the-self-improvement-harness/
 is about the loop the developers use to make the agent better at building them. This
 one is about what those apps became once they stopped being one-offs and grew a place to live.
 
-Across the series, Möbius has one job, to be as useful to you as it can. The app store gives that job an on-ramp. Because your apps share a storage layer and a permission model, the agent can compose them and reshape the whole system around how you actually live.
+Across the series, Möbius is built around one goal, being genuinely useful to you. The app store gives that goal an on-ramp. Because your apps share a storage layer and a permission model, the agent can compose them and reshape the whole system around how you actually live.
 
 The primitives that make this work are small on purpose. You can inspect the source. The smallest app is one source file and a small manifest the agent (or you) can rewrite in place; larger apps add only a few more files. An update is a new version of those files. Installing is a transaction the platform can roll back. Some of those pieces are solid; others are still plans.
 
@@ -123,7 +123,7 @@ Today it is a hand-picked set. You can install from outside it:
 
 </div>
 
-Each of those is a public git repo in the [`mobius-os`](https://github.com/mobius-os) organization, named `app-<something>`, with a `mobius.json` manifest, an `index.jsx` entry point, and a 1024×1024 icon. The smallest apps are that single file; larger ones pull in a few more, but the manifest plus an entry point is the whole contract. Publishing means making a repo public and sharing its manifest URL. The list above is a starter pack I picked. The install button takes any manifest URL you paste, and the store warns and lets you continue when it comes from a host it has not seen before.
+Each of those is a public git repo in the [`mobius-os`](https://github.com/mobius-os) organization, named `app-<something>`, with a `mobius.json` manifest, an `index.jsx` entry point, and a 1024×1024 icon. The smallest apps are that single file; larger ones pull in a few more, but the manifest plus an entry point is the whole contract. An app the agent builds just for your own instance needs none of this; the manifest only matters once you want to publish one. Publishing means making a repo public and sharing its manifest URL. The list above is a starter pack I picked. The install button takes any manifest URL you paste, and the store warns and lets you continue when it comes from a host it has not seen before.
 
 <figure class="mb-diagram">
   <div class="mb-stack mb-files">
@@ -232,7 +232,7 @@ Your data survives a dead connection, and I have checked it on a real phone afte
 
 ## One system made from small apps
 
-Once your apps share a storage layer and a permission model, the agent can build across them. It can reach across your apps, compose them, and grow the whole thing around how you actually live.
+Once your apps share a storage layer and a permission model, the agent can build across them. It can pull data from one app into another and build new tools on top of both.
 
 **Tweaking an app you have is real and easy.** Open it, tell the agent what you want different (a darker palette, a new column, a weekly view instead of daily), and it edits the app's source in place and recompiles. You skip the fork button and project setup; the app is one file, and the agent edits that file the same way it would write a new one.
 
@@ -253,7 +253,7 @@ Once your apps share a storage layer and a permission model, the agent can build
       <span class="mb-node__sub">reads across your apps and surfaces the metrics you care about</span>
     </div>
   </div>
-  <figcaption>The composition I want and have not built. The dashed box is a promise, not a feature.</figcaption>
+  <figcaption>The composition I want and have not built yet. The dashed box marks the part that does not exist today.</figcaption>
 </figure>
 
 The two apps I have barely touched here, Memory and Reflection, drive most of this adaptation. Memory records the lessons worth keeping from what the agent has learned about how you work. It avoids profile-building and focuses on what works. Reflection is the overnight job that reviews the day's work and feeds new lessons back in. Together they are how the agent gets sharper at fitting your system to you over time. I cover them in [your agent improves itself]({{ '/blog/2026/your-agent-improves-itself/' | relative_url }}).
@@ -266,7 +266,7 @@ Building these apps _well_ leans on the same two levers as the rest of Möbius, 
 
 **Low floor, high ceiling.** A personal tracker that stores a little data and works offline should take one sentence, and an app that wants its own local database is free to reach for one. The one real wall right now blocks arbitrary network connections from apps to outside services, a deliberate security line I have not yet built a careful door through.
 
-**You own all of it.** Your data is on a server you control. Your apps are files you can read. Your shell is a git repo you can revert. The system is tuned for usefulness. Engagement hacking is the wrong goal here. Across this series, I have been arguing for an assistant whose one job is to be useful, that builds you the thing, gets out of the way, and leaves you holding something you can keep.
+**You own all of it.** Your data is on a server you control. Your apps are files you can read. Your shell is a git repo you can revert. The system is tuned for usefulness. Engagement hacking is the wrong goal here. Across this series, I have been arguing for an assistant that builds the thing you asked for and then leaves you with software you actually own.
 
 ## After the starter pack
 

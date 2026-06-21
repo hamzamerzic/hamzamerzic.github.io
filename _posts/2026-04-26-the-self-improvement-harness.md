@@ -29,6 +29,12 @@ published: true
 
 </details>
 
+Fully recursive self-improvement, a system that rewrites itself
+unattended and just gets better, is not what this is. A person is in
+the loop at every turn. What already works is the half in front of it:
+an agent and a human improving that agent together, faster and more
+durably than either manages alone.
+
 My companion post, [An agent that adapts to you]({{
 '/blog/2026/mobius-an-app-that-builds-itself/' | relative_url }}),
 covers the agent itself. This post covers the loop that makes it
@@ -96,9 +102,9 @@ The outer agent reads the inner agent's output and operates its interface. Throu
 
 ## What we measure
 
-We score each build 0–9 on a fixed compliance checklist (clarifying questions before building, experience-log append, end-of-build notification, partner-facing language that keeps leaked JSX out) across a fixed prompt battery of a vague prompt, a directive one, and a stair-step prompt that escalates mid-conversation. I track the interventions needed to improve the scores, not only the final scores.
+We score each build 0–12 on a fixed compliance checklist (clarifying questions before building, experience-log append, end-of-build notification, partner-facing language that keeps leaked JSX out) across a fixed prompt battery of a vague prompt, a directive one, and a stair-step prompt that escalates mid-conversation. I track the interventions needed to improve the scores, not only the final scores.
 
-Most of what follows is controlled experiment. Where I compare two approaches I fork the inner agent from the same post-build state, run identical prompts, and hold the skill and seed snapshot fixed except for the one thing under test, so the only changed variable is the rule under test. The anecdotes explain the numbers. The controlled comparisons carry the evidence.
+Most of what follows is controlled experiment. Where I compare two approaches I fork the inner agent from the same post-build state, run identical prompts, and hold the skill and seed snapshot fixed except for the one thing under test, so the only changed variable is the rule under test. The anecdotes explain the numbers, but the controlled comparisons are where the actual evidence is. The numbers come from my own test sessions rather than the public repo, since the harness that runs them is not open source, so you are taking them on trust rather than rerunning them from the code yourself.
 
 <div class="stat-callout">
   <div class="stat-number">+10</div>
@@ -190,7 +196,9 @@ That changed my assumption from earlier models, that asking a model "why did you
 
 Once introspection was the default, did it matter _how_ I asked? The
 naive worry is that a friendly framing just gets you whatever the
-sycophantic model thinks you want to hear. The friendly prompt produced pushback too.
+sycophantic model thinks you want to hear. It did not work out that
+way: the warm prompt pushed back on a false premise as readily as the
+blunt one did, as the experiment below shows.
 
 **Setup.** After a session where all three apps shipped correctly,
 two issues remained in every chat. The inner agent used the wrong
@@ -251,7 +259,7 @@ yourself, informed by it. Copy-pasting the suggested fix verbatim
 overfits to the failure it just hit; a durable rule has to hold across
 nearby failures.
 
-I saw the same pattern in the Anthropic notes and in my Claude Code driving Codex workflow. Anthropic's harness notes (below) land on **separating the generator from the evaluator**, one agent building and another checking. The workflow I converged on has Claude Code driving Codex (below), where the two models disagree often enough that I can use the disagreement to inspect the change. In both cases, agents that collaborate and review each other, sometimes adversarially, beat a single bigger model doing all the work alone, because the separate vantage point catches mistakes the first model misses.
+I saw the same pattern in the Anthropic notes and in my Claude Code driving Codex workflow. Anthropic's harness notes land on **separating the generator from the evaluator**, one agent building and another checking. The workflow I converged on has Claude Code driving Codex, where the two models disagree often enough that I can use the disagreement to inspect the change. Both times, two agents checking each other beat one bigger model working alone, because the second one questions choices the first had already committed to.
 
 ## Without the harness, the vanilla agent barely works
 
@@ -307,7 +315,7 @@ as a meta-goal for the next iteration. I still need more real user problems to o
 
 ## Notes on what's not in this post
 
-The harness code is still private: orchestration, recording, and the introspection template. The pieces are ordinary. This post describes the shape; the rest is glue around `agent-browser` plus a small CLI for parallel sessions. If there is interest I will publish it; otherwise the description above plus the [Möbius source](https://github.com/mobius-os/mobius) should be enough to re-implement.
+The harness code is still private: orchestration, recording, and the introspection template. None of the pieces are exotic. This post covers the structure; the implementation is mostly glue around `agent-browser` plus a small CLI for running sessions in parallel. If there is interest I will publish it; otherwise the description above plus the [Möbius source](https://github.com/mobius-os/mobius) should be enough to re-implement.
 
 Three things I did not try this round that seem worth doing next.
 
@@ -327,7 +335,7 @@ which made the whole thing feel more grounded. They
 identify roughly the pathology I was hitting. Agents under extended
 context develop "context anxiety" and self-evaluation bias, and the
 cleanest mitigations are _context resets_ and _separating the
-generator from the evaluator_, agent A judges, agent B builds. My
+generator from the evaluator_, so one agent builds while a second one checks. My
 loop landed near that pattern too, and the evaluator did better when
 it stopped grading and started asking. I had doubted the inner agent
 could ground a self-report in its own visible context.
@@ -338,7 +346,7 @@ rewrites what it carries forward. That is the same move I kept reaching
 for from outside the loop, only run on the agent's own schedule instead
 of mine.
 
-The same instinct shows up in my annoyance with the experience file, a linear log that accretes but never reorganizes. The harness improves the agent during development, and these lessons are what the [Reflection app]({{ '/blog/2026/an-app-store-that-adapts-to-you/' | relative_url }}) productizes for the user. It runs the same reflect-and-refactor step on your own instance, against the agent's own memory of everything it has learned with you. It drops stale rules, merges duplicates, and surfaces cross-build patterns the live agent could not see. The version Möbius is heading toward is self-hosted. It leaves the input log alone, and you keep the output.
+The same instinct shows up in my annoyance with the experience file, a linear log that accretes but never reorganizes. The harness improves the agent during development, and these lessons are what the [Reflection app]({{ '/blog/2026/your-agent-improves-itself/' | relative_url }}) productizes for the user. It runs the same reflect-and-refactor step on your own instance, against the agent's own memory of everything it has learned with you. It drops stale rules, merges duplicates, and surfaces cross-build patterns the live agent could not see. The version Möbius is heading toward is self-hosted. It leaves the input log alone, and you keep the output.
 
 ## On models
 
