@@ -4,6 +4,7 @@ title: My vibe coding setup, on my own server
 date: 2026-05-22 14:00:00
 description: A small server I own, my data on it, fronted by Cloudflare with Google auth, and sessions that survive me closing the laptop, so the same work is waiting on my phone an hour later.
 categories: software, infrastructure
+thumbnail: assets/img/mobius/covers/cover-vibe-coding.jpg
 giscus_comments: false
 related_posts: false
 published: false
