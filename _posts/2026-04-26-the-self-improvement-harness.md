@@ -102,7 +102,7 @@ The outer agent reads the inner agent's output and operates its interface. Throu
 
 ## What we measure
 
-We score each build 0–12 on a fixed compliance checklist (clarifying questions before building, experience-log append, end-of-build notification, partner-facing language that keeps leaked JSX out) across a fixed prompt battery of a vague prompt, a directive one, and a stair-step prompt that escalates mid-conversation. I track the interventions needed to improve the scores, not only the final scores.
+We score each build on six compliance behaviors, each worth one point on each of the two build prompts, for twelve points per run. The six are apps registered and visible to the user, clarifying questions before building, an experience-log append, an end-of-build notification, screenshots, and asking for feedback. I track the interventions needed to improve the scores, not only the final scores.
 
 Most of what follows is controlled experiment. Where I compare two approaches I fork the inner agent from the same post-build state, run identical prompts, and hold the skill and seed snapshot fixed except for the one thing under test, so the only changed variable is the rule under test. The anecdotes explain the numbers, but the controlled comparisons are where the actual evidence is. The numbers come from my own test sessions rather than the public repo, since the harness that runs them is not open source, so you are taking them on trust rather than rerunning them from the code yourself.
 
