@@ -1,7 +1,8 @@
 {
   "scripts": {
     "build:css": "postcss _site/assets/css/main.css --config . --replace && postcss _site/assets/css/bootstrap.min.css --config . --replace",
-    "build": "jekyll build && npm run build:css"
+    "build": "./bin/build-local.sh && npm run build:css",
+    "dev": "./bin/build-local.sh serve"
   },
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^7.0.2",
