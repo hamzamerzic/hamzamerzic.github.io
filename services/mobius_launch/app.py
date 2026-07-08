@@ -95,6 +95,18 @@ MOBIUS_DEPLOY_ENVIRONMENT = os.environ.get("MOBIUS_DEPLOY_ENVIRONMENT", "product
 
 os.makedirs(DATA_DIR, exist_ok=True)
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
+LOGO_FILENAME = "moebius.png"
+
+
+def static_asset_version(filename):
+    try:
+        with open(os.path.join(STATIC_DIR, filename), "rb") as file:
+            return hashlib.sha256(file.read()).hexdigest()[:12]
+    except OSError:
+        return str(int(time.time()))
+
+
+LOGO_VERSION = static_asset_version(LOGO_FILENAME)
 
 app = Flask(__name__)
 
@@ -169,7 +181,12 @@ def close_db(error=None):
 
 @app.get("/favicon.png")
 def favicon():
-    return send_from_directory(STATIC_DIR, "favicon.png", mimetype="image/png", max_age=86400)
+    return send_from_directory(STATIC_DIR, LOGO_FILENAME, mimetype="image/png", max_age=300)
+
+
+@app.get("/moebius.png")
+def moebius_logo():
+    return send_from_directory(STATIC_DIR, LOGO_FILENAME, mimetype="image/png", max_age=86400)
 
 
 @app.before_request
@@ -322,6 +339,10 @@ def path(route=""):
     if not route.startswith("/"):
         route = "/" + route
     return APP_BASE_PATH + route
+
+
+def logo_url():
+    return f"{path('/moebius.png')}?v={LOGO_VERSION}"
 
 
 def current_public_base_url():
@@ -672,7 +693,7 @@ def oauth_error(title, message):
       <section class="panel">
         <div class="section">
           <div class="brand block">
-            <img class="mark" src="{path('/favicon.png')}" alt="">
+            <img class="mark" src="{logo_url()}" alt="">
             <div>
               <h1>{h(title)}</h1>
               <p class="subtitle">{h(message)}</p>
@@ -2415,10 +2436,10 @@ LAYOUT = """
     .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .brand.block { align-items: flex-start; margin-bottom: 18px; }
     .mark {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      object-fit: cover;
+      width: 48px;
+      height: 48px;
+      border-radius: 0;
+      object-fit: contain;
       display: block;
       flex: none;
       filter: drop-shadow(0 6px 18px rgba(139, 108, 247, 0.22));
@@ -2834,10 +2855,10 @@ LAYOUT = """
     }
     .launch-title h2 { font-size: clamp(26px, 4vw, 42px); }
     .launch-mark {
-      width: 54px;
-      height: 54px;
-      border-radius: 14px;
-      object-fit: cover;
+      width: 64px;
+      height: 64px;
+      border-radius: 0;
+      object-fit: contain;
       box-shadow: 0 12px 30px rgba(0,0,0,0.26);
     }
     .railway-connect {
@@ -2907,11 +2928,34 @@ LAYOUT = """
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: color-mix(in srgb, var(--surface2) 55%, transparent);
-      padding: 10px 12px;
+      padding: 0;
+      overflow: hidden;
     }
     .compact-details summary {
+      align-items: center;
       color: var(--text);
+      display: flex;
+      gap: 10px;
+      justify-content: space-between;
       font-weight: 700;
+      min-height: 44px;
+      padding: 10px 12px;
+      width: 100%;
+    }
+    .compact-details summary::after {
+      content: "Automatic";
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
+    .compact-details[open] summary {
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+    .compact-details[open] summary::after { content: "Custom"; color: var(--accent); }
+    .compact-details .control-row {
+      margin-top: 0 !important;
+      padding: 12px;
     }
     .create-panel {
       background: color-mix(in srgb, var(--surface) 72%, transparent);
@@ -3015,13 +3059,6 @@ LAYOUT = """
     .status-badge.ok { color: var(--ok); background: var(--ok-soft); border-color: rgba(99, 217, 140, 0.25); }
     .status-badge.warn { color: var(--warn); background: var(--warn-soft); border-color: rgba(242, 195, 107, 0.28); }
     .status-badge.err { color: var(--danger); background: var(--danger-soft); border-color: rgba(248, 113, 113, 0.28); }
-    .container-url {
-      color: var(--accent);
-      display: inline-block;
-      font-size: 12px;
-      margin-top: 4px;
-      overflow-wrap: anywhere;
-    }
     .container-actions {
       display: flex;
       gap: 8px;
@@ -3115,13 +3152,6 @@ LAYOUT = """
       white-space: nowrap;
     }
     .cost-pair strong { color: var(--text); font-size: 14px; }
-    .install-note {
-      border-left: 2px solid var(--ok);
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 9px;
-      padding-left: 10px;
-    }
     .container-foot {
       display: flex;
       flex-wrap: wrap;
@@ -3199,13 +3229,13 @@ LAYOUT = """
 
 
 def render(body):
-    return render_template_string(LAYOUT, body=body, favicon_url=path("/favicon.png"))
+    return render_template_string(LAYOUT, body=body, favicon_url=logo_url())
 
 
 def brand():
     return f"""
     <div class="brand">
-      <img class="mark" src="{path('/favicon.png')}" alt="">
+      <img class="mark" src="{logo_url()}" alt="">
       <div>
         <h1>Möbius</h1>
         <p class="subtitle">Launch</p>
@@ -3243,7 +3273,7 @@ def login_page():
       <section class="panel">
         <div class="section">
           <div class="brand block">
-            <img class="mark" src="{path('/favicon.png')}" alt="">
+            <img class="mark" src="{logo_url()}" alt="">
             <div>
               <h1>Möbius Launch</h1>
               <p class="subtitle">Sign in to continue.</p>
@@ -3321,7 +3351,7 @@ def index():
               <div class="launch-surface">
                 <div class="launch-head">
                   <div class="launch-title">
-                    <img class="launch-mark" src="{path('/favicon.png')}" alt="">
+                    <img class="launch-mark" src="{logo_url()}" alt="">
                     <div>
                       <p class="kicker">One-click Railway deployment</p>
                       <h2>Deploy Möbius.</h2>
@@ -3333,12 +3363,11 @@ def index():
                   </div>
                 </div>
                 {connection_notice}
-                <div class="signal-strip">
-                  <span class="signal"><strong>$5</strong> trial credit</span>
-                  <span class="signal">No card for trial</span>
-                  <span class="signal">Email sign-in works</span>
-                  <span class="signal">Add to Home Screen</span>
-                </div>
+                  <div class="signal-strip">
+                    <span class="signal"><strong>$5</strong> trial credit</span>
+                    <span class="signal">No card for trial</span>
+                    <span class="signal">Email sign-in works</span>
+                  </div>
               </div>
             </section>
           </div>
@@ -3379,19 +3408,9 @@ def index():
             if inst["railway_project_id"]
             else ""
         )
-        public_link = (
-            f"""<a class="url" href="{h(inst['public_url'])}" target="_blank" rel="noreferrer">{h(inst['public_url'])}</a>"""
-            if inst["public_url"]
-            else f"""<p class="hint">{h(inst['current_step'] or 'Queued')}</p>"""
-        )
         build_hint = (
             """<p class="hint">First builds can take a few minutes. You can close this page and come back; the dashboard will check Railway when you return.</p>"""
             if status in {"queued", "creating", "deploying"}
-            else ""
-        )
-        home_screen_hint = (
-            """<p class="install-note">Add to Home Screen for an app-like feel.</p>"""
-            if status == "ready" and inst["public_url"]
             else ""
         )
         error_markup = (
@@ -3479,14 +3498,12 @@ def index():
               <div class="container-top">
                 <div>
                   <div class="container-title">
-                    <h3>{h(inst['display_name'])}</h3>
-                    <span class="status-badge {pill_class}" data-pill>{h(status_label)}</span>
-                    {step_pill}
-                  </div>
-                  {public_link.replace('class="url"', 'class="container-url"')}
-                  {build_hint}
-                  {home_screen_hint}
-                  <div class="container-foot">
+                      <h3>{h(inst['display_name'])}</h3>
+                      <span class="status-badge {pill_class}" data-pill>{h(status_label)}</span>
+                      {step_pill}
+                    </div>
+                    {build_hint}
+                    <div class="container-foot">
                     {plan_pill}
                     {caps_pill}
                     <span>{h(volume_size_label(inst['volume_size_gb']))} volume</span>
@@ -3616,22 +3633,22 @@ def index():
           <div class="launch-surface">
             <div class="launch-head">
               <div class="launch-title">
-                <img class="launch-mark" src="{path('/favicon.png')}" alt="">
+                <img class="launch-mark" src="{logo_url()}" alt="">
                 <div>
                   <h2>New Möbius</h2>
                   <p class="hint">{h(workspace or 'Railway workspace')} · {h(plan_copy)}</p>
                 </div>
               </div>
-	              <div class="signal-strip">
-	                <span class="signal"><strong>$5</strong> included</span>
-	                <span class="signal">Usage-based</span>
-	                <span class="signal">Hard limits stop spend</span>
-	              </div>
+                <div class="signal-strip">
+                  <span class="signal"><strong>$5</strong> included</span>
+                  <span class="signal">Usage-based</span>
+                  <span class="signal">Hard limits stop spend</span>
+                </div>
             </div>
             {connection_notice}
             {workspace_picker}
             {deploy_control}
-	            <p class="muted-line">First build takes a few minutes. This page keeps checking Railway.</p>
+              <p class="muted-line">First build takes a few minutes. This page keeps checking Railway.</p>
           </div>
         </section>
         """
