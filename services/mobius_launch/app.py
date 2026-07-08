@@ -170,7 +170,11 @@ def csrf_guard():
 def ensure_column(conn, table, column, ddl):
     rows = conn.execute(f"pragma table_info({table})").fetchall()
     if column not in {row[1] for row in rows}:
-        conn.execute(f"alter table {table} add column {ddl}")
+        try:
+            conn.execute(f"alter table {table} add column {ddl}")
+        except sqlite3.OperationalError as exc:
+            if "duplicate column name" not in str(exc).lower():
+                raise
 
 
 def init_db():
