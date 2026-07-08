@@ -22,8 +22,22 @@ api.hamzamerzic.info {
 		}
 	}
 
+	# Mobius Launch prototype. This route is excluded from the API origin
+	# blocker below because it is a first-party web app served from
+	# api.hamzamerzic.info and submits same-origin forms.
+	handle /mobius-launch {
+		redir /mobius-launch/ 308
+	}
+
+	handle_path /mobius-launch* {
+		reverse_proxy mobius-launch:8080
+	}
+
 	# --- CORS ---
-	@cors_preflight method OPTIONS
+	@cors_preflight {
+		method OPTIONS
+		header Origin {$ALLOWED_ORIGIN}
+	}
 	handle @cors_preflight {
 		header Access-Control-Allow-Origin {$ALLOWED_ORIGIN}
 		header Access-Control-Allow-Methods "GET, POST, OPTIONS"
@@ -34,11 +48,14 @@ api.hamzamerzic.info {
 
 	# --- Origin check (replaces API key + referrer restriction) ---
 	# Block requests from other websites (but allow no-Origin requests like curl)
-	@cross_site {
+	@cross_site_api {
+		path /generate_solver /robot_link_info /upload /download/*
 		header Origin *
 		not header Origin {$ALLOWED_ORIGIN}
 	}
-	respond @cross_site "Forbidden" 403
+	handle @cross_site_api {
+		respond "Forbidden" 403
+	}
 
 	# --- Routes ---
 
@@ -86,4 +103,36 @@ api.hamzamerzic.info {
 		output stdout
 		format console
 	}
+}
+
+mobius.hamzamerzic.info {
+	encode gzip
+	# Recovery floor: route /recover* to the SEPARATE recoveryd container so it
+	# stays reachable when the platform (mobius:8000) is broken/down. Everything
+	# else goes to the app. recoveryd is joined to deploy_default.
+	handle /recover* {
+		reverse_proxy mobius-recoveryd:8001
+	}
+	handle {
+		reverse_proxy mobius:8000
+	}
+}
+
+mobius.page {
+	encode gzip
+	reverse_proxy mobius-launch:8080
+	log {
+		output stdout
+		format console
+	}
+}
+
+www.mobius.page, mobius.you, www.mobius.you {
+	redir https://mobius.page{uri} permanent
+}
+
+:8443 {
+	encode gzip
+	reverse_proxy mobius-test:8000
+	tls internal
 }

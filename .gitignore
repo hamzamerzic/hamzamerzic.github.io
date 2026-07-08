@@ -14,6 +14,8 @@ vendor
 .idea
 venv
 .env
+__pycache__/
+*.py[cod]
 # Agent instruction files — local dev only, never track (may expose internal notes)
 .claude/
 AGENTS.md
