@@ -5,6 +5,7 @@ WORKDIR /app
 RUN pip install --no-cache-dir flask cryptography gunicorn
 
 COPY app.py /app/app.py
+COPY static /app/static
 
 EXPOSE 8080
 

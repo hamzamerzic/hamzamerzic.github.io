@@ -8,6 +8,7 @@ import secrets
 import sqlite3
 import threading
 import time
+import unicodedata
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -16,7 +17,7 @@ from contextlib import closing
 from datetime import datetime, timezone
 
 from cryptography.fernet import Fernet
-from flask import Flask, Response, g, make_response, redirect, render_template_string, request
+from flask import Flask, Response, g, make_response, redirect, render_template_string, request, send_from_directory
 from itsdangerous import BadSignature, SignatureExpired, URLSafeTimedSerializer
 
 
@@ -27,6 +28,14 @@ APP_BASE_PATH = os.environ.get("APP_BASE_PATH", "/mobius-launch").rstrip("/")
 PUBLIC_BASE_URL = os.environ.get(
     "PUBLIC_BASE_URL", "https://api.hamzamerzic.info/mobius-launch"
 ).rstrip("/")
+PUBLIC_HOSTS = {
+    host.strip().lower()
+    for host in os.environ.get("PUBLIC_HOSTS", "mobius.page,mobius.you").split(",")
+    if host.strip()
+}
+PUBLIC_BASE_HOST = urllib.parse.urlparse(PUBLIC_BASE_URL).netloc.lower()
+if PUBLIC_BASE_HOST:
+    PUBLIC_HOSTS.add(PUBLIC_BASE_HOST)
 
 RAILWAY_AUTH_URL = os.environ.get(
     "RAILWAY_AUTH_URL", "https://backboard.railway.com/oauth/auth"
@@ -72,7 +81,8 @@ MOBIUS_IMAGE_REF = os.environ.get("MOBIUS_IMAGE_REF", "").strip()
 MOBIUS_SOURCE_REPO = os.environ.get("MOBIUS_SOURCE_REPO", "mobius-os/mobius").strip()
 MOBIUS_SOURCE_BRANCH = os.environ.get("MOBIUS_SOURCE_BRANCH", "main").strip()
 MOBIUS_SERVICE_NAME = os.environ.get("MOBIUS_SERVICE_NAME", "mobius").strip()
-MOBIUS_SERVICE_PORT = int(os.environ.get("MOBIUS_SERVICE_PORT", "8000"))
+MOBIUS_SERVICE_PORT_RAW = os.environ.get("MOBIUS_SERVICE_PORT", "").strip()
+MOBIUS_SERVICE_PORT = int(MOBIUS_SERVICE_PORT_RAW) if MOBIUS_SERVICE_PORT_RAW else None
 MOBIUS_VOLUME_MOUNT_PATH = os.environ.get("MOBIUS_VOLUME_MOUNT_PATH", "/data").strip()
 MOBIUS_DEFAULT_VOLUME_SIZE_GB = os.environ.get(
     "MOBIUS_DEFAULT_VOLUME_SIZE_GB",
@@ -84,6 +94,7 @@ MOBIUS_VOLUME_SIZE_OPTIONS_GB = os.environ.get(
 MOBIUS_DEPLOY_ENVIRONMENT = os.environ.get("MOBIUS_DEPLOY_ENVIRONMENT", "production").strip()
 
 os.makedirs(DATA_DIR, exist_ok=True)
+STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 
 app = Flask(__name__)
 
@@ -154,6 +165,11 @@ def close_db(error=None):
     conn = g.pop("db", None)
     if conn is not None:
         conn.close()
+
+
+@app.get("/favicon.png")
+def favicon():
+    return send_from_directory(STATIC_DIR, "favicon.png", mimetype="image/png", max_age=86400)
 
 
 @app.before_request
@@ -286,6 +302,10 @@ def init_db():
             ("provision_token", "provision_token text"),
         ]:
             ensure_column(conn, "mobius_instances", column, ddl)
+        conn.execute(
+            "update mobius_instances set display_name = ? where display_name = ?",
+            ("My Möbius", "My Mobius"),
+        )
         conn.commit()
 
 
@@ -302,6 +322,24 @@ def path(route=""):
     if not route.startswith("/"):
         route = "/" + route
     return APP_BASE_PATH + route
+
+
+def current_public_base_url():
+    forwarded_host = (request.headers.get("X-Forwarded-Host") or "").split(",")[0].strip()
+    host = (forwarded_host or request.host or "").split(":", 1)[0].lower()
+    if host.startswith("www."):
+        host = host[4:]
+    if host in PUBLIC_HOSTS:
+        return f"https://{host}"
+    return PUBLIC_BASE_URL
+
+
+def google_redirect_uri():
+    return current_public_base_url() + path("/auth/google/callback")
+
+
+def railway_redirect_uri():
+    return current_public_base_url() + path("/railway/callback")
 
 
 def encrypt_secret(value):
@@ -382,6 +420,7 @@ def mobius_source():
 
 def normalize_handle(value, fallback="mobius"):
     raw = (value or fallback or "mobius").strip().lower()
+    raw = unicodedata.normalize("NFKD", raw).encode("ascii", "ignore").decode("ascii")
     raw = re.sub(r"[^a-z0-9-]+", "-", raw)
     raw = re.sub(r"-+", "-", raw).strip("-")
     if len(raw) < 3:
@@ -474,6 +513,45 @@ def volume_size_mb(value):
 def volume_size_label(value):
     size = coerce_volume_size_gb(value, default_volume_size_gb()) or default_volume_size_gb()
     return f"{format_volume_gb(size)} GB"
+
+
+def format_gb_label(value):
+    try:
+        gb = float(value)
+    except (TypeError, ValueError):
+        return "n/a"
+    if gb <= 0:
+        return "0"
+    if 0.95 <= gb < 1.05:
+        return "1 GB"
+    if gb < 1:
+        return f"{gb * 1024:.0f} MB"
+    if gb < 10:
+        return f"{gb:.2f}".rstrip("0").rstrip(".") + " GB"
+    return f"{gb:.1f}".rstrip("0").rstrip(".") + " GB"
+
+
+def format_cpu_label(value):
+    try:
+        cpu = float(value)
+    except (TypeError, ValueError):
+        return "n/a"
+    if cpu < 0.01:
+        return f"{cpu:.4f} vCPU"
+    if cpu < 1:
+        return f"{cpu:.2f} vCPU"
+    return f"{cpu:.1f}".rstrip("0").rstrip(".") + " vCPU"
+
+
+def percent_label(used, total):
+    try:
+        used = float(used)
+        total = float(total)
+    except (TypeError, ValueError):
+        return ""
+    if total <= 0:
+        return ""
+    return f"{min(999, (used / total) * 100):.0f}%"
 
 
 def volume_size_select_options(selected=None):
@@ -594,14 +672,14 @@ def oauth_error(title, message):
       <section class="panel">
         <div class="section">
           <div class="brand block">
-            <img class="mark" src="https://mobius-os.github.io/mobius-brand.png" alt="">
+            <img class="mark" src="{path('/favicon.png')}" alt="">
             <div>
               <h1>{h(title)}</h1>
               <p class="subtitle">{h(message)}</p>
             </div>
           </div>
           <div class="actions left">
-            <a class="button primary" href="{path('/')}">Back to Mobius Launch</a>
+            <a class="button primary" href="{path('/')}">Back to Möbius Launch</a>
           </div>
         </div>
       </section>
@@ -782,22 +860,22 @@ def railway_deploy_blocked(access_token, workspace_id):
     if not workspace_id:
         return None
     try:
-	        data = railway_graphql(
-	            "query($id: String!) { resourceAccess(explicitResourceOwner: { type: WORKSPACE, id: $id }) { deployment { disallowed } project { disallowed } } }",
-	            access_token,
-	            {"id": workspace_id},
-	        )
-	        resource_access = data.get("resourceAccess")
-	        if not isinstance(resource_access, dict):
-	            return None
-	        deployment = resource_access.get("deployment")
-	        project = resource_access.get("project")
-	        reason = None
-	        if isinstance(project, dict):
-	            reason = project.get("disallowed")
-	        if not reason and isinstance(deployment, dict):
-	            reason = deployment.get("disallowed")
-	        return str(reason) if reason else None
+        data = railway_graphql(
+            "query($id: String!) { resourceAccess(explicitResourceOwner: { type: WORKSPACE, id: $id }) { deployment { disallowed } project { disallowed } } }",
+            access_token,
+            {"id": workspace_id},
+        )
+        resource_access = data.get("resourceAccess")
+        if not isinstance(resource_access, dict):
+            return None
+        deployment = resource_access.get("deployment")
+        project = resource_access.get("project")
+        reason = None
+        if isinstance(project, dict):
+            reason = project.get("disallowed")
+        if not reason and isinstance(deployment, dict):
+            reason = deployment.get("disallowed")
+        return str(reason) if reason else None
     except (RailwayAPIError, TypeError, ValueError, KeyError):
         return None
 
@@ -872,11 +950,33 @@ def connection_workspaces(connection):
     return records
 
 
-def workspace_select_options(connection):
-    selected_id = connection["railway_workspace_id"] if connection else ""
+def live_connection_workspaces(connection):
+    records = connection_workspaces(connection)
+    if connection is None:
+        return records
+    try:
+        access_token = refresh_railway_access_token(connection, db())
+        fresh = normalize_workspaces(fetch_railway_workspaces(access_token))
+        if fresh:
+            records = fresh
+            current_id = (connection["railway_workspace_id"] or "").strip()
+            if current_id and current_id not in {workspace["id"] for workspace in records}:
+                records.insert(
+                    0,
+                    {
+                        "id": current_id,
+                        "name": connection["railway_workspace_name"] or current_id,
+                    },
+                )
+    except RailwayAPIError:
+        pass
+    return records
+
+
+def workspace_select_options(workspaces, selected_id):
     return "\n".join(
         f"""<option value="{h(workspace['id'])}" {'selected' if workspace['id'] == selected_id else ''}>{h(workspace['name'])}</option>"""
-        for workspace in connection_workspaces(connection)
+        for workspace in workspaces
     )
 
 
@@ -889,7 +989,7 @@ def save_oauth_connection(user, profile, workspaces, tokens, workspace_error=Non
         (item for item in workspace_records if item["id"] == existing_workspace_id),
         workspace_records[0] if workspace_records else {},
     )
-    workspaces_json = json.dumps(workspace_records, separators=(",", ":")) if workspace_records else None
+    workspaces_json = None
     refresh_token = tokens.get("refresh_token")
     refresh_ciphertext = (
         encrypt_secret(refresh_token)
@@ -1255,7 +1355,24 @@ def project_resources(access_token, project_id):
             }
             volumes {
               edges {
-                node { id name }
+                node {
+                  id
+                  name
+                  volumeInstances {
+                    edges {
+                      node {
+                        id
+                        externalId
+                        serviceId
+                        environmentId
+                        mountPath
+                        state
+                        sizeMB
+                        currentSizeMB
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -1268,6 +1385,32 @@ def project_resources(access_token, project_id):
     services = [edge.get("node") or {} for edge in ((project.get("services") or {}).get("edges") or [])]
     volumes = [edge.get("node") or {} for edge in ((project.get("volumes") or {}).get("edges") or [])]
     return project, services, volumes
+
+
+def volume_instances(volume):
+    return [
+        edge.get("node") or {}
+        for edge in (((volume or {}).get("volumeInstances") or {}).get("edges") or [])
+    ]
+
+
+def matching_volume_instance(volume, service_id=None, environment_id=None):
+    instances = volume_instances(volume)
+    for item in instances:
+        if service_id and item.get("serviceId") != service_id:
+            continue
+        if environment_id and item.get("environmentId") != environment_id:
+            continue
+        return item
+    return instances[0] if instances else {}
+
+
+def volume_instance_size_gb(volume_instance):
+    try:
+        size_mb = float((volume_instance or {}).get("sizeMB") or 0)
+    except (TypeError, ValueError):
+        size_mb = 0
+    return size_mb / 1024 if size_mb > 0 else None
 
 
 def wait_for_template_service(access_token, project_id, timeout_seconds=300, on_wait=None):
@@ -1290,12 +1433,18 @@ def wait_for_template_service(access_token, project_id, timeout_seconds=300, on_
             on_wait(int(time.time() - start))
         time.sleep(3)
     raise RailwayAPIError(
-        f"Railway did not register the Mobius service and /data volume within "
+        f"Railway did not register the Möbius service and /data volume within "
         f"{timeout_seconds}s for project {last_project.get('name') or project_id}."
     )
 
 
 def create_service_domain(access_token, service_id, environment_id):
+    payload = {
+        "serviceId": service_id,
+        "environmentId": environment_id,
+    }
+    if MOBIUS_SERVICE_PORT is not None:
+        payload["targetPort"] = MOBIUS_SERVICE_PORT
     data = railway_graphql(
         """
         mutation serviceDomainCreate($input: ServiceDomainCreateInput!) {
@@ -1303,18 +1452,91 @@ def create_service_domain(access_token, service_id, environment_id):
         }
         """,
         access_token,
-        {
-            "input": {
-                "serviceId": service_id,
-                "environmentId": environment_id,
-                "targetPort": MOBIUS_SERVICE_PORT,
-            }
-        },
+        {"input": payload},
     )
     domain = data.get("serviceDomainCreate") or {}
     if not domain.get("domain"):
         raise RailwayAPIError("Railway did not return a service domain.")
     return domain
+
+
+def service_instance_details(access_token, service_id, environment_id):
+    data = railway_graphql(
+        """
+        query serviceInstance($serviceId: String!, $environmentId: String!) {
+          serviceInstance(serviceId: $serviceId, environmentId: $environmentId) {
+            id
+            serviceId
+            environmentId
+            deletedAt
+            region
+            domains {
+              serviceDomains { id domain }
+              customDomains { id domain }
+            }
+            latestDeployment {
+              id
+              status
+              url
+              createdAt
+              updatedAt
+            }
+          }
+        }
+        """,
+        access_token,
+        {"serviceId": service_id, "environmentId": environment_id},
+    )
+    return data.get("serviceInstance") or {}
+
+
+def service_instance_domain(service_instance):
+    domains = (service_instance or {}).get("domains") or {}
+    for key in ("serviceDomains", "customDomains"):
+        for domain in domains.get(key) or []:
+            if domain.get("domain"):
+                return {"id": domain.get("id") or "", "domain": domain["domain"]}
+    return None
+
+
+def service_instance_missing_error(exc):
+    return "serviceinstance not found" in compact_api_error(exc).lower()
+
+
+def create_service_domain_with_retry(access_token, service_id, environment_id, timeout_seconds=180, on_wait=None):
+    start = time.time()
+    last_error = None
+    while time.time() - start < timeout_seconds:
+        try:
+            existing = service_instance_domain(
+                service_instance_details(access_token, service_id, environment_id)
+            )
+            if existing:
+                return existing
+        except RailwayAPIError as exc:
+            last_error = exc
+            if not service_instance_missing_error(exc):
+                raise
+
+        try:
+            return create_service_domain(access_token, service_id, environment_id)
+        except RailwayAPIError as exc:
+            last_error = exc
+            if not service_instance_missing_error(exc):
+                existing = service_instance_domain(
+                    service_instance_details(access_token, service_id, environment_id)
+                )
+                if existing:
+                    return existing
+                raise
+            if on_wait:
+                on_wait(int(time.time() - start))
+            time.sleep(5)
+
+    raise RailwayAPIError(
+        "Railway has not finished creating the service instance yet. "
+        f"Last error: {compact_api_error(last_error)}"
+    )
 
 
 def set_service_limits(access_token, environment_id, service_id, cpu, memory_mb):
@@ -1346,7 +1568,7 @@ def set_service_limits(access_token, environment_id, service_id, cpu, memory_mb)
         {
             "environmentId": environment_id,
             "patch": patch,
-            "commitMessage": "Set Mobius resource limits",
+            "commitMessage": "Set Möbius resource limits",
         },
     )
 
@@ -1392,6 +1614,441 @@ def delete_project(access_token, project_id):
 
 DEPLOY_STATUS_OK = {"SUCCESS", "SLEEPING"}
 DEPLOY_STATUS_BAD = {"FAILED", "CRASHED", "REMOVED", "REMOVING", "SKIPPED"}
+
+
+def can_recover_public_link(instance):
+    return bool(
+        instance
+        and instance["railway_project_id"]
+        and instance["railway_service_id"]
+        and instance["railway_environment_id"]
+        and not instance["public_url"]
+        and instance["status"] in {"error", "creating", "deploying"}
+    )
+
+
+def recover_public_link(conn, instance, access_token=None):
+    if not can_recover_public_link(instance):
+        return instance
+    connection = conn.execute(
+        "select * from railway_connections where id = ?",
+        (instance["railway_connection_id"],),
+    ).fetchone()
+    if connection is None:
+        return instance
+    if access_token is None:
+        access_token = refresh_railway_access_token(connection, conn)
+
+    service_instance = service_instance_details(
+        access_token,
+        instance["railway_service_id"],
+        instance["railway_environment_id"],
+    )
+    domain = service_instance_domain(service_instance)
+    if domain is None:
+        domain = create_service_domain_with_retry(
+            access_token,
+            instance["railway_service_id"],
+            instance["railway_environment_id"],
+            timeout_seconds=60,
+        )
+    deployment = (
+        (service_instance or {}).get("latestDeployment")
+        or latest_deployment(
+            access_token,
+            instance["railway_project_id"],
+            instance["railway_service_id"],
+            instance["railway_environment_id"],
+        )
+    )
+    deployment_status = (deployment.get("status") or "").upper()
+    if deployment_status in DEPLOY_STATUS_OK:
+        status, step, error = "ready", "Ready", ""
+    elif deployment_status in DEPLOY_STATUS_BAD:
+        status, step, error = (
+            "error",
+            "Deployment failed",
+            f"Railway reported the deployment {deployment_status.lower()}.",
+        )
+    elif deployment_status in {"WAITING", "NEEDS_APPROVAL"}:
+        status, step, error = "deploying", "Needs approval in Railway", ""
+    else:
+        status, step, error = "deploying", f"Railway: {deployment_status.lower()}" if deployment_status else "Railway is building Möbius", ""
+
+    public_url = f"https://{domain['domain']}"
+    update_instance(
+        conn,
+        instance["id"],
+        railway_domain=domain["domain"],
+        public_url=public_url,
+        recovery_url=f"{public_url}/recover",
+        status=status,
+        current_step=step,
+        last_error=error,
+        provision_token="",
+        last_deployment_id=deployment.get("id") or instance["last_deployment_id"] or "",
+    )
+    add_instance_event(conn, instance["id"], "info", "Recovered public link from Railway")
+    conn.commit()
+    return conn.execute(
+        "select * from mobius_instances where id = ?", (instance["id"],)
+    ).fetchone()
+
+
+METRIC_MEASUREMENTS = [
+    "CPU_USAGE",
+    "CPU_LIMIT",
+    "MEMORY_USAGE_GB",
+    "MEMORY_LIMIT_GB",
+    "DISK_USAGE_GB",
+    "NETWORK_RX_GB",
+    "NETWORK_TX_GB",
+]
+RAILWAY_MONTHLY_RESOURCE_MINUTES = 30 * 24 * 60
+RAILWAY_TRIAL_ALLOWANCE_USD = 5.0
+RAILWAY_USAGE_RATES = {
+    "CPU_USAGE": 20.0 / RAILWAY_MONTHLY_RESOURCE_MINUTES,
+    "MEMORY_USAGE_GB": 10.0 / RAILWAY_MONTHLY_RESOURCE_MINUTES,
+    "DISK_USAGE_GB": 0.15 / RAILWAY_MONTHLY_RESOURCE_MINUTES,
+    "NETWORK_TX_GB": 0.05,
+}
+
+
+def latest_metric_value(metrics, measurement):
+    for metric in metrics or []:
+        if metric.get("measurement") != measurement:
+            continue
+        for value in reversed(metric.get("values") or []):
+            if value.get("value") is not None:
+                try:
+                    return float(value["value"])
+                except (TypeError, ValueError):
+                    return None
+    return None
+
+
+def usage_value(usage, measurement):
+    for item in usage or []:
+        if item.get("measurement") != measurement:
+            continue
+        try:
+            return float(item.get("value"))
+        except (TypeError, ValueError):
+            return None
+    return None
+
+
+def estimated_usage_value(usage, measurement):
+    for item in usage or []:
+        if item.get("measurement") != measurement:
+            continue
+        try:
+            return float(item.get("estimatedValue"))
+        except (TypeError, ValueError):
+            return None
+    return None
+
+
+def metric_values(metrics, measurement):
+    for metric in metrics or []:
+        if metric.get("measurement") == measurement:
+            return [
+                float(item["value"])
+                for item in metric.get("values") or []
+                if item.get("value") is not None
+            ]
+    return []
+
+
+def numeric_percent(value, limit):
+    try:
+        value = float(value)
+        limit = float(limit)
+    except (TypeError, ValueError):
+        return None
+    if limit <= 0:
+        return None
+    return max(0.0, min(100.0, (value / limit) * 100))
+
+
+def spark_percentages(metrics, measurement, limit=None):
+    values = metric_values(metrics, measurement)[-18:]
+    if not values:
+        return []
+    if limit:
+        return [round(numeric_percent(value, limit) or 0, 2) for value in values]
+    max_value = max(values)
+    if max_value <= 0:
+        return [0 for _ in values]
+    return [round(max(0.0, min(100.0, (value / max_value) * 100)), 2) for value in values]
+
+
+def format_usd(value):
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        return "n/a"
+    if value <= 0:
+        return "$0"
+    if value < 0.01:
+        return "<$0.01"
+    return f"${value:.2f}"
+
+
+def usage_cost(usage, value_key="value"):
+    total = 0.0
+    for measurement, rate in RAILWAY_USAGE_RATES.items():
+        try:
+            raw = next(
+                float(item.get(value_key))
+                for item in usage or []
+                if item.get("measurement") == measurement
+                and item.get(value_key) is not None
+            )
+        except (StopIteration, TypeError, ValueError):
+            raw = 0.0
+        total += raw * rate
+    return total
+
+
+def railway_metrics_snapshot(access_token, connection, instance):
+    end = datetime.now(timezone.utc)
+    start = end.replace(microsecond=0)
+    start = datetime.fromtimestamp(start.timestamp() - 60 * 60, timezone.utc)
+    data = railway_graphql(
+        """
+        query liveMetrics(
+          $projectId: String!
+          $serviceId: String!
+          $environmentId: String!
+          $startDate: DateTime!
+          $endDate: DateTime!
+          $measurements: [MetricMeasurement!]!
+        ) {
+          serviceInstance(serviceId: $serviceId, environmentId: $environmentId) {
+            id
+            region
+            latestDeployment { id status updatedAt }
+            domains {
+              serviceDomains { id domain }
+              customDomains { id domain }
+            }
+          }
+          project(id: $projectId) {
+            id
+            name
+            volumes {
+              edges {
+                node {
+                  id
+                  name
+                  volumeInstances {
+                    edges {
+                      node {
+                        id
+                        externalId
+                        serviceId
+                        environmentId
+                        mountPath
+                        state
+                        sizeMB
+                        currentSizeMB
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          metrics(
+            projectId: $projectId
+            serviceId: $serviceId
+            environmentId: $environmentId
+            startDate: $startDate
+            endDate: $endDate
+            measurements: $measurements
+            sampleRateSeconds: 300
+            averagingWindowSeconds: 300
+          ) {
+            measurement
+            values { ts value }
+          }
+        }
+        """,
+        access_token,
+        {
+            "projectId": instance["railway_project_id"],
+            "serviceId": instance["railway_service_id"],
+            "environmentId": instance["railway_environment_id"],
+            "startDate": start.isoformat(),
+            "endDate": end.isoformat(),
+            "measurements": METRIC_MEASUREMENTS,
+        },
+    )
+    usage = []
+    estimated_usage = []
+    try:
+        usage_data = railway_graphql(
+            """
+            query usage(
+              $workspaceId: String!
+              $projectId: String!
+              $measurements: [MetricMeasurement!]!
+            ) {
+              usage(
+                workspaceId: $workspaceId
+                projectId: $projectId
+                measurements: $measurements
+              ) {
+                measurement
+                value
+                tags { projectId serviceId environmentId volumeId volumeInstanceId }
+              }
+            }
+            """,
+            access_token,
+            {
+                "workspaceId": connection["railway_workspace_id"],
+                "projectId": instance["railway_project_id"],
+                "measurements": [
+                    "CPU_USAGE",
+                    "MEMORY_USAGE_GB",
+                    "DISK_USAGE_GB",
+                    "NETWORK_TX_GB",
+                ],
+            },
+        )
+        usage = usage_data.get("usage") or []
+    except RailwayAPIError:
+        usage = []
+    try:
+        estimated_data = railway_graphql(
+            """
+            query estimatedUsage(
+              $workspaceId: String!
+              $projectId: String!
+              $measurements: [MetricMeasurement!]!
+            ) {
+              estimatedUsage(
+                workspaceId: $workspaceId
+                projectId: $projectId
+                includeDeleted: false
+                measurements: $measurements
+              ) {
+                measurement
+                estimatedValue
+                projectId
+              }
+            }
+            """,
+            access_token,
+            {
+                "workspaceId": connection["railway_workspace_id"],
+                "projectId": instance["railway_project_id"],
+                "measurements": [
+                    "CPU_USAGE",
+                    "MEMORY_USAGE_GB",
+                    "DISK_USAGE_GB",
+                    "NETWORK_TX_GB",
+                ],
+            },
+        )
+        estimated_usage = estimated_data.get("estimatedUsage") or []
+    except RailwayAPIError:
+        estimated_usage = []
+
+    project = data.get("project") or {}
+    volumes = [edge.get("node") or {} for edge in ((project.get("volumes") or {}).get("edges") or [])]
+    volume = volumes[0] if volumes else {}
+    volume_instance = {}
+    for candidate in volumes:
+        volume_instance = matching_volume_instance(
+            candidate, instance["railway_service_id"], instance["railway_environment_id"]
+        )
+        if volume_instance:
+            volume = candidate
+            break
+
+    metrics = data.get("metrics") or []
+    cpu_now = latest_metric_value(metrics, "CPU_USAGE")
+    cpu_limit = latest_metric_value(metrics, "CPU_LIMIT")
+    memory_now = latest_metric_value(metrics, "MEMORY_USAGE_GB")
+    memory_limit = latest_metric_value(metrics, "MEMORY_LIMIT_GB")
+    disk_now = latest_metric_value(metrics, "DISK_USAGE_GB")
+    network_rx = latest_metric_value(metrics, "NETWORK_RX_GB")
+    network_tx = latest_metric_value(metrics, "NETWORK_TX_GB")
+    allocated_gb = volume_instance_size_gb(volume_instance) or coerce_volume_size_gb(instance["volume_size_gb"])
+    try:
+        volume_current_gb = float((volume_instance or {}).get("currentSizeMB") or 0) / 1024
+    except (TypeError, ValueError):
+        volume_current_gb = 0
+    disk_used_gb = disk_now if disk_now is not None else volume_current_gb
+    deployment = (data.get("serviceInstance") or {}).get("latestDeployment") or {}
+    deployment_status = (deployment.get("status") or instance["status"] or "").lower()
+    used_cost = usage_cost(usage)
+    estimated_cost = usage_cost(estimated_usage, value_key="estimatedValue")
+    cost_reference = estimated_cost or used_cost
+    network_spark = spark_percentages(metrics, "NETWORK_TX_GB")
+
+    return {
+        "updated_at": now_iso(),
+        "deployment_status": deployment_status,
+        "service_instance_id": (data.get("serviceInstance") or {}).get("id") or "",
+        "railway_project_name": project.get("name") or instance["railway_project_name"] or "",
+        "cpu": {
+            "value": cpu_now,
+            "limit": cpu_limit,
+            "label": format_cpu_label(cpu_now),
+            "limit_label": format_cpu_label(cpu_limit),
+            "percent": percent_label(cpu_now, cpu_limit),
+            "spark": spark_percentages(metrics, "CPU_USAGE", cpu_limit),
+        },
+        "memory": {
+            "value_gb": memory_now,
+            "limit_gb": memory_limit,
+            "label": format_gb_label(memory_now),
+            "limit_label": format_gb_label(memory_limit),
+            "percent": percent_label(memory_now, memory_limit),
+            "spark": spark_percentages(metrics, "MEMORY_USAGE_GB", memory_limit),
+        },
+        "volume": {
+            "id": (volume or {}).get("id") or instance["railway_volume_id"] or "",
+            "state": (volume_instance or {}).get("state") or "",
+            "used_gb": disk_used_gb,
+            "allocated_gb": allocated_gb,
+            "used_label": format_gb_label(disk_used_gb),
+            "allocated_label": format_gb_label(allocated_gb),
+            "percent": percent_label(disk_used_gb, allocated_gb),
+            "spark": spark_percentages(metrics, "DISK_USAGE_GB", allocated_gb),
+        },
+        "network": {
+            "rx_gb": network_rx,
+            "tx_gb": network_tx,
+            "rx_label": format_gb_label(network_rx),
+            "tx_label": format_gb_label(network_tx),
+            "percent": f"{network_spark[-1]}%" if network_spark else "0%",
+            "spark": network_spark,
+        },
+        "usage_24h": {
+            "cpu_label": format_cpu_label(usage_value(usage, "CPU_USAGE")),
+            "memory_label": format_gb_label(usage_value(usage, "MEMORY_USAGE_GB")),
+            "disk_label": format_gb_label(usage_value(usage, "DISK_USAGE_GB")),
+            "rx_label": format_gb_label(usage_value(usage, "NETWORK_RX_GB")),
+            "tx_label": format_gb_label(usage_value(usage, "NETWORK_TX_GB")),
+        },
+        "cost": {
+            "available": bool(usage or estimated_usage),
+            "used": used_cost,
+            "estimated": estimated_cost,
+            "allowance": RAILWAY_TRIAL_ALLOWANCE_USD,
+            "label": format_usd(cost_reference),
+            "used_label": format_usd(used_cost),
+            "estimated_label": format_usd(estimated_cost),
+            "allowance_label": format_usd(RAILWAY_TRIAL_ALLOWANCE_USD),
+            "percent": percent_label(cost_reference, RAILWAY_TRIAL_ALLOWANCE_USD),
+            "note": "Estimated; Railway is the billing source.",
+        },
+    }
 
 
 def provision_instance(instance_id, token):
@@ -1462,7 +2119,7 @@ def provision_instance(instance_id, token):
                     railway_project_name=instance["display_name"],
                     railway_workspace_name=connection["railway_workspace_name"],
                     last_deployment_id=payload.get("workflowId") or "",
-                    current_step="Building Mobius (this can take a few minutes)",
+                    current_step="Building Möbius (this can take a few minutes)",
                 )
                 add_instance_event(conn, instance_id, "info", "Railway project created; template deploying")
             else:
@@ -1477,7 +2134,7 @@ def provision_instance(instance_id, token):
 
             def _tick(elapsed):
                 if not cancel_requested():
-                    update_instance(conn, instance_id, current_step=f"Building Mobius ({elapsed}s)")
+                    update_instance(conn, instance_id, current_step=f"Building Möbius ({elapsed}s)")
 
             _project, service, volume = wait_for_template_service(
                 access_token, project_id, on_wait=_tick
@@ -1486,12 +2143,15 @@ def provision_instance(instance_id, token):
                 return
             service_id = service["id"]
             environment_id = project_environment_id(access_token, project_id)
+            volume_instance = matching_volume_instance(volume, service_id, environment_id)
+            actual_volume_gb = volume_instance_size_gb(volume_instance)
             update_instance(
                 conn,
                 instance_id,
                 railway_service_id=service_id,
                 railway_volume_id=volume.get("id") or "",
                 railway_environment_id=environment_id,
+                volume_size_gb=format_volume_gb(actual_volume_gb) if actual_volume_gb else instance["volume_size_gb"],
                 current_step="Creating your public link",
             )
             inst_now = provisioning_row(conn, instance_id, token)
@@ -1518,32 +2178,48 @@ def provision_instance(instance_id, token):
                         conn,
                         instance_id,
                         "info",
-                        f"Could not set resource caps (Mobius still deploys): {compact_api_error(exc)}",
+                        f"Could not set resource caps (Möbius still deploys): {compact_api_error(exc)}",
                     )
             add_instance_event(
                 conn,
                 instance_id,
                 "info",
-                f"Mobius service created with a {volume_size_label(instance['volume_size_gb'])} /data volume",
+                f"Möbius service created with a {volume_size_label(actual_volume_gb or instance['volume_size_gb'])} /data volume",
             )
 
             if cleanup_if_cancelled():
                 return
-            domain = create_service_domain(access_token, service_id, environment_id)
+
+            def _domain_tick(elapsed):
+                if not cancel_requested():
+                    update_instance(
+                        conn,
+                        instance_id,
+                        current_step=f"Waiting for Railway service instance ({elapsed}s)",
+                    )
+
+            domain = create_service_domain_with_retry(
+                access_token, service_id, environment_id, on_wait=_domain_tick
+            )
             if cleanup_if_cancelled():
                 return
             public_url = f"https://{domain['domain']}"
+            deployment = latest_deployment(access_token, project_id, service_id, environment_id)
+            deployment_status = (deployment.get("status") or "").upper()
+            final_status = "ready" if deployment_status in DEPLOY_STATUS_OK else "deploying"
+            final_step = "Ready" if final_status == "ready" else "Railway is building Möbius"
             update_instance(
                 conn,
                 instance_id,
                 railway_domain=domain["domain"],
                 public_url=public_url,
                 recovery_url=f"{public_url}/recover",
-                status="deploying",
-                current_step="Railway is building Mobius",
+                status=final_status,
+                current_step=final_step,
                 provision_token="",
+                last_deployment_id=deployment.get("id") or instance["last_deployment_id"] or "",
             )
-            add_instance_event(conn, instance_id, "info", "Public link created; Railway is building Mobius")
+            add_instance_event(conn, instance_id, "info", f"Public link created; {final_step.lower()}")
             conn.commit()
         except Exception as exc:
             if provisioning_row(conn, instance_id, token) is None:
@@ -1576,6 +2252,21 @@ def reconcile_deployment_status(conn, instance):
     # On demand (called from the status poll): while an instance is "deploying",
     # ask Railway for the latest deployment status and advance it to ready/error.
     # Throttled via last_seen_at so page polling can't hammer the Railway API.
+    if can_recover_public_link(instance):
+        try:
+            return recover_public_link(conn, instance)
+        except RailwayAPIError as exc:
+            update_instance(
+                conn,
+                instance["id"],
+                current_step="Waiting for Railway service instance",
+                last_seen_at=now_iso(),
+                last_error=compact_api_error(exc),
+            )
+            return conn.execute(
+                "select * from mobius_instances where id = ?", (instance["id"],)
+            ).fetchone()
+
     if instance["status"] != "deploying":
         return instance
     if not (
@@ -1610,7 +2301,7 @@ def reconcile_deployment_status(conn, instance):
         status = (node.get("status") or "").upper()
         if status in DEPLOY_STATUS_OK:
             fields.update(status="ready", current_step="Ready")
-            add_instance_event(conn, instance["id"], "info", "Mobius is live")
+            add_instance_event(conn, instance["id"], "info", "Möbius is live")
         elif status in DEPLOY_STATUS_BAD:
             fields.update(
                 status="error",
@@ -1618,7 +2309,7 @@ def reconcile_deployment_status(conn, instance):
                 last_error=f"Railway reported the deployment {status.lower()}.",
             )
             add_instance_event(conn, instance["id"], "error", f"Deployment {status.lower()}")
-        elif status == "NEEDS_APPROVAL":
+        elif status in {"WAITING", "NEEDS_APPROVAL"}:
             fields.update(current_step="Needs approval in Railway")
         elif status:
             fields.update(current_step=f"Railway: {status.lower()}")
@@ -1664,7 +2355,10 @@ LAYOUT = """
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mobius Launch</title>
+  <meta name="theme-color" content="#0d0d0d">
+  <title>Möbius Launch</title>
+  <link rel="icon" type="image/png" href="{{ favicon_url }}">
+  <link rel="apple-touch-icon" href="{{ favicon_url }}">
   <link rel="preconnect" href="https://rsms.me/">
   <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
   <style>
@@ -1673,63 +2367,79 @@ LAYOUT = """
       --bg: #0d0d0d;
       --surface: #171717;
       --surface2: #212121;
+      --surface3: #111111;
       --border: #2a2a2a;
+      --border-light: #1f1f1f;
       --text: #ececec;
       --muted: #a8a8a8;
       --accent: #8b6cf7;
-      --accent-dim: #6a4fd1;
-      --ok: #63d98c;
-      --ok-soft: rgba(99, 217, 140, 0.14);
-      --warn: #f2c36b;
-      --warn-soft: rgba(242, 195, 107, 0.14);
-      --radius: 10px;
+      --accent-hover: #7c5ce6;
+      --accent-dim: rgba(139, 108, 247, 0.14);
+      --ok: #10b981;
+      --ok-soft: rgba(16, 185, 129, 0.14);
+      --warn: #f0c674;
+      --warn-soft: rgba(240, 198, 116, 0.13);
+      --danger: #f87171;
+      --danger-soft: rgba(248, 113, 113, 0.13);
+      --radius: 8px;
+      --spring: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     * { box-sizing: border-box; }
+    html { color-scheme: dark; }
     html, body { margin: 0; min-height: 100%; }
     body {
-      background: var(--bg);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0) 220px),
+        var(--bg);
       color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       letter-spacing: 0;
-      line-height: 1.5;
+      line-height: 1.55;
       -webkit-font-smoothing: antialiased;
+      font-feature-settings: "cv01", "ss01";
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
     a { color: inherit; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .shell { max-width: 760px; margin: 0 auto; padding: 28px 20px 64px; }
+    .shell { max-width: 1040px; margin: 0 auto; padding: 20px 20px 64px; }
     .narrow { max-width: 460px; padding-top: 72px; }
     .topbar {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
     .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .brand.block { align-items: flex-start; margin-bottom: 18px; }
     .mark {
       width: 36px;
       height: 36px;
-      border-radius: 9px;
+      border-radius: 10px;
       object-fit: cover;
       display: block;
       flex: none;
-      filter: drop-shadow(0 4px 14px rgba(139, 108, 247, 0.22));
+      filter: drop-shadow(0 6px 18px rgba(139, 108, 247, 0.22));
     }
     h1, h2, h3 { margin: 0; line-height: 1.2; letter-spacing: 0; }
-    h1 { font-size: 20px; font-weight: 720; }
-    h2 { font-size: 18px; font-weight: 720; }
-    h3 { font-size: 15px; font-weight: 680; }
+    h1 { font-size: 20px; font-weight: 700; }
+    h2 { font-size: 19px; font-weight: 700; }
+    h3 { font-size: 15px; font-weight: 650; }
     .subtitle, .hint, .muted { color: var(--muted); }
     .subtitle { margin: 3px 0 0; font-size: 13px; overflow-wrap: anywhere; }
     .hint { margin: 6px 0 0; font-size: 13px; }
+    .fine { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
     .stack { display: grid; gap: 14px; }
     .panel {
-      background: var(--surface);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0) 120px),
+        var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.22);
     }
     .section { padding: 20px; }
     .section + .section { border-top: 1px solid var(--border); }
@@ -1742,10 +2452,62 @@ LAYOUT = """
     }
     .hero-panel {
       display: grid;
-      align-content: center;
-      gap: 18px;
-      min-height: 260px;
+      gap: 20px;
       padding: 28px;
+    }
+    .hero-copy { max-width: 660px; }
+    .hero-copy h2 { font-size: clamp(28px, 5vw, 52px); line-height: 1.02; font-weight: 720; }
+    .kicker {
+      margin: 0 0 10px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .connect-center {
+      display: grid;
+      gap: 12px;
+      place-items: center;
+      padding: 22px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--surface2) 72%, transparent);
+    }
+    .connect-center form { width: min(100%, 320px); }
+    .connect-center .button, .connect-center button { width: 100%; }
+    .trust-strip, .billing-strip, .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .trust-item, .billing-item, .metric-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      padding: 12px;
+      min-width: 0;
+    }
+    .trust-item strong, .billing-item strong, .metric-card strong {
+      display: block;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+    }
+    .trust-item span, .billing-item span, .metric-card span, .metric-card small {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+    .billing-strip {
+      margin-top: 14px;
+    }
+    .deploy-card {
+      display: grid;
+      gap: 14px;
     }
     .actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
     .actions.left { justify-content: flex-start; }
@@ -1767,16 +2529,51 @@ LAYOUT = """
       justify-content: center;
       gap: 8px;
       white-space: nowrap;
+      transition: transform 120ms var(--spring), background 180ms ease, border-color 180ms ease, color 180ms ease, box-shadow 180ms ease;
+      touch-action: manipulation;
     }
     .button.subtle, button.subtle { background: transparent; color: var(--muted); }
     .button.primary, button.primary {
       background: var(--accent);
       border-color: var(--accent);
       color: #ffffff;
+      box-shadow: 0 10px 26px rgba(139, 108, 247, 0.25);
+    }
+    .button.icon, button.icon {
+      width: 40px;
+      min-width: 40px;
+      padding: 0;
+      font-size: 16px;
+    }
+    .button.large, button.large {
+      min-height: 52px;
+      font-size: 15px;
+      border-radius: 12px;
     }
     button:disabled { cursor: not-allowed; opacity: 0.55; }
     .button:hover, button:hover { border-color: var(--accent); text-decoration: none; }
-    .button.primary:hover, button.primary:hover { background: var(--accent-dim); }
+    .button.primary:hover, button.primary:hover { background: var(--accent-hover); }
+    .button:active, button:active { transform: scale(0.97); }
+    .open-app {
+      min-width: 92px;
+      gap: 7px;
+    }
+    .railway-link {
+      min-width: 82px;
+    }
+    .topbar .button, .topbar button {
+      min-height: 36px;
+      padding: 7px 11px;
+    }
+    .workspace-pill {
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      font-size: 13px;
+      border-color: rgba(16, 185, 129, 0.28);
+      background: rgba(16, 185, 129, 0.12);
+    }
     .button:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
       outline: 2px solid var(--accent);
       outline-offset: 2px;
@@ -1790,6 +2587,7 @@ LAYOUT = """
       min-height: 40px;
       padding: 9px 10px;
       font: inherit;
+      font-size: 16px;
       color: var(--text);
       background: var(--bg);
     }
@@ -1856,14 +2654,23 @@ LAYOUT = """
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       gap: 12px;
+      position: relative;
+      overflow: hidden;
+      animation: enter 260ms var(--spring);
     }
     .instance details { grid-column: 1 / -1; margin-top: 2px; }
+    .instance-main { min-width: 0; }
     .url {
       display: inline-block;
       margin-top: 5px;
       color: var(--accent);
       font-size: 13px;
       word-break: break-word;
+    }
+    .ready-note {
+      margin-top: 10px;
+      border-left: 2px solid var(--ok);
+      padding-left: 10px;
     }
     .meta {
       display: flex;
@@ -1883,8 +2690,50 @@ LAYOUT = """
     }
     .pill.ok { color: var(--ok); background: var(--ok-soft); border-color: rgba(99, 217, 140, 0.25); }
     .pill.warn { color: var(--warn); background: var(--warn-soft); border-color: rgba(242, 195, 107, 0.28); }
-    .pill.err { color: #ff9f9f; background: rgba(255, 80, 80, 0.12); border-color: rgba(255, 80, 80, 0.28); }
-    .instance-actions { display: flex; gap: 8px; align-items: stretch; justify-content: flex-end; flex-wrap: wrap; min-width: 108px; }
+    .pill.err { color: var(--danger); background: var(--danger-soft); border-color: rgba(248, 113, 113, 0.28); }
+    .instance-actions { display: flex; gap: 8px; align-items: flex-start; justify-content: flex-end; flex-wrap: wrap; min-width: 108px; align-self: start; }
+    .metric-grid {
+      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      grid-column: 1 / -1;
+      margin-top: 2px;
+    }
+    .metric-card {
+      background: var(--surface3);
+      padding: 11px;
+    }
+    .metric-card strong {
+      font-size: 17px;
+      font-variant-numeric: tabular-nums;
+    }
+    .meter {
+      height: 4px;
+      margin-top: 9px;
+      background: var(--surface2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .meter > span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      margin: 0;
+      background: var(--accent);
+      transition: width 280ms ease;
+    }
+    .progress-line {
+      grid-column: 1 / -1;
+      height: 3px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: var(--surface2);
+    }
+    .progress-line span {
+      display: block;
+      height: 100%;
+      width: 42%;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      animation: sweep 1.4s ease-in-out infinite;
+    }
     .command {
       margin-top: 8px;
       border-radius: 8px;
@@ -1906,6 +2755,11 @@ LAYOUT = """
       font-size: 13px;
     }
     .notice + form { margin-top: 12px; }
+    .notice.danger {
+      border-color: rgba(248, 113, 113, 0.28);
+      background: var(--danger-soft);
+      color: #fecaca;
+    }
     .empty {
       border: 1px dashed var(--border);
       border-radius: 8px;
@@ -1945,13 +2799,13 @@ LAYOUT = """
     .advanced .form-grid, .advanced .trust-grid { margin-top: 12px; }
     .trust-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
     }
     .trust-card {
       border: 1px solid var(--border);
       border-radius: 8px;
-      background: var(--bg);
+      background: transparent;
       padding: 14px;
     }
     .trust-card ul {
@@ -1961,6 +2815,350 @@ LAYOUT = """
       font-size: 13px;
     }
     .trust-card li + li { margin-top: 6px; }
+    .launch-surface {
+      display: grid;
+      gap: 18px;
+      padding: 18px;
+    }
+    .launch-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: start;
+    }
+    .launch-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .launch-title h2 { font-size: clamp(26px, 4vw, 42px); }
+    .launch-mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 14px;
+      object-fit: cover;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.26);
+    }
+    .railway-connect {
+      min-height: 58px;
+      min-width: min(100%, 290px);
+      flex-direction: column;
+      gap: 1px;
+    }
+    .button-main { font-size: 15px; }
+    .button-sub { font-size: 11px; font-weight: 600; opacity: 0.82; }
+    .signal-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .signal {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--surface2) 78%, transparent);
+      color: var(--muted);
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    .signal strong { color: var(--text); font-weight: 720; }
+    .deploy-inline {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 10px;
+      align-items: end;
+    }
+    .control-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 10px;
+    }
+    .input-shell {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--bg);
+      padding: 8px 10px 10px;
+      transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+    .input-shell:focus-within {
+      border-color: color-mix(in srgb, var(--accent) 70%, white 0%);
+      background: color-mix(in srgb, var(--surface2) 64%, transparent);
+      box-shadow: 0 0 0 4px rgba(139, 108, 247, 0.12);
+    }
+    .input-shell span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    .input-shell input, .input-shell select {
+      border: 0;
+      min-height: 30px;
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+    }
+    .input-shell input:focus-visible, .input-shell select:focus-visible { outline: 0; }
+    .compact-details {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--surface2) 55%, transparent);
+      padding: 10px 12px;
+    }
+    .compact-details summary {
+      color: var(--text);
+      font-weight: 700;
+    }
+    .create-panel {
+      background: color-mix(in srgb, var(--surface) 72%, transparent);
+      box-shadow: none;
+    }
+    .create-drawer {
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .create-drawer summary {
+      width: 100%;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 15px 17px;
+      color: var(--text);
+    }
+    .create-drawer summary::-webkit-details-marker { display: none; }
+    .create-drawer summary:hover { background: rgba(255,255,255,0.025); }
+    .create-drawer summary strong {
+      display: block;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+    .create-drawer summary span span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .create-plus {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      display: inline-grid;
+      place-items: center;
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1;
+      flex: none;
+      transition: transform 180ms var(--spring), background 180ms ease, color 180ms ease;
+    }
+    .create-drawer[open] .create-plus { transform: rotate(45deg); background: var(--accent-dim); color: var(--accent); }
+    .create-body {
+      display: grid;
+      gap: 14px;
+      padding: 0 17px 17px;
+    }
+    .container-list { display: grid; gap: 14px; }
+    .container-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.045), transparent 58%),
+        var(--bg);
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+      animation: enter 260ms var(--spring);
+    }
+    .container-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+    }
+    .container-title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      min-width: 0;
+    }
+    .container-title h3 { font-size: 22px; font-weight: 730; }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 26px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px 9px;
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    .status-badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: currentColor;
+      box-shadow: 0 0 16px currentColor;
+    }
+    .status-badge.ok { color: var(--ok); background: var(--ok-soft); border-color: rgba(99, 217, 140, 0.25); }
+    .status-badge.warn { color: var(--warn); background: var(--warn-soft); border-color: rgba(242, 195, 107, 0.28); }
+    .status-badge.err { color: var(--danger); background: var(--danger-soft); border-color: rgba(248, 113, 113, 0.28); }
+    .container-url {
+      color: var(--accent);
+      display: inline-block;
+      font-size: 12px;
+      margin-top: 4px;
+      overflow-wrap: anywhere;
+    }
+    .container-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .container-actions .button:not(.icon) { min-height: 38px; }
+    .resource-stack {
+      display: grid;
+      gap: 10px;
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius);
+      padding: 12px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(139, 108, 247, 0.09), transparent 34%),
+        color-mix(in srgb, var(--surface3) 90%, transparent);
+    }
+    .metric-row {
+      display: grid;
+      grid-template-columns: minmax(120px, 152px) minmax(0, 1fr) 78px;
+      gap: 12px;
+      align-items: center;
+      min-height: 32px;
+    }
+    .metric-head {
+      display: grid;
+      gap: 1px;
+      min-width: 0;
+    }
+    .metric-head span {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 720;
+      text-transform: uppercase;
+    }
+    .metric-head strong {
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 740;
+      font-variant-numeric: tabular-nums;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+    .metric-bar {
+      height: 9px;
+      border-radius: 999px;
+      background: var(--surface2);
+      overflow: hidden;
+    }
+    .metric-bar > span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent), #d8b4fe);
+      transition: width 280ms ease;
+    }
+    .metric-row:nth-child(2) .metric-bar > span { background: linear-gradient(90deg, #60a5fa, #8b6cf7); }
+    .metric-row:nth-child(3) .metric-bar > span { background: linear-gradient(90deg, #10b981, #7dd3fc); }
+    .metric-row:nth-child(4) .metric-bar > span { background: linear-gradient(90deg, #f0c674, #8b6cf7); }
+    .spark {
+      width: 78px;
+      height: 24px;
+      display: block;
+      overflow: visible;
+    }
+    .spark polyline {
+      fill: none;
+      stroke: color-mix(in srgb, var(--accent) 76%, white 12%);
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      vector-effect: non-scaling-stroke;
+    }
+    .cost-strip {
+      display: grid;
+      grid-template-columns: minmax(120px, 152px) minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+      border-top: 1px solid var(--border);
+      padding-top: 10px;
+    }
+    .cost-pair {
+      display: flex;
+      gap: 8px;
+      align-items: baseline;
+      justify-content: flex-end;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .cost-pair strong { color: var(--text); font-size: 14px; }
+    .install-note {
+      border-left: 2px solid var(--ok);
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 9px;
+      padding-left: 10px;
+    }
+    .container-foot {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .container-foot span + span::before {
+      content: "";
+      width: 4px;
+      height: 4px;
+      display: inline-block;
+      margin: 0 10px 2px 0;
+      border-radius: 999px;
+      background: var(--border);
+    }
+    .muted-line {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    @keyframes sweep {
+      from { transform: translateX(-100%); }
+      to { transform: translateX(240%); }
+    }
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 1ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 1ms !important;
+      }
+    }
     @media (max-width: 860px) {
       .shell { padding: 18px 14px 48px; }
       .narrow { padding-top: 42px; }
@@ -1969,8 +3167,15 @@ LAYOUT = """
       .form-grid { grid-template-columns: 1fr; }
       .tier-grid { grid-template-columns: 1fr; }
       .trust-grid { grid-template-columns: 1fr; }
+      .trust-strip, .billing-strip, .metric-grid { grid-template-columns: 1fr; }
       .instance { grid-template-columns: 1fr; }
       .instance-actions { min-width: 0; justify-content: flex-start; }
+      .hero-panel { padding: 20px; }
+      .launch-head, .container-top, .deploy-inline, .control-row { grid-template-columns: 1fr; }
+      .container-actions { justify-content: flex-start; }
+      .metric-row, .cost-strip { grid-template-columns: minmax(92px, 132px) minmax(0, 1fr); }
+      .spark, .cost-pair { grid-column: 2; }
+      .cost-pair { justify-content: flex-start; }
     }
   </style>
 </head>
@@ -1994,15 +3199,15 @@ LAYOUT = """
 
 
 def render(body):
-    return render_template_string(LAYOUT, body=body)
+    return render_template_string(LAYOUT, body=body, favicon_url=path("/favicon.png"))
 
 
 def brand():
-    return """
+    return f"""
     <div class="brand">
-      <img class="mark" src="https://mobius-os.github.io/mobius-brand.png" alt="">
+      <img class="mark" src="{path('/favicon.png')}" alt="">
       <div>
-        <h1>Mobius</h1>
+        <h1>Möbius</h1>
         <p class="subtitle">Launch</p>
       </div>
     </div>
@@ -2038,9 +3243,9 @@ def login_page():
       <section class="panel">
         <div class="section">
           <div class="brand block">
-            <img class="mark" src="https://mobius-os.github.io/mobius-brand.png" alt="">
+            <img class="mark" src="{path('/favicon.png')}" alt="">
             <div>
-              <h1>Mobius Launch</h1>
+              <h1>Möbius Launch</h1>
               <p class="subtitle">Sign in to continue.</p>
             </div>
           </div>
@@ -2050,9 +3255,6 @@ def login_page():
           {email_fallback}
         </div>
       </section>
-      <nav class="footer-links">
-        <a href="{path('/transparency')}">What we store</a>
-      </nav>
     </main>
     """
     return render(body)
@@ -2081,7 +3283,7 @@ def index():
     top_status = ""
     if connected:
         top_status = f"""
-        <span class="pill ok">{h(workspace or 'Railway connected')}</span>
+        <span class="pill ok workspace-pill">{h(workspace or 'Railway connected')}</span>
         {disconnect_action}
         """
 
@@ -2091,14 +3293,17 @@ def index():
             connection_notice = f"""
             <div class="notice">
               Railway OAuth is wired in the app, but this server still needs RAILWAY_CLIENT_ID and RAILWAY_CLIENT_SECRET.
-              <div class="command">{h(RAILWAY_REDIRECT_URI)}</div>
+              <div class="command">{h(railway_redirect_uri())}</div>
             </div>
             """
-        connection_action = """<button class="primary" type="button" disabled>Connect Railway</button>"""
+        connection_action = """<button class="primary large railway-connect" type="button" disabled><span class="button-main">Connect Railway</span><span class="button-sub">Choose email on Railway</span></button>"""
         if oauth_ready:
             connection_action = f"""
               <form method="post" action="{path('/railway/connect')}">
-                <button class="primary" type="submit">Connect Railway</button>
+                <button class="primary large railway-connect" type="submit">
+                  <span class="button-main">Connect Railway</span>
+                  <span class="button-sub">Choose email on Railway</span>
+                </button>
               </form>
             """
         body = f"""
@@ -2113,36 +3318,30 @@ def index():
           </header>
           <div class="stack">
             <section class="panel">
-              <div class="hero-panel">
-                <div>
-                  <h2>Connect Railway</h2>
-                  <p class="hint">Mobius Launch creates the Railway project, deploys the official template, attaches storage, and gives you the link.</p>
-                </div>
-                {connection_notice}
-                <div class="actions left">{connection_action}</div>
-              </div>
-            </section>
-            <section class="panel">
-              <div class="section">
-                <div class="section-title">
-                  <div>
-                    <h2>Minimal by design</h2>
-                    <p class="hint">Railway owns the deployment and billing. Mobius Launch only keeps enough state to reconnect you to what it created.</p>
+              <div class="launch-surface">
+                <div class="launch-head">
+                  <div class="launch-title">
+                    <img class="launch-mark" src="{path('/favicon.png')}" alt="">
+                    <div>
+                      <p class="kicker">One-click Railway deployment</p>
+                      <h2>Deploy Möbius.</h2>
+                      <p class="hint">A private container in your Railway account, with persistent storage and live usage visibility.</p>
+                    </div>
+                  </div>
+                  <div class="connect-center">
+                    {connection_action}
                   </div>
                 </div>
-                <div class="meta">
-                  <span class="pill">Google identity</span>
-                  <span class="pill">Railway token</span>
-                  <span class="pill">Deployment links</span>
-                  <span class="pill">No app telemetry</span>
+                {connection_notice}
+                <div class="signal-strip">
+                  <span class="signal"><strong>$5</strong> trial credit</span>
+                  <span class="signal">No card for trial</span>
+                  <span class="signal">Email sign-in works</span>
+                  <span class="signal">Add to Home Screen</span>
                 </div>
-                <p class="hint"><a class="inline-link" href="{path('/transparency')}">See exactly what is stored</a></p>
               </div>
             </section>
           </div>
-          <nav class="footer-links">
-            <a href="{path('/transparency')}">What we store</a>
-          </nav>
         </main>
         """
         return render(body)
@@ -2152,7 +3351,6 @@ def index():
     deploy_blocked = plan_state["deploy_blocked"]
     limits = plan_limits(plan_label)
     plan_name = plan_title(plan_label)
-    default_volume_gb = plan_default_volume_gb(plan_label)
     instances = list_instances(user["id"])
     rows = []
     for inst in instances:
@@ -2164,10 +3362,17 @@ def index():
         )
         status = inst["status"] or "queued"
         pill_class = "ok" if status == "ready" else "err" if status in {"error", "delete_failed"} else "warn"
+        status_label = status.replace("_", " ").title()
+        step_text = inst["current_step"] or ""
+        step_pill = (
+            f"""<span class="pill" data-step>{h(step_text or 'created')}</span>"""
+            if status != "ready" or (step_text and step_text.lower() != "ready")
+            else """<span class="pill" data-step style="display: none;"></span>"""
+        )
         open_action = (
-            f"""<a class="button primary" href="{h(inst['public_url'])}" target="_blank" rel="noreferrer">Open</a>"""
+            f"""<a class="button primary open-app" href="{h(inst['public_url'])}" target="_blank" rel="noreferrer" title="Open Möbius"><span aria-hidden="true">↗</span><span>Open</span></a>"""
             if inst["public_url"] and status not in {"error", "delete_failed", "deleted"}
-            else """<button type="button" disabled>Open</button>"""
+            else """<button class="icon" type="button" disabled title="Möbius is not ready yet" aria-label="Möbius is not ready yet">↗</button>"""
         )
         railway_url = (
             f"https://railway.com/project/{inst['railway_project_id']}"
@@ -2179,8 +3384,13 @@ def index():
             if inst["public_url"]
             else f"""<p class="hint">{h(inst['current_step'] or 'Queued')}</p>"""
         )
+        build_hint = (
+            """<p class="hint">First builds can take a few minutes. You can close this page and come back; the dashboard will check Railway when you return.</p>"""
+            if status in {"queued", "creating", "deploying"}
+            else ""
+        )
         home_screen_hint = (
-            """<p class="hint">📱 On your phone, open this link and use your browser's Share → "Add to Home Screen" to install Mobius like an app.</p>"""
+            """<p class="install-note">Add to Home Screen for an app-like feel.</p>"""
             if status == "ready" and inst["public_url"]
             else ""
         )
@@ -2189,21 +3399,28 @@ def index():
             if inst["last_error"]
             else ""
         )
-        railway_action = (
-            f"""<a class="button subtle" href="{h(railway_url)}" target="_blank" rel="noreferrer">View usage &amp; cost on Railway</a>"""
+        railway_project_action = (
+            f"""<a class="button subtle railway-link" href="{h(railway_url)}" target="_blank" rel="noreferrer" title="Open Railway project">Railway ↗</a>"""
             if railway_url
             else ""
         )
         recovery_action = (
-            f"""<a class="button subtle" href="{h(inst['recovery_url'])}" target="_blank" rel="noreferrer">Recovery</a>"""
+            f"""<a class="button subtle icon" href="{h(inst['recovery_url'])}" target="_blank" rel="noreferrer" title="Open recovery console" aria-label="Open recovery console">↺</a>"""
             if inst["recovery_url"]
             else ""
         )
-        delete_action = f"""<form method="post" action="{path('/instances/' + inst['id'] + '/delete')}" onsubmit="return confirm('Delete this Mobius and its Railway project? This cannot be undone.');">
-                    <button class="subtle" type="submit">Delete</button>
+        delete_action = f"""<form method="post" action="{path('/instances/' + inst['id'] + '/delete')}" onsubmit="return confirm('Delete this Möbius and its Railway project? This cannot be undone.');">
+                    <button class="subtle icon" type="submit" title="Delete deployment" aria-label="Delete deployment">×</button>
                   </form>"""
+        retry_action = (
+            f"""<form method="post" action="{path('/instances/' + inst['id'] + '/retry')}">
+                    <button class="subtle icon" type="submit" title="Retry deployment" aria-label="Retry deployment">↻</button>
+                  </form>"""
+            if status in {"error", "delete_failed"}
+            else ""
+        )
         delete_in_main = status in {"error", "delete_failed"}
-        main_delete_action = delete_action if delete_in_main else ""
+        main_delete_action = f"{retry_action}{delete_action}" if delete_in_main else ""
         advanced_delete_action = "" if delete_in_main else delete_action
         cpu_cap = inst["cpu"] or ""
         memory_cap = inst["memory_mb"] or ""
@@ -2211,36 +3428,79 @@ def index():
             cpu_label = h(cpu_cap) if cpu_cap else "&mdash;"
             memory_label = memory_mb_label(memory_cap)
             memory_label = h(memory_label) if memory_label else "&mdash;"
-            caps_pill = f"""<span class="pill">cap: {cpu_label} vCPU / {memory_label}</span>"""
+            caps_pill = f"""<span>Limit {cpu_label} vCPU / {memory_label}</span>"""
         else:
-            caps_pill = """<span class="pill">uncapped</span>"""
+            caps_pill = """<span>Uncapped</span>"""
         inst_plan = inst["plan_label"] or ""
         plan_pill = (
-            f"""<span class="pill">{h(plan_title(inst_plan))} plan</span>"""
+            f"""<span>{h(plan_title(inst_plan))} plan</span>"""
             if inst_plan
             else ""
         )
         poll_flag = "1" if status in {"queued", "creating", "deploying"} else "0"
+        progress_markup = (
+            """<div class="progress-line" aria-hidden="true"><span></span></div>"""
+            if status in {"queued", "creating", "deploying"}
+            else ""
+        )
+        metrics_markup = f"""
+                <div class="resource-stack" data-metrics-url="{path('/instances/' + inst['id'] + '/metrics')}">
+                  <div class="metric-row">
+                    <div class="metric-head"><span>CPU</span><strong data-metric="cpu">--</strong></div>
+                    <div class="metric-bar"><span data-meter="cpu"></span></div>
+                    <svg class="spark" data-spark="cpu" viewBox="0 0 100 24" preserveAspectRatio="none"></svg>
+                  </div>
+                  <div class="metric-row">
+                    <div class="metric-head"><span>Memory</span><strong data-metric="memory">--</strong></div>
+                    <div class="metric-bar"><span data-meter="memory"></span></div>
+                    <svg class="spark" data-spark="memory" viewBox="0 0 100 24" preserveAspectRatio="none"></svg>
+                  </div>
+                  <div class="metric-row">
+                    <div class="metric-head"><span>Volume</span><strong data-metric="volume">{h(volume_size_label(inst['volume_size_gb']))}</strong></div>
+                    <div class="metric-bar"><span data-meter="volume"></span></div>
+                    <svg class="spark" data-spark="volume" viewBox="0 0 100 24" preserveAspectRatio="none"></svg>
+                  </div>
+                  <div class="metric-row">
+                    <div class="metric-head"><span>Network</span><strong data-metric="network">--</strong></div>
+                    <div class="metric-bar"><span data-meter="network"></span></div>
+                    <svg class="spark" data-spark="network" viewBox="0 0 100 24" preserveAspectRatio="none"></svg>
+                  </div>
+                  <div class="cost-strip">
+                    <div class="metric-head"><span>Cost</span><strong data-metric="cost-estimate">--</strong></div>
+                    <div class="metric-bar"><span data-meter="cost"></span></div>
+                    <div class="cost-pair"><span data-metric="cost-used">used --</span><strong data-metric="cost-cap">$5</strong></div>
+                  </div>
+                  <div class="muted-line" data-metric="cost-note">Estimated; Railway is the billing source.</div>
+                </div>
+        """
         rows.append(
             f"""
-            <article class="instance" data-instance-id="{h(inst['id'])}" data-status="{h(status)}" data-poll="{poll_flag}">
-              <div>
-                <h3>{h(inst['display_name'])}</h3>
-                {public_link}
-                {home_screen_hint}
-                <div class="meta">
-                      <span class="pill {pill_class}" data-pill>{h(status)}</span>
-                      <span class="pill" data-step>{h(inst['current_step'] or 'created')}</span>
-                      {plan_pill}
-                      {caps_pill}
-                      <span class="pill">{h(volume_size_label(inst['volume_size_gb']))}</span>
-                    </div>
-                    {error_markup}
+            <article class="container-card" data-instance-id="{h(inst['id'])}" data-status="{h(status)}" data-poll="{poll_flag}">
+              <div class="container-top">
+                <div>
+                  <div class="container-title">
+                    <h3>{h(inst['display_name'])}</h3>
+                    <span class="status-badge {pill_class}" data-pill>{h(status_label)}</span>
+                    {step_pill}
                   </div>
-                  <div class="instance-actions">
-                    {open_action}
-                    {main_delete_action}
+                  {public_link.replace('class="url"', 'class="container-url"')}
+                  {build_hint}
+                  {home_screen_hint}
+                  <div class="container-foot">
+                    {plan_pill}
+                    {caps_pill}
+                    <span>{h(volume_size_label(inst['volume_size_gb']))} volume</span>
                   </div>
+                  {error_markup}
+                </div>
+                <div class="container-actions">
+                  {open_action}
+                  {railway_project_action}
+                  {main_delete_action}
+                </div>
+              </div>
+              {progress_markup}
+              {metrics_markup}
               <details>
                 <summary>Advanced</summary>
                 <div class="meta">
@@ -2250,8 +3510,7 @@ def index():
                 </div>
                 <div class="command">{h(ssh)}</div>
                 <div class="actions left" style="margin-top: 10px;">
-                      <button type="button" data-copy="{h(ssh)}">SSH</button>
-                      {railway_action}
+                      <button class="icon" type="button" data-copy="{h(ssh)}" title="Copy SSH command" aria-label="Copy SSH command">⌘</button>
                       {recovery_action}
                       {advanced_delete_action}
                     </div>
@@ -2261,6 +3520,7 @@ def index():
         )
 
     instance_markup = "\n".join(rows)
+    has_instances = bool(rows)
 
     connection_notice = ""
     if connection and connection["last_error"]:
@@ -2273,27 +3533,24 @@ def index():
         if plan_label == "unknown"
         else f"You're on the {plan_name} plan."
     )
-    authorized_workspaces = connection_workspaces(connection)
+    authorized_workspaces = live_connection_workspaces(connection)
     workspace_picker = ""
     if len(authorized_workspaces) > 1:
         workspace_picker = f"""
-          <form method="post" action="{path('/railway/workspace')}" class="form-grid" style="margin: 12px 0;">
-            <label>
-              Railway workspace
+          <form method="post" action="{path('/railway/workspace')}" class="deploy-inline">
+            <label class="input-shell">
+              <span>Railway workspace</span>
               <select name="workspace_id">
-                {workspace_select_options(connection)}
+                {workspace_select_options(authorized_workspaces, connection['railway_workspace_id'])}
               </select>
             </label>
-            <div class="deploy-submit" style="align-self: end;">
-              <button class="subtle" type="submit">Use workspace</button>
-            </div>
+            <button class="subtle" type="submit">Use workspace</button>
           </form>
         """
     elif not workspace:
         workspace_picker = """
           <div class="notice">Railway did not return an authorized workspace. Reconnect Railway and select a workspace during OAuth.</div>
         """
-    volume_options = plan_volume_select_options(plan_label, default_volume_gb)
     memory_options = plan_memory_select_options(plan_label)
     if deploy_blocked:
         deploy_control = f"""
@@ -2301,65 +3558,83 @@ def index():
             <p style="margin: 0 0 10px;">{h(deploy_blocked)}</p>
             <div class="actions left">
               <a class="button primary" href="https://railway.com/account/plans" target="_blank" rel="noreferrer">Manage plan on Railway</a>
-              <button type="button" disabled>Deploy Mobius</button>
+              <button type="button" disabled>Deploy Möbius</button>
             </div>
           </div>
         """
     else:
         deploy_control = f"""
-          <form method="post" action="{path('/instances')}">
-            <div class="form-grid">
-              <label class="full">
-                Project name
-                <input name="display_name" value="My Mobius" maxlength="80" required>
+          <form class="deploy-card" method="post" action="{path('/instances')}">
+            <div class="deploy-inline">
+              <label class="input-shell">
+                <span>Name</span>
+                <input name="display_name" value="My Möbius" maxlength="80" autocomplete="off" required>
               </label>
+              <button class="primary large" type="submit">Deploy Möbius</button>
             </div>
-            <details class="advanced">
-              <summary>Advanced</summary>
-              <p class="hint">You're on the {h(plan_name)} plan &mdash; up to {limits['max_cpu']} vCPU and {h(memory_mb_label(limits['max_memory_mb']))} RAM per service. Mobius runs uncapped by default; set caps below to limit usage.</p>
-              <div class="form-grid">
-                <label>
-                  Data volume
-                  <select name="volume_gb">
-                    {volume_options}
-                  </select>
-                  <span class="hint">Volumes cannot be resized later.</span>
+            <details class="compact-details">
+              <summary>Limits</summary>
+              <div class="control-row" style="margin-top: 10px;">
+                <label class="input-shell">
+                  <span>CPU cap</span>
+                  <input name="custom_cpu" type="number" inputmode="decimal" min="1" max="{limits['max_cpu']}" autocomplete="off" placeholder="No cap">
                 </label>
-                <label>
-                  Max CPU (vCPU)
-                  <input name="custom_cpu" type="number" min="1" max="{limits['max_cpu']}" placeholder="uncapped">
-                </label>
-                <label>
-                  Max memory
+                <label class="input-shell">
+                  <span>Memory cap</span>
                   <select name="memory_mb">
                     {memory_options}
                   </select>
                 </label>
               </div>
             </details>
-            <div class="deploy-submit">
-              <p class="hint">Runs in the background. When it is ready, open the link and set your Mobius username and password on first visit.</p>
-              <button class="primary" type="submit">Deploy Mobius</button>
-            </div>
           </form>
         """
 
-    deploy_form = f"""
+    if has_instances:
+        deploy_form = f"""
+        <section id="new" class="panel create-panel">
+          <details class="create-drawer">
+            <summary>
+              <span>
+                <strong>New Möbius</strong>
+                <span>{h(workspace or 'Railway workspace')} · {h(plan_copy)}</span>
+              </span>
+              <span class="create-plus" aria-hidden="true">+</span>
+            </summary>
+            <div class="create-body">
+              {connection_notice}
+              {workspace_picker}
+              {deploy_control}
+              <p class="muted-line">First build takes a few minutes. You can come back here while Railway finishes.</p>
+            </div>
+          </details>
+        </section>
+        """
+    else:
+        deploy_form = f"""
         <section id="new" class="panel">
-          <div class="section">
-            <div class="section-title">
-              <div>
-                <h2>Your Railway plan</h2>
-                <p class="hint">{h(plan_copy)}</p>
-                <p class="hint">Deploys the official template into {h(workspace or 'your Railway workspace')}.</p>
+          <div class="launch-surface">
+            <div class="launch-head">
+              <div class="launch-title">
+                <img class="launch-mark" src="{path('/favicon.png')}" alt="">
+                <div>
+                  <h2>New Möbius</h2>
+                  <p class="hint">{h(workspace or 'Railway workspace')} · {h(plan_copy)}</p>
+                </div>
               </div>
+	              <div class="signal-strip">
+	                <span class="signal"><strong>$5</strong> included</span>
+	                <span class="signal">Usage-based</span>
+	                <span class="signal">Hard limits stop spend</span>
+	              </div>
             </div>
             {connection_notice}
             {workspace_picker}
             {deploy_control}
+	            <p class="muted-line">First build takes a few minutes. This page keeps checking Railway.</p>
           </div>
         </section>
-    """
+        """
 
     # Live status: while any instance is still deploying, poll its status
     # endpoint (which reconciles from Railway) so the step advances and the page
@@ -2368,8 +3643,77 @@ def index():
     <script>
     (function () {
       var base = "__BASE__";
+      function setText(root, selector, value) {
+        var el = root.querySelector(selector);
+        if (el && value !== undefined && value !== null && value !== "") el.textContent = value;
+      }
+      function setMeter(root, selector, percent) {
+        var el = root.querySelector(selector);
+        if (!el) return;
+        var value = parseFloat(String(percent || "").replace("%", ""));
+        el.style.width = (isFinite(value) ? Math.max(0, Math.min(100, value)) : 0) + "%";
+      }
+      function setSpark(root, name, values) {
+        var svg = root.querySelector('[data-spark="' + name + '"]');
+        if (!svg || !Array.isArray(values) || !values.length) return;
+        var points = values.map(function (raw, i) {
+          var x = values.length === 1 ? 100 : (i / (values.length - 1)) * 100;
+          var y = 22 - (Math.max(0, Math.min(100, Number(raw) || 0)) / 100) * 20;
+          return x.toFixed(2) + "," + y.toFixed(2);
+        }).join(" ");
+        svg.innerHTML = '<polyline points="' + points + '"></polyline>';
+      }
+      function cpuPair(label, limit) {
+        if (!limit || limit === 'n/a') return label;
+        return String(label || '').replace(/ vCPU$/, '') + ' / ' + limit;
+      }
+      function loadMetrics() {
+        document.querySelectorAll('[data-metrics-url]').forEach(function (el) {
+          if (el.getAttribute('data-loading') === '1') return;
+          el.setAttribute('data-loading', '1');
+          fetch(el.getAttribute('data-metrics-url'), { headers: { 'Accept': 'application/json' } })
+            .then(function (r) { return r.json().catch(function () { return null; }); })
+            .then(function (d) {
+              if (!d) return;
+              if (d.cpu) {
+                setText(el, '[data-metric="cpu"]', cpuPair(d.cpu.label, d.cpu.limit_label));
+                setMeter(el, '[data-meter="cpu"]', d.cpu.percent);
+                setSpark(el, 'cpu', d.cpu.spark);
+              }
+              if (d.memory) {
+                setText(el, '[data-metric="memory"]', d.memory.label + (d.memory.limit_label && d.memory.limit_label !== 'n/a' ? ' / ' + d.memory.limit_label : ''));
+                setMeter(el, '[data-meter="memory"]', d.memory.percent);
+                setSpark(el, 'memory', d.memory.spark);
+              }
+              if (d.volume) {
+                setText(el, '[data-metric="volume"]', d.volume.used_label + (d.volume.allocated_label && d.volume.allocated_label !== 'n/a' ? ' / ' + d.volume.allocated_label : ''));
+                setMeter(el, '[data-meter="volume"]', d.volume.percent);
+                setSpark(el, 'volume', d.volume.spark);
+              }
+              if (d.network) {
+                setText(el, '[data-metric="network"]', (d.network.tx_label || '0') + ' out');
+                setMeter(el, '[data-meter="network"]', d.network.percent);
+                setSpark(el, 'network', d.network.spark);
+              }
+              if (d.cost) {
+                setText(el, '[data-metric="cost-estimate"]', d.cost.label);
+                setText(el, '[data-metric="cost-used"]', 'used ' + (d.cost.used_label || '--'));
+                setText(el, '[data-metric="cost-cap"]', d.cost.allowance_label || '$5');
+                setText(el, '[data-metric="cost-note"]', d.cost.note);
+                setMeter(el, '[data-meter="cost"]', d.cost.percent);
+              }
+              if (d.error) setText(el, '[data-metric="cost-note"]', d.error);
+              var card = el.closest('.container-card');
+              if (card && d.deployment_status && ['success', 'sleeping'].indexOf(String(d.deployment_status).toLowerCase()) !== -1 && card.getAttribute('data-status') !== 'ready') {
+                location.reload();
+              }
+            })
+            .catch(function () {})
+            .finally(function () { el.removeAttribute('data-loading'); });
+        });
+      }
       function poll() {
-        document.querySelectorAll('.instance[data-poll="1"]').forEach(function (el) {
+        document.querySelectorAll('.container-card[data-poll="1"]').forEach(function (el) {
           var id = el.getAttribute('data-instance-id');
           fetch(base + '/instances/' + id + '/status', { headers: { 'Accept': 'application/json' } })
             .then(function (r) { return r.ok ? r.json() : null; })
@@ -2381,8 +3725,11 @@ def index():
             })
             .catch(function () {});
         });
+        loadMetrics();
       }
-      if (document.querySelector('.instance[data-poll="1"]')) setInterval(poll, 5000);
+      loadMetrics();
+      if (document.querySelector('.container-card[data-poll="1"]')) setInterval(poll, 5000);
+      if (document.querySelector('[data-metrics-url]')) setInterval(loadMetrics, 30000);
     })();
     </script>
     """.replace("__BASE__", APP_BASE_PATH)
@@ -2393,16 +3740,16 @@ def index():
     <section class="panel">
       <div class="section">
         <div class="section-title">
-          <h2>Your Mobius</h2>
+          <h2>Your Möbius</h2>
           <span class="pill">{len(instances)}</span>
         </div>
-        <div class="instance-list">{instance_markup}</div>
+        <div class="container-list">{instance_markup}</div>
       </div>
     </section>
     {poll_script}
     """
 
-    main_content = f"{deploy_form}{instances_panel}"
+    main_content = f"{instances_panel}{deploy_form}" if has_instances else f"{deploy_form}{instances_panel}"
 
     body = f"""
     <main class="shell">
@@ -2416,9 +3763,6 @@ def index():
         </div>
       </header>
       <div class="stack">{main_content}</div>
-      <nav class="footer-links">
-        <a href="{path('/transparency')}">What we store</a>
-      </nav>
     </main>
     """
     return render(body)
@@ -2441,34 +3785,41 @@ def transparency():
           <div class="section">
             <div class="section-title">
               <div>
-                <h2>What Mobius Launch Stores</h2>
-                <p class="hint">The launcher is only a bridge between your Mobius account and your Railway-owned deployments.</p>
+                <h2>What Möbius Launch Stores</h2>
+                <p class="hint">The launcher is a bridge between your Möbius account and your Railway-owned deployments. It keeps the minimum state needed to reconnect, resume, and delete what it created.</p>
               </div>
             </div>
             <div class="trust-grid">
               <div class="trust-card">
                 <h3>Stored</h3>
                 <ul>
-                  <li>Your Mobius Launch account email, name, sign-in provider, and avatar URL when available.</li>
+                  <li>Your Möbius Launch account email, name, sign-in provider, and avatar URL when available.</li>
                   <li>An encrypted Railway OAuth token so deployments can be created and refreshed.</li>
-                  <li>Deployment metadata: Railway project, service, volume, public URL, chosen auth mode, and volume size.</li>
+                  <li>Deployment metadata: Railway project, service, environment, volume, public URL, recovery URL, and selected resource caps.</li>
                   <li>Short provisioning events and errors so failed launches are debuggable.</li>
                 </ul>
               </div>
               <div class="trust-card">
-                <h3>Not stored</h3>
+                <h3>Fetched live</h3>
                 <ul>
-                  <li>Your Mobius conversations, files, apps, databases, or agent activity.</li>
+                  <li>Railway workspace choices and deployment status are refreshed from Railway when the page needs them.</li>
+                  <li>CPU, RAM, disk, volume, and network metrics are read on demand and not persisted as history.</li>
+                  <li>Exact billing and usage limits stay in Railway; the launcher links you to the Railway project for spend details.</li>
+                </ul>
+              </div>
+              <div class="trust-card">
+                <h3>Never stored</h3>
+                <ul>
+                  <li>Your Möbius conversations, files, apps, databases, or agent activity.</li>
                   <li>Your Railway password or Google password.</li>
-                  <li>Billing data; Railway owns that relationship directly.</li>
-                  <li>Product analytics or telemetry from inside your Mobius instance.</li>
+                  <li>Product analytics or telemetry from inside your Möbius instance.</li>
                 </ul>
               </div>
             </div>
           </div>
           <div class="section">
             <h2>Backend Surface</h2>
-            <p class="hint">The minimum backend is an OAuth callback, an encrypted token store, a deploy worker, and a small deployment registry. Open-sourcing this service is the cleanest way to make that claim inspectable.</p>
+            <p class="hint">The backend is intentionally small: OAuth callbacks, encrypted token storage, a deploy worker, and a deployment registry.</p>
             <div class="meta">
               <span class="pill">OAuth callbacks</span>
               <span class="pill">Encrypted tokens</span>
@@ -2514,13 +3865,14 @@ def login():
 def google_login():
     if not google_oauth_configured():
         return redirect(path("/"))
+    redirect_uri = google_redirect_uri()
     state = google_state_serializer.dumps(
-        {"nonce": secrets.token_urlsafe(16), "iat": int(time.time())}
+        {"nonce": secrets.token_urlsafe(16), "iat": int(time.time()), "redirect_uri": redirect_uri}
     )
     params = {
         "response_type": "code",
         "client_id": GOOGLE_CLIENT_ID,
-        "redirect_uri": GOOGLE_REDIRECT_URI,
+        "redirect_uri": redirect_uri,
         "scope": "openid email profile",
         "state": state,
         "access_type": "online",
@@ -2551,7 +3903,7 @@ def google_callback():
     if not state or not cookie_state or not secrets.compare_digest(state, cookie_state):
         return oauth_error("Google did not connect", "The OAuth state check failed.")
     try:
-        google_state_serializer.loads(state, max_age=10 * 60)
+        payload = google_state_serializer.loads(state, max_age=10 * 60)
     except SignatureExpired:
         return oauth_error("Google did not connect", "The OAuth request expired.")
     except BadSignature:
@@ -2566,7 +3918,7 @@ def google_callback():
             {
                 "grant_type": "authorization_code",
                 "code": code,
-                "redirect_uri": GOOGLE_REDIRECT_URI,
+                "redirect_uri": payload.get("redirect_uri") or google_redirect_uri(),
                 "client_id": GOOGLE_CLIENT_ID,
                 "client_secret": GOOGLE_CLIENT_SECRET,
             },
@@ -2612,6 +3964,7 @@ def connect_railway():
         return redirect(path("/"))
 
     code_verifier = secrets.token_urlsafe(64)
+    redirect_uri = railway_redirect_uri()
     challenge = base64.urlsafe_b64encode(
         hashlib.sha256(code_verifier.encode("ascii")).digest()
     ).decode("ascii").rstrip("=")
@@ -2620,12 +3973,13 @@ def connect_railway():
             "user_id": user["id"],
             "nonce": secrets.token_urlsafe(16),
             "code_verifier": code_verifier,
+            "redirect_uri": redirect_uri,
         }
     )
     params = {
         "response_type": "code",
         "client_id": RAILWAY_CLIENT_ID,
-        "redirect_uri": RAILWAY_REDIRECT_URI,
+        "redirect_uri": redirect_uri,
         "scope": RAILWAY_OAUTH_SCOPES,
         "state": state,
         "code_challenge": challenge,
@@ -2681,7 +4035,7 @@ def railway_callback():
     try:
         tokens = exchange_railway_code(
             code,
-            RAILWAY_REDIRECT_URI,
+            payload.get("redirect_uri") or railway_redirect_uri(),
             payload.get("code_verifier"),
         )
         access_token = tokens.get("access_token")
@@ -2722,10 +4076,8 @@ def select_railway_workspace():
     if connection is None:
         return redirect(path("/"))
     workspace_id = (request.form.get("workspace_id") or "").strip()
-    workspace = next(
-        (item for item in connection_workspaces(connection) if item["id"] == workspace_id),
-        None,
-    )
+    workspaces = live_connection_workspaces(connection)
+    workspace = next((item for item in workspaces if item["id"] == workspace_id), None)
     if workspace is None:
         return oauth_error("Workspace not available", "Reconnect Railway and authorize the workspace you want to use.")
     timestamp = now_iso()
@@ -2762,7 +4114,7 @@ def create_instance():
     if connection is None or connection["connected_mode"] != "oauth":
         return redirect(path("/"))
 
-    display_name = (request.form.get("display_name") or "My Mobius").strip()[:80]
+    display_name = (request.form.get("display_name") or "My Möbius").strip()[:80]
     # handle is an internal label only; Railway assigns the real public domain.
     handle = normalize_handle(display_name)
     auth_mode = "local"  # the instance uses its own username/password on first open
@@ -2866,6 +4218,77 @@ def instance_status(instance_id):
         "public_url": inst["public_url"],
         "last_error": inst["last_error"],
     }
+
+
+@app.get("/instances/<instance_id>/metrics")
+def instance_metrics(instance_id):
+    user = require_user()
+    if user is None:
+        return Response('{"error":"unauthorized"}', status=401, mimetype="application/json")
+    inst = db().execute(
+        "select * from mobius_instances where id = ? and user_id = ?",
+        (instance_id, user["id"]),
+    ).fetchone()
+    if inst is None:
+        return Response('{"error":"not found"}', status=404, mimetype="application/json")
+    if not (
+        inst["railway_project_id"]
+        and inst["railway_service_id"]
+        and inst["railway_environment_id"]
+    ):
+        return {
+            "updated_at": now_iso(),
+            "deployment_status": inst["status"],
+            "error": "Railway has not returned deployment resources yet.",
+        }
+    connection = db().execute(
+        "select * from railway_connections where id = ? and user_id = ?",
+        (inst["railway_connection_id"], user["id"]),
+    ).fetchone()
+    if connection is None:
+        return Response('{"error":"Railway is not connected"}', status=409, mimetype="application/json")
+    try:
+        access_token = refresh_railway_access_token(connection, db())
+        inst = reconcile_deployment_status(db(), inst)
+        return railway_metrics_snapshot(access_token, connection, inst)
+    except RailwayAPIError as exc:
+        return {
+            "updated_at": now_iso(),
+            "deployment_status": inst["status"],
+            "error": compact_api_error(exc),
+            "cost": {
+                "available": False,
+                "label": "Railway",
+                "note": "Open Railway for detailed usage and cost.",
+            },
+        }, 502
+
+
+@app.post("/instances/<instance_id>/retry")
+def retry_instance(instance_id):
+    user = require_user()
+    if user is None:
+        return redirect(path("/"))
+    inst = db().execute(
+        "select * from mobius_instances where id = ? and user_id = ?",
+        (instance_id, user["id"]),
+    ).fetchone()
+    if inst is None or inst["status"] == "deleted":
+        return redirect(path("/"))
+    if inst["status"] not in {"error", "delete_failed", "creating", "deploying"}:
+        return redirect(path("/"))
+    update_instance(
+        db(),
+        inst["id"],
+        status="queued",
+        current_step="Retrying Railway deployment",
+        last_error="",
+        provision_token="",
+    )
+    add_instance_event(db(), inst["id"], "info", "Retry requested")
+    db().commit()
+    start_provisioning(inst["id"])
+    return redirect(path("/"))
 
 
 @app.post("/instances/<instance_id>/delete")

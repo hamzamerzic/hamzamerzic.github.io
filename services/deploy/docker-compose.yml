@@ -53,6 +53,7 @@ services:
     environment:
       - APP_BASE_PATH=
       - PUBLIC_BASE_URL=https://mobius.page
+      - PUBLIC_HOSTS=mobius.page,mobius.you
       - DATA_DIR=/data
       - RAILWAY_CLIENT_ID=${RAILWAY_CLIENT_ID:-}
       - RAILWAY_CLIENT_SECRET=${RAILWAY_CLIENT_SECRET:-}

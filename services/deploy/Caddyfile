@@ -22,7 +22,7 @@ api.hamzamerzic.info {
 		}
 	}
 
-	# Mobius Launch now lives at mobius.page. Do not serve the root-mounted app
+	# Möbius Launch now lives at mobius.page. Do not serve the root-mounted app
 	# under a stripped prefix here; its forms and OAuth callbacks are
 	# intentionally rooted at mobius.page.
 	handle /mobius-launch* {
@@ -114,7 +114,7 @@ mobius.hamzamerzic.info {
 	}
 }
 
-mobius.page {
+mobius.page, mobius.you {
 	encode gzip
 	reverse_proxy mobius-launch:8080
 	log {
@@ -123,8 +123,12 @@ mobius.page {
 	}
 }
 
-www.mobius.page, mobius.you, www.mobius.you {
+www.mobius.page {
 	redir https://mobius.page{uri} permanent
+}
+
+www.mobius.you {
+	redir https://mobius.you{uri} permanent
 }
 
 :8443 {
