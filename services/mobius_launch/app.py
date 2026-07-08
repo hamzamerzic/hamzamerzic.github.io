@@ -54,6 +54,7 @@ RAILWAY_TEMPLATE_URL = os.environ.get(
 ).strip()
 RAILWAY_TEMPLATE_CODE = os.environ.get("RAILWAY_TEMPLATE_CODE", "xVMuX9").strip()
 RAILWAY_REFERRAL_CODE = os.environ.get("RAILWAY_REFERRAL_CODE", "cERpKq").strip()
+PROVISIONING_STALE_SECONDS = int(os.environ.get("PROVISIONING_STALE_SECONDS", "900"))
 GOOGLE_AUTH_URL = os.environ.get("GOOGLE_AUTH_URL", "https://accounts.google.com/o/oauth2/v2/auth")
 GOOGLE_TOKEN_URL = os.environ.get("GOOGLE_TOKEN_URL", "https://oauth2.googleapis.com/token")
 GOOGLE_USERINFO_URL = os.environ.get(
@@ -265,6 +266,7 @@ def init_db():
             ("cached_plan", "cached_plan text"),
             ("deploy_blocked", "deploy_blocked text"),
             ("plan_checked_at", "plan_checked_at text"),
+            ("railway_workspaces_json", "railway_workspaces_json text"),
         ]:
             ensure_column(conn, "railway_connections", column, ddl)
         for column, ddl in [
@@ -281,6 +283,7 @@ def init_db():
             ("current_step", "current_step text"),
             ("last_error", "last_error text"),
             ("last_deployment_id", "last_deployment_id text"),
+            ("provision_token", "provision_token text"),
         ]:
             ensure_column(conn, "mobius_instances", column, ddl)
         conn.commit()
@@ -417,15 +420,27 @@ def short_date(value):
     return str(value).replace("T", " ")[:16]
 
 
+def format_volume_gb(value):
+    try:
+        size = float(value)
+    except (TypeError, ValueError):
+        return ""
+    if size.is_integer():
+        return str(int(size))
+    return f"{size:.2f}".rstrip("0").rstrip(".")
+
+
 def coerce_volume_size_gb(value, fallback=None):
     if value is None:
         return fallback
-    match = re.search(r"\d+", str(value))
+    match = re.search(r"\d+(?:\.\d+)?", str(value))
     if not match:
         return fallback
-    size = int(match.group(0))
-    if size < 1 or size > 100:
+    size = float(match.group(0))
+    if size < 0.5 or size > 5000:
         return fallback
+    if size.is_integer():
+        return int(size)
     return size
 
 
@@ -447,23 +462,24 @@ def normalize_volume_size_gb(value):
     size = coerce_volume_size_gb(value)
     options = volume_size_options_gb()
     if size in options:
-        return str(size)
-    return str(options[0])
+        return format_volume_gb(size)
+    return format_volume_gb(options[0])
 
 
 def volume_size_mb(value):
-    return (coerce_volume_size_gb(value, default_volume_size_gb()) or default_volume_size_gb()) * 1024
+    size = coerce_volume_size_gb(value, default_volume_size_gb()) or default_volume_size_gb()
+    return int(round(float(size) * 1024))
 
 
 def volume_size_label(value):
     size = coerce_volume_size_gb(value, default_volume_size_gb()) or default_volume_size_gb()
-    return f"{size} GB"
+    return f"{format_volume_gb(size)} GB"
 
 
 def volume_size_select_options(selected=None):
     selected_size = normalize_volume_size_gb(selected)
     return "\n".join(
-        f"""<option value="{size}" {'selected' if str(size) == selected_size else ''}>{size} GB</option>"""
+        f"""<option value="{format_volume_gb(size)}" {'selected' if format_volume_gb(size) == selected_size else ''}>{format_volume_gb(size)} GB</option>"""
         for size in volume_size_options_gb()
     )
 
@@ -471,44 +487,61 @@ def volume_size_select_options(selected=None):
 PLAN_LIMITS = {
     "trial": {
         "max_cpu": 2,
-        "max_memory_mb": 512,
-        "max_volume_gb": 1,
-        "memory_options_mb": [256, 512],
-        "volume_options_gb": [1],
+        "max_memory_mb": 1024,
+        "max_volume_gb": 0.5,
+        "memory_options_mb": [256, 512, 1024],
+        "volume_options_gb": [0.5],
     },
     "free": {
         "max_cpu": 1,
         "max_memory_mb": 512,
-        "max_volume_gb": 1,
+        "max_volume_gb": 0.5,
         "memory_options_mb": [256, 512],
-        "volume_options_gb": [1],
+        "volume_options_gb": [0.5],
     },
     "hobby": {
-        "max_cpu": 8,
-        "max_memory_mb": 8192,
+        "max_cpu": 48,
+        "max_memory_mb": 49152,
         "max_volume_gb": 5,
-        "memory_options_mb": [512, 1024, 2048, 4096, 8192],
-        "volume_options_gb": [1, 2, 5],
+        "memory_options_mb": [512, 1024, 2048, 4096, 8192, 16384, 32768, 49152],
+        "volume_options_gb": [0.5, 1, 2, 5],
     },
     "pro": {
-        "max_cpu": 32,
-        "max_memory_mb": 32768,
-        "max_volume_gb": 50,
-        "memory_options_mb": [512, 1024, 2048, 4096, 8192, 16384],
-        "volume_options_gb": [2, 5, 10, 20, 50],
+        "max_cpu": 1000,
+        "max_memory_mb": 1048576,
+        "max_volume_gb": 1000,
+        "memory_options_mb": [1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072],
+        "volume_options_gb": [2, 5, 10, 20, 50, 100, 250, 500, 1000],
+    },
+    "enterprise": {
+        "max_cpu": 2400,
+        "max_memory_mb": 2457600,
+        "max_volume_gb": 5000,
+        "memory_options_mb": [4096, 8192, 16384, 32768, 65536, 131072, 262144],
+        "volume_options_gb": [5, 20, 50, 100, 250, 500, 1000, 5000],
     },
     "unknown": {
-        "max_cpu": 8,
-        "max_memory_mb": 8192,
+        "max_cpu": 48,
+        "max_memory_mb": 49152,
         "max_volume_gb": 5,
-        "memory_options_mb": [512, 1024, 2048, 4096],
-        "volume_options_gb": [1, 2, 5],
+        "memory_options_mb": [512, 1024, 2048, 4096, 8192, 16384],
+        "volume_options_gb": [0.5, 1, 2, 5],
     },
 }
 
 
+def normalize_plan_label(label):
+    token = re.sub(r"[^a-z0-9]+", "_", str(label or "").lower()).strip("_")
+    if token in PLAN_LIMITS:
+        return token
+    for known in ("enterprise", "pro", "hobby", "trial", "free"):
+        if known in token:
+            return known
+    return "unknown"
+
+
 def plan_limits(label):
-    return PLAN_LIMITS.get(label, PLAN_LIMITS["unknown"])
+    return PLAN_LIMITS.get(normalize_plan_label(label), PLAN_LIMITS["unknown"])
 
 
 def plan_default_volume_gb(label):
@@ -526,14 +559,14 @@ def memory_mb_label(value):
 
 
 def plan_title(label):
-    label = (label or "unknown").lower()
+    label = normalize_plan_label(label)
     return label.title() if label in PLAN_LIMITS and label != "unknown" else "Unknown"
 
 
 def plan_volume_select_options(label, selected=None):
-    selected_size = str(selected or plan_default_volume_gb(label))
+    selected_size = format_volume_gb(selected or plan_default_volume_gb(label))
     return "\n".join(
-        f"""<option value="{size}" {'selected' if str(size) == selected_size else ''}>{size} GB</option>"""
+        f"""<option value="{format_volume_gb(size)}" {'selected' if format_volume_gb(size) == selected_size else ''}>{format_volume_gb(size)} GB</option>"""
         for size in plan_limits(label)["volume_options_gb"]
     )
 
@@ -749,19 +782,22 @@ def railway_deploy_blocked(access_token, workspace_id):
     if not workspace_id:
         return None
     try:
-        data = railway_graphql(
-            "query($id: String!) { resourceAccess(explicitResourceOwner: { type: WORKSPACE, id: $id }) { deployment { disallowed } project { disallowed } } }",
-            access_token,
-            {"id": workspace_id},
-        )
-        resource_access = data.get("resourceAccess")
-        if not isinstance(resource_access, dict):
-            return None
-        deployment = resource_access.get("deployment")
-        if not isinstance(deployment, dict):
-            return None
-        reason = deployment.get("disallowed")
-        return str(reason) if reason else None
+	        data = railway_graphql(
+	            "query($id: String!) { resourceAccess(explicitResourceOwner: { type: WORKSPACE, id: $id }) { deployment { disallowed } project { disallowed } } }",
+	            access_token,
+	            {"id": workspace_id},
+	        )
+	        resource_access = data.get("resourceAccess")
+	        if not isinstance(resource_access, dict):
+	            return None
+	        deployment = resource_access.get("deployment")
+	        project = resource_access.get("project")
+	        reason = None
+	        if isinstance(project, dict):
+	            reason = project.get("disallowed")
+	        if not reason and isinstance(deployment, dict):
+	            reason = deployment.get("disallowed")
+	        return str(reason) if reason else None
     except (RailwayAPIError, TypeError, ValueError, KeyError):
         return None
 
@@ -775,25 +811,85 @@ def railway_plan_label(access_token, workspace_id):
             access_token,
             {"id": workspace_id},
         )
+        workspace = data.get("workspace") or {}
+        label = normalize_plan_label(workspace.get("plan"))
+        if label != "unknown":
+            return label
         projects = data.get("projects")
         edges = []
         if isinstance(projects, dict):
             edges = projects.get("edges") or []
-        if edges:
-            node = (edges[0] or {}).get("node") or {}
-            label = str(node.get("subscriptionType") or "").lower()
-        else:
-            workspace = data.get("workspace") or {}
-            label = str(workspace.get("plan") or "").lower()
-        return label if label in PLAN_LIMITS else "unknown"
+        for edge in edges:
+            node = (edge or {}).get("node") or {}
+            expired_at = node.get("expiredAt")
+            if expired_at:
+                try:
+                    expires = datetime.fromisoformat(str(expired_at).replace("Z", "+00:00"))
+                    if expires < datetime.now(timezone.utc):
+                        continue
+                except ValueError:
+                    pass
+            label = normalize_plan_label(node.get("subscriptionType"))
+            if label != "unknown":
+                return label
+        return "unknown"
     except (RailwayAPIError, TypeError, ValueError, KeyError, IndexError):
         return "unknown"
 
 
+def normalize_workspaces(workspaces):
+    records = []
+    seen = set()
+    for workspace in workspaces or []:
+        if not isinstance(workspace, dict):
+            continue
+        workspace_id = str(workspace.get("id") or "").strip()
+        if not workspace_id or workspace_id in seen:
+            continue
+        seen.add(workspace_id)
+        name = str(workspace.get("name") or workspace_id).strip() or workspace_id
+        records.append({"id": workspace_id, "name": name})
+    return records
+
+
+def connection_workspaces(connection):
+    if connection is None:
+        return []
+    records = []
+    try:
+        records = normalize_workspaces(json.loads(connection["railway_workspaces_json"] or "[]"))
+    except (KeyError, TypeError, ValueError, json.JSONDecodeError):
+        records = []
+    current_id = (connection["railway_workspace_id"] or "").strip()
+    if current_id and current_id not in {workspace["id"] for workspace in records}:
+        records.insert(
+            0,
+            {
+                "id": current_id,
+                "name": connection["railway_workspace_name"] or current_id,
+            },
+        )
+    return records
+
+
+def workspace_select_options(connection):
+    selected_id = connection["railway_workspace_id"] if connection else ""
+    return "\n".join(
+        f"""<option value="{h(workspace['id'])}" {'selected' if workspace['id'] == selected_id else ''}>{h(workspace['name'])}</option>"""
+        for workspace in connection_workspaces(connection)
+    )
+
+
 def save_oauth_connection(user, profile, workspaces, tokens, workspace_error=None):
     timestamp = now_iso()
-    workspace = workspaces[0] if workspaces else {}
     existing = get_connection(user["id"])
+    workspace_records = normalize_workspaces(workspaces)
+    existing_workspace_id = existing["railway_workspace_id"] if existing else ""
+    workspace = next(
+        (item for item in workspace_records if item["id"] == existing_workspace_id),
+        workspace_records[0] if workspace_records else {},
+    )
+    workspaces_json = json.dumps(workspace_records, separators=(",", ":")) if workspace_records else None
     refresh_token = tokens.get("refresh_token")
     refresh_ciphertext = (
         encrypt_secret(refresh_token)
@@ -810,6 +906,7 @@ def save_oauth_connection(user, profile, workspaces, tokens, workspace_error=Non
         profile.get("picture"),
         workspace.get("id"),
         workspace.get("name"),
+        workspaces_json,
         "oauth",
         tokens.get("scope") or RAILWAY_OAUTH_SCOPES,
         tokens.get("token_type") or "Bearer",
@@ -820,29 +917,31 @@ def save_oauth_connection(user, profile, workspaces, tokens, workspace_error=Non
         timestamp,
     )
     if existing:
-        db().execute(
-            """
-            update railway_connections
-            set railway_sub = ?, railway_email = ?, railway_name = ?, railway_picture = ?,
-                railway_workspace_id = ?, railway_workspace_name = ?, connected_mode = ?,
-                granted_scopes = ?, token_type = ?, token_expires_at = ?,
-                access_token_ciphertext = ?, refresh_token_ciphertext = ?,
-                last_error = ?, cached_plan = null, deploy_blocked = '', plan_checked_at = null,
-                updated_at = ?
+            db().execute(
+                """
+                update railway_connections
+                set railway_sub = ?, railway_email = ?, railway_name = ?, railway_picture = ?,
+                    railway_workspace_id = ?, railway_workspace_name = ?, railway_workspaces_json = ?,
+                    connected_mode = ?,
+                    granted_scopes = ?, token_type = ?, token_expires_at = ?,
+                    access_token_ciphertext = ?, refresh_token_ciphertext = ?,
+                    last_error = ?, cached_plan = null, deploy_blocked = '', plan_checked_at = null,
+                    updated_at = ?
             where id = ?
             """,
             values + (existing["id"],),
         )
     else:
-        db().execute(
-            """
-            insert into railway_connections (
-              id, user_id, railway_sub, railway_email, railway_name, railway_picture,
-              railway_workspace_id, railway_workspace_name, connected_mode, granted_scopes,
-              token_type, token_expires_at, access_token_ciphertext,
-              refresh_token_ciphertext, last_error, created_at, updated_at
-            ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """,
+            db().execute(
+                """
+                insert into railway_connections (
+                  id, user_id, railway_sub, railway_email, railway_name, railway_picture,
+                  railway_workspace_id, railway_workspace_name, railway_workspaces_json,
+                  connected_mode, granted_scopes,
+                  token_type, token_expires_at, access_token_ciphertext,
+                  refresh_token_ciphertext, last_error, created_at, updated_at
+                ) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
             (
                 "rail_" + uuid.uuid4().hex[:10],
                 user["id"],
@@ -900,9 +999,7 @@ def refresh_railway_access_token(connection, sql_conn=None):
 
 
 def cached_plan_state(connection):
-    plan_label = str(connection["cached_plan"] or "unknown").lower()
-    if plan_label not in PLAN_LIMITS:
-        plan_label = "unknown"
+    plan_label = normalize_plan_label(connection["cached_plan"])
     return {
         "plan_label": plan_label,
         "deploy_blocked": connection["deploy_blocked"] or "",
@@ -932,6 +1029,11 @@ def get_plan_state(connection):
     try:
         access_token = refresh_railway_access_token(connection)
         workspace_id = connection["railway_workspace_id"]
+        if not workspace_id:
+            return {
+                "plan_label": "unknown",
+                "deploy_blocked": "No authorized Railway workspace was returned. Reconnect Railway and choose a workspace.",
+            }
         plan_label = railway_plan_label(access_token, workspace_id)
         deploy_blocked = railway_deploy_blocked(access_token, workspace_id) or ""
         timestamp = now_iso()
@@ -970,6 +1072,60 @@ def update_instance(conn, instance_id, **fields):
         values,
     )
     conn.commit()
+
+
+def timestamp_age_seconds(value):
+    if not value:
+        return float("inf")
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=timezone.utc)
+        return time.time() - parsed.timestamp()
+    except ValueError:
+        return float("inf")
+
+
+def claim_provisioning(instance_id, include_creating=False):
+    token = "job_" + uuid.uuid4().hex
+    timestamp = now_iso()
+    if include_creating:
+        stale_cutoff = datetime.fromtimestamp(
+            time.time() - PROVISIONING_STALE_SECONDS, timezone.utc
+        ).replace(microsecond=0).isoformat()
+        status_condition = "status = 'queued' or (status = 'creating' and (updated_at is null or updated_at < ?))"
+        params = (token, timestamp, instance_id, stale_cutoff)
+    else:
+        status_condition = "status = 'queued'"
+        params = (token, timestamp, instance_id)
+    with closing(connect_db()) as conn:
+        cur = conn.execute(
+            f"""
+            update mobius_instances
+            set provision_token = ?, status = 'creating', current_step = 'Starting deployment',
+                last_error = null, updated_at = ?
+            where id = ?
+              and ({status_condition})
+              and status != 'deleted'
+            """,
+            params,
+        )
+        conn.commit()
+        if cur.rowcount != 1:
+            return None
+    return token
+
+
+def provisioning_row(conn, instance_id, token):
+    row = conn.execute(
+        "select * from mobius_instances where id = ?",
+        (instance_id,),
+    ).fetchone()
+    if row is None:
+        return None
+    if row["status"] == "deleted" or row["provision_token"] != token:
+        return None
+    return row
 
 
 def project_environment_id(access_token, project_id):
@@ -1238,14 +1394,34 @@ DEPLOY_STATUS_OK = {"SUCCESS", "SLEEPING"}
 DEPLOY_STATUS_BAD = {"FAILED", "CRASHED", "REMOVED", "REMOVING", "SKIPPED"}
 
 
-def provision_instance(instance_id):
+def provision_instance(instance_id, token):
     with closing(connect_db()) as conn:
         project_id = None
-        try:
-            instance = conn.execute(
-                "select * from mobius_instances where id = ?",
+        access_token = None
+
+        def cancel_requested():
+            row = conn.execute(
+                "select status, provision_token from mobius_instances where id = ?",
                 (instance_id,),
             ).fetchone()
+            return row is None or row["status"] == "deleted" or row["provision_token"] != token
+
+        def cleanup_if_cancelled():
+            row = conn.execute(
+                "select status, provision_token from mobius_instances where id = ?",
+                (instance_id,),
+            ).fetchone()
+            if row and row["status"] == "deleted" and project_id and access_token:
+                try:
+                    delete_project(access_token, project_id)
+                except RailwayAPIError:
+                    pass
+                add_instance_event(conn, instance_id, "info", "Deleted during provisioning; Railway project torn down")
+                conn.commit()
+            return row is None or (row and (row["status"] == "deleted" or row["provision_token"] != token))
+
+        try:
+            instance = provisioning_row(conn, instance_id, token)
             if instance is None:
                 return
             connection = conn.execute(
@@ -1255,48 +1431,59 @@ def provision_instance(instance_id):
             if connection is None:
                 raise RailwayAPIError("Railway is not connected.")
 
-            update_instance(conn, instance_id, status="creating", current_step="Loading Railway template", last_error=None)
-            add_instance_event(conn, instance_id, "info", f"Loading Railway template {RAILWAY_TEMPLATE_CODE}")
+            update_instance(conn, instance_id, status="creating", current_step="Loading Railway token", last_error=None)
             access_token = refresh_railway_access_token(connection, conn)
-            template = fetch_template(RAILWAY_TEMPLATE_CODE)
 
-            # One call creates the project, service, /data volume, and starts the
-            # build (see deploy_template). We then wait for the resources to
-            # register and hand off build-progress tracking to the status poll.
-            update_instance(conn, instance_id, current_step="Creating your Railway project")
-            payload = deploy_template(
-                access_token,
-                template,
-                connection["railway_workspace_id"],
-                volume_size_gb=instance["volume_size_gb"],
-            )
-            project_id = payload["projectId"]
-            update_instance(
-                conn,
-                instance_id,
-                railway_project_id=project_id,
-                railway_project_name=instance["display_name"],
-                railway_workspace_name=connection["railway_workspace_name"],
-                last_deployment_id=payload.get("workflowId") or "",
-                current_step="Building Mobius (this can take a few minutes)",
-            )
-            row = conn.execute("select status from mobius_instances where id = ?", (instance_id,)).fetchone()
-            if row and row["status"] == "deleted":
-                try:
-                    delete_project(access_token, project_id)
-                except RailwayAPIError:
-                    pass
-                add_instance_event(conn, instance_id, "info", "Deleted during provisioning; Railway project torn down")
-                conn.commit()
+            project_id = instance["railway_project_id"] or None
+            if not project_id:
+                update_instance(conn, instance_id, current_step="Loading Railway template")
+                add_instance_event(conn, instance_id, "info", f"Loading Railway template {RAILWAY_TEMPLATE_CODE}")
+                template = fetch_template(RAILWAY_TEMPLATE_CODE)
+                if cleanup_if_cancelled():
+                    return
+
+                # One call creates the project, service, /data volume, and starts
+                # the build (see deploy_template). We then wait for resources to
+                # register and hand off build-progress tracking to the status poll.
+                update_instance(conn, instance_id, current_step="Creating your Railway project")
+                payload = deploy_template(
+                    access_token,
+                    template,
+                    connection["railway_workspace_id"],
+                    volume_size_gb=instance["volume_size_gb"],
+                )
+                project_id = payload["projectId"]
+                if cleanup_if_cancelled():
+                    return
+                update_instance(
+                    conn,
+                    instance_id,
+                    railway_project_id=project_id,
+                    railway_project_name=instance["display_name"],
+                    railway_workspace_name=connection["railway_workspace_name"],
+                    last_deployment_id=payload.get("workflowId") or "",
+                    current_step="Building Mobius (this can take a few minutes)",
+                )
+                add_instance_event(conn, instance_id, "info", "Railway project created; template deploying")
+            else:
+                update_instance(
+                    conn,
+                    instance_id,
+                    current_step="Resuming interrupted Railway deployment",
+                )
+                add_instance_event(conn, instance_id, "info", "Resuming interrupted Railway deployment")
+            if cleanup_if_cancelled():
                 return
-            add_instance_event(conn, instance_id, "info", "Railway project created; template deploying")
 
             def _tick(elapsed):
-                update_instance(conn, instance_id, current_step=f"Building Mobius ({elapsed}s)")
+                if not cancel_requested():
+                    update_instance(conn, instance_id, current_step=f"Building Mobius ({elapsed}s)")
 
             _project, service, volume = wait_for_template_service(
                 access_token, project_id, on_wait=_tick
             )
+            if cleanup_if_cancelled():
+                return
             service_id = service["id"]
             environment_id = project_environment_id(access_token, project_id)
             update_instance(
@@ -1307,10 +1494,10 @@ def provision_instance(instance_id):
                 railway_environment_id=environment_id,
                 current_step="Creating your public link",
             )
-            inst_now = conn.execute(
-                "select cpu, memory_mb from mobius_instances where id = ?",
-                (instance_id,),
-            ).fetchone()
+            inst_now = provisioning_row(conn, instance_id, token)
+            if inst_now is None:
+                cleanup_if_cancelled()
+                return
             if inst_now and (inst_now["cpu"] or inst_now["memory_mb"]):
                 try:
                     set_service_limits(
@@ -1340,16 +1527,11 @@ def provision_instance(instance_id):
                 f"Mobius service created with a {volume_size_label(instance['volume_size_gb'])} /data volume",
             )
 
-            row = conn.execute("select status from mobius_instances where id = ?", (instance_id,)).fetchone()
-            if row and row["status"] == "deleted":
-                try:
-                    delete_project(access_token, project_id)
-                except RailwayAPIError:
-                    pass
-                add_instance_event(conn, instance_id, "info", "Deleted during provisioning; Railway project torn down")
-                conn.commit()
+            if cleanup_if_cancelled():
                 return
             domain = create_service_domain(access_token, service_id, environment_id)
+            if cleanup_if_cancelled():
+                return
             public_url = f"https://{domain['domain']}"
             update_instance(
                 conn,
@@ -1359,10 +1541,14 @@ def provision_instance(instance_id):
                 recovery_url=f"{public_url}/recover",
                 status="deploying",
                 current_step="Railway is building Mobius",
+                provision_token="",
             )
             add_instance_event(conn, instance_id, "info", "Public link created; Railway is building Mobius")
             conn.commit()
         except Exception as exc:
+            if provisioning_row(conn, instance_id, token) is None:
+                cleanup_if_cancelled()
+                return
             message = compact_api_error(exc)
             update_instance(
                 conn,
@@ -1370,6 +1556,7 @@ def provision_instance(instance_id):
                 status="error",
                 current_step="Deployment failed",
                 last_error=message,
+                provision_token="",
             )
             add_instance_event(conn, instance_id, "error", message)
             if project_id:
@@ -1444,9 +1631,31 @@ def reconcile_deployment_status(conn, instance):
     ).fetchone()
 
 
-def start_provisioning(instance_id):
-    thread = threading.Thread(target=provision_instance, args=(instance_id,), daemon=True)
+def start_provisioning(instance_id, include_creating=False):
+    token = claim_provisioning(instance_id, include_creating=include_creating)
+    if not token:
+        return False
+    thread = threading.Thread(target=provision_instance, args=(instance_id, token), daemon=True)
     thread.start()
+    return True
+
+
+def recover_interrupted_provisioning():
+    with closing(connect_db()) as conn:
+        rows = conn.execute(
+            """
+            select id, status, updated_at
+            from mobius_instances
+            where status in ('queued', 'creating')
+            """,
+        ).fetchall()
+    for row in rows:
+        include_creating = row["status"] == "creating"
+        if row["status"] == "queued" or timestamp_age_seconds(row["updated_at"]) > PROVISIONING_STALE_SECONDS:
+            start_provisioning(row["id"], include_creating=include_creating)
+
+
+recover_interrupted_provisioning()
 
 
 LAYOUT = """
@@ -2020,18 +2229,18 @@ def index():
                 {public_link}
                 {home_screen_hint}
                 <div class="meta">
-	                  <span class="pill {pill_class}" data-pill>{h(status)}</span>
-	                  <span class="pill" data-step>{h(inst['current_step'] or 'created')}</span>
-	                  {plan_pill}
-	                  {caps_pill}
-	                  <span class="pill">{h(volume_size_label(inst['volume_size_gb']))}</span>
-	                </div>
-	                {error_markup}
-	              </div>
-	              <div class="instance-actions">
-	                {open_action}
-	                {main_delete_action}
-	              </div>
+                      <span class="pill {pill_class}" data-pill>{h(status)}</span>
+                      <span class="pill" data-step>{h(inst['current_step'] or 'created')}</span>
+                      {plan_pill}
+                      {caps_pill}
+                      <span class="pill">{h(volume_size_label(inst['volume_size_gb']))}</span>
+                    </div>
+                    {error_markup}
+                  </div>
+                  <div class="instance-actions">
+                    {open_action}
+                    {main_delete_action}
+                  </div>
               <details>
                 <summary>Advanced</summary>
                 <div class="meta">
@@ -2041,13 +2250,13 @@ def index():
                 </div>
                 <div class="command">{h(ssh)}</div>
                 <div class="actions left" style="margin-top: 10px;">
-	                  <button type="button" data-copy="{h(ssh)}">SSH</button>
-	                  {railway_action}
-	                  {recovery_action}
-	                  {advanced_delete_action}
-	                </div>
-	              </details>
-	            </article>
+                      <button type="button" data-copy="{h(ssh)}">SSH</button>
+                      {railway_action}
+                      {recovery_action}
+                      {advanced_delete_action}
+                    </div>
+                  </details>
+                </article>
             """
         )
 
@@ -2064,6 +2273,26 @@ def index():
         if plan_label == "unknown"
         else f"You're on the {plan_name} plan."
     )
+    authorized_workspaces = connection_workspaces(connection)
+    workspace_picker = ""
+    if len(authorized_workspaces) > 1:
+        workspace_picker = f"""
+          <form method="post" action="{path('/railway/workspace')}" class="form-grid" style="margin: 12px 0;">
+            <label>
+              Railway workspace
+              <select name="workspace_id">
+                {workspace_select_options(connection)}
+              </select>
+            </label>
+            <div class="deploy-submit" style="align-self: end;">
+              <button class="subtle" type="submit">Use workspace</button>
+            </div>
+          </form>
+        """
+    elif not workspace:
+        workspace_picker = """
+          <div class="notice">Railway did not return an authorized workspace. Reconnect Railway and select a workspace during OAuth.</div>
+        """
     volume_options = plan_volume_select_options(plan_label, default_volume_gb)
     memory_options = plan_memory_select_options(plan_label)
     if deploy_blocked:
@@ -2126,6 +2355,7 @@ def index():
               </div>
             </div>
             {connection_notice}
+            {workspace_picker}
             {deploy_control}
           </div>
         </section>
@@ -2483,6 +2713,36 @@ def disconnect_railway():
     return redirect(path("/"))
 
 
+@app.post("/railway/workspace")
+def select_railway_workspace():
+    user = require_user()
+    if user is None:
+        return redirect(path("/"))
+    connection = get_connection(user["id"])
+    if connection is None:
+        return redirect(path("/"))
+    workspace_id = (request.form.get("workspace_id") or "").strip()
+    workspace = next(
+        (item for item in connection_workspaces(connection) if item["id"] == workspace_id),
+        None,
+    )
+    if workspace is None:
+        return oauth_error("Workspace not available", "Reconnect Railway and authorize the workspace you want to use.")
+    timestamp = now_iso()
+    db().execute(
+        """
+        update railway_connections
+        set railway_workspace_id = ?, railway_workspace_name = ?,
+            cached_plan = null, deploy_blocked = '', plan_checked_at = null,
+            updated_at = ?
+        where id = ?
+        """,
+        (workspace["id"], workspace["name"], timestamp, connection["id"]),
+    )
+    db().commit()
+    return redirect(path("/#new"), code=303)
+
+
 @app.get("/railway/template")
 def railway_template():
     user = require_user()
@@ -2512,7 +2772,8 @@ def create_instance():
     limits = plan_limits(state["plan_label"])
     default_volume_gb = plan_default_volume_gb(state["plan_label"])
     volume_gb = coerce_volume_size_gb(request.form.get("volume_gb"), default_volume_gb) or default_volume_gb
-    volume_gb = max(1, min(limits["max_volume_gb"], int(volume_gb)))
+    min_volume_gb = min(limits["volume_options_gb"])
+    volume_gb = max(min_volume_gb, min(limits["max_volume_gb"], float(volume_gb)))
     custom_cpu_raw = (request.form.get("custom_cpu") or "").strip()
     custom_cpu = (
         None
@@ -2558,7 +2819,7 @@ def create_instance():
             source_ref,
             source_kind,
             source_ref,
-            str(volume_gb),
+            format_volume_gb(volume_gb),
             str(custom_cpu) if custom_cpu else "",
             str(memory_mb) if memory_mb else "",
             state["plan_label"],
@@ -2588,6 +2849,15 @@ def instance_status(instance_id):
     ).fetchone()
     if inst is None:
         return Response('{"error":"not found"}', status=404, mimetype="application/json")
+    if inst["status"] in {"queued", "creating"}:
+        include_creating = inst["status"] == "creating"
+        stale = timestamp_age_seconds(inst["updated_at"]) > PROVISIONING_STALE_SECONDS
+        if inst["status"] == "queued" or stale:
+            if start_provisioning(inst["id"], include_creating=include_creating):
+                inst = db().execute(
+                    "select * from mobius_instances where id = ? and user_id = ?",
+                    (instance_id, user["id"]),
+                ).fetchone()
     inst = reconcile_deployment_status(db(), inst)
     return {
         "id": inst["id"],
@@ -2609,6 +2879,9 @@ def delete_instance(instance_id):
     ).fetchone()
     if inst is None:
         return redirect(path("/"))
+    update_instance(db(), instance_id, status="deleted", current_step="Deleting", provision_token="")
+    add_instance_event(db(), instance_id, "info", "Delete requested")
+    db().commit()
     if inst["railway_project_id"]:
         connection = db().execute(
             "select * from railway_connections where id = ?",
@@ -2625,6 +2898,7 @@ def delete_instance(instance_id):
                 instance_id,
                 status="delete_failed",
                 current_step="Delete failed",
+                provision_token="",
                 last_error="Could not delete the Railway project — try again, or delete it from Railway.",
             )
             add_instance_event(
@@ -2635,7 +2909,7 @@ def delete_instance(instance_id):
             )
             db().commit()
             return redirect(path("/#new"), code=303)
-    update_instance(db(), instance_id, status="deleted", current_step="Deleted")
+    update_instance(db(), instance_id, status="deleted", current_step="Deleted", provision_token="")
     add_instance_event(db(), instance_id, "info", "Instance deleted")
     db().commit()
     return redirect(path("/#new"), code=303)

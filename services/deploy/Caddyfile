@@ -22,15 +22,11 @@ api.hamzamerzic.info {
 		}
 	}
 
-	# Mobius Launch prototype. This route is excluded from the API origin
-	# blocker below because it is a first-party web app served from
-	# api.hamzamerzic.info and submits same-origin forms.
-	handle /mobius-launch {
-		redir /mobius-launch/ 308
-	}
-
-	handle_path /mobius-launch* {
-		reverse_proxy mobius-launch:8080
+	# Mobius Launch now lives at mobius.page. Do not serve the root-mounted app
+	# under a stripped prefix here; its forms and OAuth callbacks are
+	# intentionally rooted at mobius.page.
+	handle /mobius-launch* {
+		redir https://mobius.page/ 308
 	}
 
 	# --- CORS ---

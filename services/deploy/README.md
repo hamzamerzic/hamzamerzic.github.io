@@ -1,11 +1,11 @@
 # VPS Deployment (Hetzner)
 
-Deploys IKFast, Robot Link Info, and Mesh Cleaner behind Caddy reverse proxy with automatic HTTPS, HTTP/2, rate limiting, and CORS.
+Deploys IKFast, Robot Link Info, Mesh Cleaner, and Mobius Launch behind Caddy with automatic HTTPS, HTTP/2/3, rate limiting, and CORS.
 
 ## Prerequisites
 
 - Hetzner VPS with Docker and Docker Compose installed
-- Domain `api.hamzamerzic.info` pointing to the VPS IP (Cloudflare A record)
+- Domains `api.hamzamerzic.info` and `mobius.page` pointing to the VPS IP
 - SSH access to the VPS
 
 ## Initial Server Setup
@@ -39,7 +39,7 @@ cd hamzamerzic.github.io/services/deploy
 
 # 2. Create .env from the example
 cp .env.example .env
-# Edit .env with your actual email and domain
+# Edit .env with your actual email, domains, and OAuth credentials
 
 # 3. Build and start
 docker compose up -d --build
@@ -50,12 +50,43 @@ docker compose logs -f caddy
 
 ## Cloudflare DNS
 
-Add an **A record** in Cloudflare:
+Add **A records** in Cloudflare:
 
 - **Name:** `api`
 - **Content:** `YOUR_VPS_IP`
 - **Proxy:** OFF (DNS only / grey cloud) — Caddy handles HTTPS directly.
   If you use Cloudflare proxy (orange cloud), set SSL mode to "Full (strict)".
+- **Name:** `mobius.page` / root apex
+- **Content:** `YOUR_VPS_IP`
+- **Proxy:** OFF unless Cloudflare SSL is set to "Full (strict)".
+
+## Mobius Launch
+
+Mobius Launch is served at `https://mobius.page`. The legacy `https://api.hamzamerzic.info/mobius-launch` path redirects there so forms and OAuth callbacks stay on the same origin.
+
+Required OAuth callback URLs:
+
+- Google: `https://mobius.page/auth/google/callback`
+- Railway: `https://mobius.page/railway/callback`
+
+Important environment variables:
+
+- `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`
+- `RAILWAY_CLIENT_ID` and `RAILWAY_CLIENT_SECRET`
+- `RAILWAY_OAUTH_SCOPES=openid email profile offline_access workspace:member`
+- `ALLOW_PROTOTYPE_EMAIL_LOGIN=false` once Google sign-in is configured
+
+The launcher stores account/session metadata, encrypted Railway OAuth tokens, deployment records, and provisioning events in the `mobius_launch_data` Docker volume. Back up that volume before moving hosts. It does not store Mobius instance files or chats; those live in the Railway projects it creates.
+
+Operational checks:
+
+```bash
+docker compose logs -f mobius-launch
+curl https://mobius.page/health
+curl https://api.hamzamerzic.info/health
+```
+
+If a deployment is interrupted while it is queued or creating, the launcher resumes stale rows on restart. If a Railway project was created before a late failure, the UI leaves the row visible so it can be deleted from the launcher or reviewed in Railway.
 
 ## What You Get
 
@@ -67,6 +98,7 @@ Add an **A record** in Cloudflare:
 - **Upload limit** — 256MB (was 32MB on Cloud Run)
 - **Streaming** — IKFast logs stream in real-time (`flush_interval -1`)
 - **No API keys exposed** — origin-based access control instead
+- **Mobius Launch** — Railway OAuth, plan-aware template deployment, public link creation, and deletion
 
 ## Updating Services
 
@@ -74,6 +106,12 @@ Add an **A record** in Cloudflare:
 cd hamzamerzic.github.io/services/deploy
 git pull
 docker compose up -d --build
+```
+
+For a launcher-only change:
+
+```bash
+docker compose up -d --build mobius-launch caddy
 ```
 
 ## Monitoring
