@@ -42,84 +42,25 @@ The primitives that make this work are small on purpose. You can inspect the sou
 
 The app store is itself a Möbius app. On first boot the platform installs it through the exact same path you use for everything else, which keeps the install channel the same for the store and every other app.
 
-<figure class="mb-diagram">
-  <div class="mb-catalog">
-    <div class="mb-app">
-      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/news.png' | relative_url }}" alt="News app icon" loading="lazy" />
-      <div class="mb-app__body">
-        <div class="mb-app__head">
-          <span class="mb-app__name">News</span>
-          <span class="mb-node__tag">runs daily</span>
-        </div>
-        <span class="mb-app__desc">An AI-curated morning digest, written for you by a background job at 10:00.</span>
-      </div>
-    </div>
-    <div class="mb-app">
-      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/gym.png' | relative_url }}" alt="Workout app icon" loading="lazy" />
-      <div class="mb-app__body">
-        <div class="mb-app__head">
-          <span class="mb-app__name">Workout</span>
-          <span class="mb-node__tag">on-device</span>
-        </div>
-        <span class="mb-app__desc">A natural-language workout logger. Type "3×5 deadlift at 100kg" and it parses the sets, all on your device.</span>
-      </div>
-    </div>
-    <div class="mb-app">
-      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/atlas.png' | relative_url }}" alt="Atlas app icon" loading="lazy" />
-      <div class="mb-app__body">
-        <div class="mb-app__head">
-          <span class="mb-app__name">Atlas</span>
-          <span class="mb-node__tag">offline</span>
-        </div>
-        <span class="mb-app__desc">A draggable 3D globe; tap the countries you have been to and watch the count climb toward 195.</span>
-      </div>
-    </div>
-    <div class="mb-app">
-      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/mind.png' | relative_url }}" alt="Memory app icon" loading="lazy" />
-      <div class="mb-app__body">
-        <div class="mb-app__head">
-          <span class="mb-app__name">Memory</span>
-          <span class="mb-node__tag">memory</span>
-        </div>
-        <span class="mb-app__desc">An Obsidian-style graph of what the agent has learned about how you work, the lessons worth keeping, made browsable.</span>
-      </div>
-    </div>
-    <div class="mb-app">
-      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/latex.png' | relative_url }}" alt="LaTeX app icon" loading="lazy" />
-      <div class="mb-app__body">
-        <div class="mb-app__head">
-          <span class="mb-app__name">LaTeX</span>
-          <span class="mb-node__tag">AI</span>
-        </div>
-        <span class="mb-app__desc">An Overleaf-style editor with a file drawer and a real tectonic engine, where an AI sub-agent writes <code>.tex</code> as you watch it typeset.</span>
-      </div>
-    </div>
-    <div class="mb-app">
-      <img class="mb-app__icon" src="{{ '/assets/img/mobius/app-icons/dreaming.png' | relative_url }}" alt="Reflection app icon" loading="lazy" />
-      <div class="mb-app__body">
-        <div class="mb-app__head">
-          <span class="mb-app__name">Reflection</span>
-          <span class="mb-node__tag">nightly</span>
-        </div>
-        <span class="mb-app__desc">Overnight, Möbius reviews the day's work and leaves a one-page morning brief.</span>
-      </div>
-    </div>
-  </div>
-  <figcaption>The curated catalog, the starter-pack apps the in-app store installs.</figcaption>
+<figure class="mb-diagram mb-diagram--image">
+  <img class="mb-diagram__image" src="{{ '/assets/img/mobius/os/batteries-included.png' | relative_url }}" alt="The Möbius App Store Browse tab showing Skills, Tasks, Contribute, Notes, News, Memory, Reflection, and Editor installed in the starter catalog." loading="lazy" />
+  <figcaption>The Batteries included starter catalog inside Möbius: system apps, everyday apps, and agent-facing tools all install through the same App Store path.</figcaption>
 </figure>
 
 Today it is a hand-picked set. You can install from outside it:
 
 <div class="table-wrap" markdown="1">
 
-| App            | What it does                                                                                                                                        |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **News**       | A daily AI-curated digest. A background job wakes at 10:00, runs the agent with web search only, and writes the morning's report.                   |
-| **Workout**    | A natural-language workout logger. Type what you did, like "3×5 deadlift at 100kg", and it parses the sets. No agent, no cloud, all on your device. |
-| **Atlas**      | A draggable 3D globe; tap the countries you have been to and the count climbs toward 195.                                                           |
-| **Memory**     | An Obsidian-style graph of what the agent has learned about how you work, the lessons worth keeping, made browsable.                                |
-| **LaTeX**      | An Overleaf-style editor with a file drawer and a real tectonic engine; an AI sub-agent writes `.tex` while you watch it typeset.                   |
-| **Reflection** | Overnight, the agent reviews the day's work and leaves a one-page morning brief, so it starts the next day a little sharper.                        |
+| App            | What it does                                                                                                                  |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| **Skills**     | Browse and search the agent's installed skills and playbooks, so the system can explain what it knows how to do.              |
+| **Tasks**      | See scheduled check-ins at a glance and keep background agent work visible instead of mysterious.                              |
+| **Contribute** | Review GitHub-backed changes the agent has proposed upstream, with a path from local improvement to shared app work.           |
+| **Notes**      | Markdown notes that render as you type, with checklists and durable local storage.                                             |
+| **News**       | A daily AI-curated digest. A background job runs the agent with web search and writes the morning's report.                    |
+| **Memory**     | A browsable graph of what Möbius has learned over time, the lessons worth keeping, and the connections between them.           |
+| **Reflection** | Overnight, the agent reviews the day's work and leaves a one-page morning brief, so it starts the next day a little sharper.   |
+| **Editor**     | Browse and edit files on your Möbius, with an agent-aware path into changing the system itself.                               |
 
 </div>
 
