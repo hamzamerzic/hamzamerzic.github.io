@@ -2933,6 +2933,10 @@ LAYOUT = """
       gap: 8px;
       align-items: end;
     }
+    .deploy-card .deploy-inline {
+      grid-template-columns: minmax(180px, 340px) auto;
+      justify-content: start;
+    }
     .deploy-button { min-width: 132px; }
     .deploy-note {
       color: var(--muted);
@@ -3304,6 +3308,10 @@ LAYOUT = """
       .hero-panel { padding: 20px; }
       .launch-head, .container-top, .deploy-inline, .control-row { grid-template-columns: 1fr; }
       .container-actions { justify-content: flex-start; }
+      .deploy-card .deploy-inline {
+        grid-template-columns: 1fr;
+        justify-content: stretch;
+      }
       .deploy-button { width: 100%; }
       .limit-grid { grid-template-columns: 1fr; }
       .budget-card { grid-template-columns: 1fr; }
