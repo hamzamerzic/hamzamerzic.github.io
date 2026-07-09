@@ -671,7 +671,7 @@ def plan_volume_select_options(label, selected=None):
 
 
 def plan_memory_select_options(label):
-    options = ["""<option value="" selected>Uncapped (up to plan max)</option>"""]
+    options = ["""<option value="" selected>Uncapped</option>"""]
     options.extend(
         f"""<option value="{size}">{memory_mb_label(size)}</option>"""
         for size in plan_limits(label)["memory_options_mb"]
@@ -2528,7 +2528,9 @@ LAYOUT = """
     }
     .deploy-card {
       display: grid;
-      gap: 10px;
+      gap: 8px;
+      width: min(100%, 560px);
+      margin: 0 auto;
     }
     .actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
     .actions.left { justify-content: flex-start; }
@@ -2933,15 +2935,59 @@ LAYOUT = """
       gap: 8px;
       align-items: end;
     }
-    .deploy-card .deploy-inline {
-      grid-template-columns: minmax(180px, 340px) auto;
-      justify-content: start;
+    .deploy-composer {
+      display: grid;
+      grid-template-columns: minmax(220px, 1fr) auto;
+      gap: 6px;
+      align-items: stretch;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg);
+      padding: 6px;
+      transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
     }
-    .deploy-button { min-width: 132px; }
+    .deploy-composer:focus-within {
+      border-color: color-mix(in srgb, var(--accent) 70%, white 0%);
+      background: color-mix(in srgb, var(--surface2) 38%, var(--bg));
+      box-shadow: 0 0 0 4px rgba(139, 108, 247, 0.1);
+    }
+    .deploy-name {
+      display: grid;
+      gap: 1px;
+      padding: 2px 8px 3px;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .deploy-name span {
+      display: block;
+    }
+    .deploy-name input {
+      border: 0;
+      min-height: 30px;
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+      color: var(--text);
+      font: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      min-width: 0;
+    }
+    .deploy-name input:focus-visible {
+      outline: 0;
+    }
+    .deploy-button {
+      min-width: 112px;
+      min-height: 40px;
+      box-shadow: none !important;
+    }
     .deploy-note {
       color: var(--muted);
       font-size: 12px;
       line-height: 1.45;
+      text-align: center;
     }
     .control-row {
       display: grid;
@@ -3308,9 +3354,9 @@ LAYOUT = """
       .hero-panel { padding: 20px; }
       .launch-head, .container-top, .deploy-inline, .control-row { grid-template-columns: 1fr; }
       .container-actions { justify-content: flex-start; }
-      .deploy-card .deploy-inline {
+      .deploy-composer {
         grid-template-columns: 1fr;
-        justify-content: stretch;
+        padding: 8px;
       }
       .deploy-button { width: 100%; }
       .limit-grid { grid-template-columns: 1fr; }
@@ -3732,8 +3778,8 @@ def index():
     else:
         deploy_control = f"""
           <form class="deploy-card" method="post" action="{path('/instances')}">
-            <div class="deploy-inline">
-              <label class="input-shell">
+            <div class="deploy-composer">
+              <label class="deploy-name">
                 <span>Name</span>
                 <input name="display_name" value="My Möbius" maxlength="80" autocomplete="off" required>
               </label>
