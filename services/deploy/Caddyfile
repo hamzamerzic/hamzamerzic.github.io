@@ -22,9 +22,8 @@ api.hamzamerzic.info {
 		}
 	}
 
-	# Möbius Launch now lives at mobius.you. Do not serve the root-mounted app
-	# under a stripped prefix here; its forms and OAuth callbacks are
-	# intentionally rooted at the launcher host.
+	# Legacy redirect for the old personal-site launcher path. The launcher
+	# service itself is owned by mobius-os/mobius-os.github.io.
 	handle /mobius-launch* {
 		redir https://mobius.you/ 308
 	}
@@ -112,23 +111,6 @@ mobius.hamzamerzic.info {
 	handle {
 		reverse_proxy mobius:8000
 	}
-}
-
-mobius.page, mobius.you {
-	encode gzip
-	reverse_proxy mobius-launch:8080
-	log {
-		output stdout
-		format console
-	}
-}
-
-www.mobius.page {
-	redir https://mobius.page{uri} permanent
-}
-
-www.mobius.you {
-	redir https://mobius.you{uri} permanent
 }
 
 :8443 {
