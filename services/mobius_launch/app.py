@@ -2424,7 +2424,7 @@ LAYOUT = """
     }
     a { color: inherit; text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .shell { max-width: 1040px; margin: 0 auto; padding: 20px 20px 64px; }
+    .shell { max-width: 1120px; margin: 0 auto; padding: 20px 20px 64px; }
     .narrow { max-width: 460px; padding-top: 72px; }
     .topbar {
       display: flex;
@@ -3008,22 +3008,28 @@ LAYOUT = """
       gap: 14px;
       padding: 0 17px 17px;
     }
+    .home-section {
+      display: grid;
+      gap: 14px;
+    }
+    .home-section .section-title { margin-bottom: 0; }
     .container-list { display: grid; gap: 14px; }
     .container-card {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background:
-        linear-gradient(180deg, rgba(255,255,255,0.045), transparent 58%),
+        radial-gradient(circle at 18% 0%, rgba(139, 108, 247, 0.12), transparent 30%),
+        linear-gradient(180deg, rgba(255,255,255,0.052), transparent 58%),
         var(--bg);
-      padding: 16px;
+      padding: 18px;
       display: grid;
-      gap: 12px;
+      gap: 16px;
       animation: enter 260ms var(--spring);
     }
     .container-top {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
+      gap: 18px;
       align-items: start;
     }
     .container-title {
@@ -3034,6 +3040,12 @@ LAYOUT = """
       min-width: 0;
     }
     .container-title h3 { font-size: 22px; font-weight: 730; }
+    .home-kicker {
+      margin: 0 0 6px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 650;
+    }
     .status-badge {
       display: inline-flex;
       align-items: center;
@@ -3067,37 +3079,85 @@ LAYOUT = """
       flex-wrap: wrap;
     }
     .container-actions .button:not(.icon) { min-height: 38px; }
-    .resource-stack {
+    .home-insights {
       display: grid;
-      gap: 10px;
-      border: 1px solid var(--border-light);
+      gap: 15px;
+      border-top: 1px solid var(--border-light);
+      padding-top: 15px;
+    }
+    .budget-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(160px, 34%);
+      gap: 18px;
+      align-items: end;
       border-radius: var(--radius);
-      padding: 12px;
+      padding: 14px;
       background:
-        radial-gradient(circle at 0% 0%, rgba(139, 108, 247, 0.09), transparent 34%),
-        color-mix(in srgb, var(--surface3) 90%, transparent);
+        linear-gradient(135deg, rgba(139, 108, 247, 0.13), rgba(16, 185, 129, 0.055)),
+        color-mix(in srgb, var(--surface3) 88%, transparent);
     }
-    .metric-row {
+    .budget-copy {
       display: grid;
-      grid-template-columns: minmax(120px, 152px) minmax(0, 1fr) 78px;
-      gap: 12px;
-      align-items: center;
-      min-height: 32px;
-    }
-    .metric-head {
-      display: grid;
-      gap: 1px;
+      gap: 4px;
       min-width: 0;
     }
-    .metric-head span {
+    .metric-label, .metric-head span {
       color: var(--muted);
       font-size: 11px;
       font-weight: 720;
       text-transform: uppercase;
     }
+    .budget-copy strong {
+      color: var(--text);
+      font-size: 36px;
+      font-weight: 760;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    .budget-copy p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .budget-meter {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+    .budget-pair {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    .budget-pair strong { color: var(--text); font-size: 15px; }
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+    }
+    .metric-tile {
+      padding: 2px 13px 0;
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      min-height: 118px;
+    }
+    .metric-tile:first-child { padding-left: 0; }
+    .metric-tile + .metric-tile {
+      border-left: 1px solid var(--border-light);
+    }
+    .metric-head {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
     .metric-head strong {
       color: var(--text);
-      font-size: 12px;
+      font-size: 15px;
       font-weight: 740;
       font-variant-numeric: tabular-nums;
       line-height: 1.25;
@@ -3117,12 +3177,11 @@ LAYOUT = """
       background: linear-gradient(90deg, var(--accent), #d8b4fe);
       transition: width 280ms ease;
     }
-    .metric-row:nth-child(2) .metric-bar > span { background: linear-gradient(90deg, #60a5fa, #8b6cf7); }
-    .metric-row:nth-child(3) .metric-bar > span { background: linear-gradient(90deg, #10b981, #7dd3fc); }
-    .metric-row:nth-child(4) .metric-bar > span { background: linear-gradient(90deg, #f0c674, #8b6cf7); }
+    .metric-tile:nth-child(2) .metric-bar > span { background: linear-gradient(90deg, #60a5fa, #8b6cf7); }
+    .metric-tile:nth-child(3) .metric-bar > span { background: linear-gradient(90deg, #10b981, #7dd3fc); }
     .spark {
-      width: 78px;
-      height: 24px;
+      width: 100%;
+      height: 34px;
       display: block;
       overflow: visible;
     }
@@ -3134,24 +3193,6 @@ LAYOUT = """
       stroke-linejoin: round;
       vector-effect: non-scaling-stroke;
     }
-    .cost-strip {
-      display: grid;
-      grid-template-columns: minmax(120px, 152px) minmax(0, 1fr) auto;
-      gap: 12px;
-      align-items: center;
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
-    }
-    .cost-pair {
-      display: flex;
-      gap: 8px;
-      align-items: baseline;
-      justify-content: flex-end;
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-    .cost-pair strong { color: var(--text); font-size: 14px; }
     .container-foot {
       display: flex;
       flex-wrap: wrap;
@@ -3203,9 +3244,18 @@ LAYOUT = """
       .hero-panel { padding: 20px; }
       .launch-head, .container-top, .deploy-inline, .control-row { grid-template-columns: 1fr; }
       .container-actions { justify-content: flex-start; }
-      .metric-row, .cost-strip { grid-template-columns: minmax(92px, 132px) minmax(0, 1fr); }
-      .spark, .cost-pair { grid-column: 2; }
-      .cost-pair { justify-content: flex-start; }
+      .budget-card { grid-template-columns: 1fr; }
+      .budget-copy strong { font-size: 30px; }
+      .resource-grid { grid-template-columns: 1fr; }
+      .metric-tile {
+        min-height: 104px;
+        padding: 13px 0 0;
+      }
+      .metric-tile:first-child { padding-top: 0; }
+      .metric-tile + .metric-tile {
+        border-left: 0;
+        border-top: 1px solid var(--border-light);
+      }
     }
   </style>
 </head>
@@ -3463,33 +3513,35 @@ def index():
             else ""
         )
         metrics_markup = f"""
-                <div class="resource-stack" data-metrics-url="{path('/instances/' + inst['id'] + '/metrics')}">
-                  <div class="metric-row">
-                    <div class="metric-head"><span>CPU</span><strong data-metric="cpu">--</strong></div>
-                    <div class="metric-bar"><span data-meter="cpu"></span></div>
-                    <svg class="spark" data-spark="cpu" viewBox="0 0 100 24" preserveAspectRatio="none"></svg>
+                <div class="home-insights" data-metrics-url="{path('/instances/' + inst['id'] + '/metrics')}">
+                  <div class="budget-card">
+                    <div class="budget-copy">
+                      <span class="metric-label">Estimated spend</span>
+                      <strong data-metric="cost-estimate">--</strong>
+                      <p data-metric="cost-note">Estimated; Railway is the billing source.</p>
+                    </div>
+                    <div class="budget-meter">
+                      <div class="metric-bar"><span data-meter="cost"></span></div>
+                      <div class="budget-pair"><span data-metric="cost-used">used --</span><strong data-metric="cost-cap">$5</strong></div>
+                    </div>
                   </div>
-                  <div class="metric-row">
-                    <div class="metric-head"><span>Memory</span><strong data-metric="memory">--</strong></div>
-                    <div class="metric-bar"><span data-meter="memory"></span></div>
-                    <svg class="spark" data-spark="memory" viewBox="0 0 100 24" preserveAspectRatio="none"></svg>
+                  <div class="resource-grid">
+                    <div class="metric-tile">
+                      <div class="metric-head"><span>CPU</span><strong data-metric="cpu">--</strong></div>
+                      <div class="metric-bar"><span data-meter="cpu"></span></div>
+                      <svg class="spark" data-spark="cpu" viewBox="0 0 100 34" preserveAspectRatio="none"></svg>
+                    </div>
+                    <div class="metric-tile">
+                      <div class="metric-head"><span>Memory</span><strong data-metric="memory">--</strong></div>
+                      <div class="metric-bar"><span data-meter="memory"></span></div>
+                      <svg class="spark" data-spark="memory" viewBox="0 0 100 34" preserveAspectRatio="none"></svg>
+                    </div>
+                    <div class="metric-tile">
+                      <div class="metric-head"><span>Storage</span><strong data-metric="volume">{h(volume_size_label(inst['volume_size_gb']))}</strong></div>
+                      <div class="metric-bar"><span data-meter="volume"></span></div>
+                      <svg class="spark" data-spark="volume" viewBox="0 0 100 34" preserveAspectRatio="none"></svg>
+                    </div>
                   </div>
-                  <div class="metric-row">
-                    <div class="metric-head"><span>Volume</span><strong data-metric="volume">{h(volume_size_label(inst['volume_size_gb']))}</strong></div>
-                    <div class="metric-bar"><span data-meter="volume"></span></div>
-                    <svg class="spark" data-spark="volume" viewBox="0 0 100 24" preserveAspectRatio="none"></svg>
-                  </div>
-                  <div class="metric-row">
-                    <div class="metric-head"><span>Network</span><strong data-metric="network">--</strong></div>
-                    <div class="metric-bar"><span data-meter="network"></span></div>
-                    <svg class="spark" data-spark="network" viewBox="0 0 100 24" preserveAspectRatio="none"></svg>
-                  </div>
-                  <div class="cost-strip">
-                    <div class="metric-head"><span>Cost</span><strong data-metric="cost-estimate">--</strong></div>
-                    <div class="metric-bar"><span data-meter="cost"></span></div>
-                    <div class="cost-pair"><span data-metric="cost-used">used --</span><strong data-metric="cost-cap">$5</strong></div>
-                  </div>
-                  <div class="muted-line" data-metric="cost-note">Estimated; Railway is the billing source.</div>
                 </div>
         """
         rows.append(
@@ -3497,13 +3549,14 @@ def index():
             <article class="container-card" data-instance-id="{h(inst['id'])}" data-status="{h(status)}" data-poll="{poll_flag}">
               <div class="container-top">
                 <div>
+                  <p class="home-kicker">Private Railway container</p>
                   <div class="container-title">
-                      <h3>{h(inst['display_name'])}</h3>
-                      <span class="status-badge {pill_class}" data-pill>{h(status_label)}</span>
-                      {step_pill}
-                    </div>
-                    {build_hint}
-                    <div class="container-foot">
+                    <h3>{h(inst['display_name'])}</h3>
+                    <span class="status-badge {pill_class}" data-pill>{h(status_label)}</span>
+                    {step_pill}
+                  </div>
+                  {build_hint}
+                  <div class="container-foot">
                     {plan_pill}
                     {caps_pill}
                     <span>{h(volume_size_label(inst['volume_size_gb']))} volume</span>
@@ -3754,14 +3807,12 @@ def index():
     instances_panel = ""
     if rows:
         instances_panel = f"""
-    <section class="panel">
-      <div class="section">
-        <div class="section-title">
-          <h2>Your Möbius</h2>
-          <span class="pill">{len(instances)}</span>
-        </div>
-        <div class="container-list">{instance_markup}</div>
+    <section class="home-section">
+      <div class="section-title">
+        <h2>Your Möbius</h2>
+        <span class="pill">{len(instances)}</span>
       </div>
+      <div class="container-list">{instance_markup}</div>
     </section>
     {poll_script}
     """
