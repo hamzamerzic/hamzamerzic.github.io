@@ -564,7 +564,7 @@ def format_cpu_label(value):
     return f"{cpu:.1f}".rstrip("0").rstrip(".") + " vCPU"
 
 
-def percent_label(used, total):
+def percent_label(used, total, decimals=0):
     try:
         used = float(used)
         total = float(total)
@@ -572,7 +572,10 @@ def percent_label(used, total):
         return ""
     if total <= 0:
         return ""
-    return f"{min(999, (used / total) * 100):.0f}%"
+    value = min(999, (used / total) * 100)
+    if decimals:
+        return f"{value:.{decimals}f}".rstrip("0").rstrip(".") + "%"
+    return f"{value:.0f}%"
 
 
 def volume_size_select_options(selected=None):
@@ -2081,7 +2084,7 @@ def railway_metrics_snapshot(access_token, connection, instance):
             "used_label": format_usd(used_cost),
             "estimated_label": format_usd(estimated_cost),
             "allowance_label": format_usd(RAILWAY_TRIAL_ALLOWANCE_USD),
-            "percent": percent_label(cost_reference, RAILWAY_TRIAL_ALLOWANCE_USD),
+            "percent": percent_label(cost_reference, RAILWAY_TRIAL_ALLOWANCE_USD, decimals=1),
             "note": "Current usage to date; projected spend is an estimate.",
         },
     }
