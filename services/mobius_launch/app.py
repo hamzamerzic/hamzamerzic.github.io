@@ -1777,17 +1777,6 @@ def usage_value(usage, measurement):
     return None
 
 
-def estimated_usage_value(usage, measurement):
-    for item in usage or []:
-        if item.get("measurement") != measurement:
-            continue
-        try:
-            return float(item.get("estimatedValue"))
-        except (TypeError, ValueError):
-            return None
-    return None
-
-
 def metric_values(metrics, measurement):
     for metric in metrics or []:
         if metric.get("measurement") == measurement:
@@ -1925,7 +1914,6 @@ def railway_metrics_snapshot(access_token, connection, instance):
         },
     )
     usage = []
-    estimated_usage = []
     try:
         usage_data = railway_graphql(
             """
@@ -1960,41 +1948,6 @@ def railway_metrics_snapshot(access_token, connection, instance):
         usage = usage_data.get("usage") or []
     except RailwayAPIError:
         usage = []
-    try:
-        estimated_data = railway_graphql(
-            """
-            query estimatedUsage(
-              $workspaceId: String!
-              $projectId: String!
-              $measurements: [MetricMeasurement!]!
-            ) {
-              estimatedUsage(
-                workspaceId: $workspaceId
-                projectId: $projectId
-                includeDeleted: false
-                measurements: $measurements
-              ) {
-                measurement
-                estimatedValue
-                projectId
-              }
-            }
-            """,
-            access_token,
-            {
-                "workspaceId": connection["railway_workspace_id"],
-                "projectId": instance["railway_project_id"],
-                "measurements": [
-                    "CPU_USAGE",
-                    "MEMORY_USAGE_GB",
-                    "DISK_USAGE_GB",
-                    "NETWORK_TX_GB",
-                ],
-            },
-        )
-        estimated_usage = estimated_data.get("estimatedUsage") or []
-    except RailwayAPIError:
-        estimated_usage = []
 
     project = data.get("project") or {}
     volumes = [edge.get("node") or {} for edge in ((project.get("volumes") or {}).get("edges") or [])]
@@ -2025,8 +1978,6 @@ def railway_metrics_snapshot(access_token, connection, instance):
     deployment = (data.get("serviceInstance") or {}).get("latestDeployment") or {}
     deployment_status = (deployment.get("status") or instance["status"] or "").lower()
     used_cost = usage_cost(usage)
-    estimated_cost = usage_cost(estimated_usage, value_key="estimatedValue")
-    cost_reference = used_cost if usage else estimated_cost
     network_spark = spark_percentages(metrics, "NETWORK_TX_GB")
 
     return {
@@ -2076,16 +2027,14 @@ def railway_metrics_snapshot(access_token, connection, instance):
             "tx_label": format_gb_label(usage_value(usage, "NETWORK_TX_GB")),
         },
         "cost": {
-            "available": bool(usage or estimated_usage),
+            "available": bool(usage),
             "used": used_cost,
-            "estimated": estimated_cost,
             "allowance": RAILWAY_TRIAL_ALLOWANCE_USD,
-            "label": format_usd(cost_reference),
+            "label": format_usd(used_cost),
             "used_label": format_usd(used_cost),
-            "estimated_label": format_usd(estimated_cost),
             "allowance_label": format_usd(RAILWAY_TRIAL_ALLOWANCE_USD),
-            "percent": percent_label(cost_reference, RAILWAY_TRIAL_ALLOWANCE_USD, decimals=1),
-            "note": "Current usage to date; projected spend is an estimate.",
+            "percent": percent_label(used_cost, RAILWAY_TRIAL_ALLOWANCE_USD, decimals=1),
+            "note": "Current project usage to date. Railway is the billing source.",
         },
     }
 
@@ -3210,7 +3159,7 @@ LAYOUT = """
       flex-wrap: wrap;
     }
     .container-actions form { margin: 0; }
-    .container-actions .button:not(.icon) { min-height: 38px; }
+    .container-actions .button, .container-actions button { min-height: 38px; }
     .home-insights {
       display: grid;
       gap: 15px;
@@ -3375,8 +3324,23 @@ LAYOUT = """
       .instance-actions { min-width: 0; justify-content: flex-start; }
       .hero-panel { padding: 20px; }
       .launch-head, .container-top, .deploy-inline, .control-row { grid-template-columns: 1fr; }
-      .container-actions { justify-content: flex-start; }
-      .container-actions form:last-child { margin-left: auto; }
+      .container-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+        justify-content: stretch;
+        width: 100%;
+      }
+      .container-actions .button, .container-actions button {
+        width: 100%;
+        min-width: 0;
+        min-height: 44px;
+        padding: 0;
+      }
+      .container-actions .button span { display: none; }
+      .container-actions form {
+        display: block;
+        width: 100%;
+      }
       .deploy-composer {
         grid-template-columns: 1fr;
         padding: 8px;
@@ -3626,7 +3590,7 @@ def index():
             else ""
         )
         railway_project_action = (
-            f"""<a class="button subtle railway-link" href="{h(railway_url)}" target="_blank" rel="noreferrer" title="Open Railway project">Railway {icon('external')}</a>"""
+            f"""<a class="button subtle railway-link" href="{h(railway_url)}" target="_blank" rel="noreferrer" title="Open Railway project">{icon('external')}<span>Railway</span></a>"""
             if railway_url
             else ""
         )
@@ -3675,11 +3639,11 @@ def index():
                     <div class="budget-copy">
                       <span class="metric-label">Current spend</span>
                       <strong data-metric="cost-current">--</strong>
-                      <p data-metric="cost-note">Current usage to date; projected spend is an estimate.</p>
+                      <p data-metric="cost-note">Current project usage to date. Railway is the billing source.</p>
                     </div>
                     <div class="budget-meter">
                       <div class="metric-bar"><span data-meter="cost"></span></div>
-                      <div class="budget-pair"><span data-metric="cost-secondary">projected --</span><strong data-metric="cost-cap">$5</strong></div>
+                      <div class="budget-pair"><span>included trial</span><strong data-metric="cost-cap">$5</strong></div>
                     </div>
                   </div>
                   <div class="resource-grid">
@@ -3922,7 +3886,6 @@ def index():
               }
               if (d.cost) {
                 setText(el, '[data-metric="cost-current"]', d.cost.label);
-                setText(el, '[data-metric="cost-secondary"]', 'projected ' + (d.cost.estimated_label || '--'));
                 setText(el, '[data-metric="cost-cap"]', d.cost.allowance_label || '$5');
                 setText(el, '[data-metric="cost-note"]', d.cost.note);
                 setMeter(el, '[data-meter="cost"]', d.cost.percent);
