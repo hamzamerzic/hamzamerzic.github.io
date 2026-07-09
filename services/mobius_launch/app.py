@@ -28,6 +28,7 @@ APP_BASE_PATH = os.environ.get("APP_BASE_PATH", "/mobius-launch").rstrip("/")
 PUBLIC_BASE_URL = os.environ.get(
     "PUBLIC_BASE_URL", "https://api.hamzamerzic.info/mobius-launch"
 ).rstrip("/")
+PUBLIC_CANONICAL_URL = os.environ.get("PUBLIC_CANONICAL_URL", "https://mobius.you").rstrip("/")
 PUBLIC_HOSTS = {
     host.strip().lower()
     for host in os.environ.get("PUBLIC_HOSTS", "mobius.page,mobius.you").split(",")
@@ -2044,7 +2045,7 @@ def railway_metrics_snapshot(access_token, connection, instance):
             "used_label": format_usd(used_cost),
             "allowance_label": format_usd(RAILWAY_TRIAL_ALLOWANCE_USD),
             "percent": percent_label(used_cost, RAILWAY_TRIAL_ALLOWANCE_USD, decimals=1),
-            "note": "Current project usage to date. Railway is the billing source.",
+            "note": "Current project usage to date. Billed by Railway.",
         },
     }
 
@@ -2361,6 +2362,8 @@ LAYOUT = """
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Launch a private Möbius container on Railway.">
+  <link rel="canonical" href="{{ canonical_url }}">
   <meta name="theme-color" content="#0d0d0d">
   <title>Möbius Launch</title>
   <link rel="icon" type="image/png" href="{{ favicon_url }}">
@@ -3404,7 +3407,12 @@ LAYOUT = """
 
 
 def render(body):
-    return render_template_string(LAYOUT, body=body, favicon_url=logo_url())
+    return render_template_string(
+        LAYOUT,
+        body=body,
+        favicon_url=logo_url(),
+        canonical_url=PUBLIC_CANONICAL_URL + path("/"),
+    )
 
 
 ICONS = {
@@ -3656,7 +3664,7 @@ def index():
                     <div class="budget-copy">
                       <span class="metric-label">Current spend</span>
                       <strong data-metric="cost-current">--</strong>
-                      <p data-metric="cost-note">Current project usage to date. Railway is the billing source.</p>
+                      <p data-metric="cost-note">Current project usage to date. Billed by Railway.</p>
                     </div>
                     <div class="budget-meter">
                       <div class="metric-bar"><span data-meter="cost"></span></div>

@@ -5,7 +5,7 @@ Deploys IKFast, Robot Link Info, Mesh Cleaner, and Mobius Launch behind Caddy wi
 ## Prerequisites
 
 - Hetzner VPS with Docker and Docker Compose installed
-- Domains `api.hamzamerzic.info` and `mobius.page` pointing to the VPS IP
+- Domains `api.hamzamerzic.info`, `mobius.you`, and `mobius.page` pointing to the VPS IP
 - SSH access to the VPS
 
 ## Initial Server Setup
@@ -56,18 +56,21 @@ Add **A records** in Cloudflare:
 - **Content:** `YOUR_VPS_IP`
 - **Proxy:** OFF (DNS only / grey cloud) — Caddy handles HTTPS directly.
   If you use Cloudflare proxy (orange cloud), set SSL mode to "Full (strict)".
+- **Name:** `mobius.you` / root apex
 - **Name:** `mobius.page` / root apex
 - **Content:** `YOUR_VPS_IP`
 - **Proxy:** OFF unless Cloudflare SSL is set to "Full (strict)".
 
 ## Mobius Launch
 
-Mobius Launch is served at `https://mobius.page`. The legacy `https://api.hamzamerzic.info/mobius-launch` path redirects there so forms and OAuth callbacks stay on the same origin.
+Mobius Launch is served at both `https://mobius.you` and `https://mobius.page`; neither host redirects to the other. `https://mobius.you` is the canonical URL used in metadata and defaults. The legacy `https://api.hamzamerzic.info/mobius-launch` path redirects to `https://mobius.you`.
 
 Required OAuth callback URLs:
 
-- Google: `https://mobius.page/auth/google/callback`
-- Railway: `https://mobius.page/railway/callback`
+- Google: `https://mobius.you/auth/google/callback`
+- Google alternate: `https://mobius.page/auth/google/callback`
+- Railway: `https://mobius.you/railway/callback`
+- Railway alternate: `https://mobius.page/railway/callback`
 
 Important environment variables:
 
@@ -83,6 +86,7 @@ Operational checks:
 ```bash
 docker compose logs -f mobius-launch
 curl https://mobius.page/health
+curl https://mobius.you/health
 curl https://api.hamzamerzic.info/health
 ```
 

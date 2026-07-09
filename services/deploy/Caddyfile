@@ -22,11 +22,11 @@ api.hamzamerzic.info {
 		}
 	}
 
-	# Möbius Launch now lives at mobius.page. Do not serve the root-mounted app
+	# Möbius Launch now lives at mobius.you. Do not serve the root-mounted app
 	# under a stripped prefix here; its forms and OAuth callbacks are
-	# intentionally rooted at mobius.page.
+	# intentionally rooted at the launcher host.
 	handle /mobius-launch* {
-		redir https://mobius.page/ 308
+		redir https://mobius.you/ 308
 	}
 
 	# --- CORS ---
