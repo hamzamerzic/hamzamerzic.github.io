@@ -51,16 +51,16 @@ Today it is a hand-picked set. You can install from outside it:
 
 <div class="table-wrap" markdown="1">
 
-| App            | What it does                                                                                                                  |
-| -------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| **Skills**     | Browse and search the agent's installed skills and playbooks, so the system can explain what it knows how to do.              |
-| **Tasks**      | See scheduled check-ins at a glance and keep background agent work visible instead of mysterious.                              |
-| **Contribute** | Review GitHub-backed changes the agent has proposed upstream, with a path from local improvement to shared app work.           |
-| **Notes**      | Markdown notes that render as you type, with checklists and durable local storage.                                             |
-| **News**       | A daily AI-curated digest. A background job runs the agent with web search and writes the morning's report.                    |
-| **Memory**     | A browsable graph of what Möbius has learned over time, the lessons worth keeping, and the connections between them.           |
-| **Reflection** | Overnight, the agent reviews the day's work and leaves a one-page morning brief, so it starts the next day a little sharper.   |
-| **Editor**     | Browse and edit files on your Möbius, with an agent-aware path into changing the system itself.                               |
+| App            | What it does                                                                                                                 |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Skills**     | Browse and search the agent's installed skills and playbooks, so the system can explain what it knows how to do.             |
+| **Tasks**      | See scheduled check-ins at a glance and keep background agent work visible instead of mysterious.                            |
+| **Contribute** | Review GitHub-backed changes the agent has proposed upstream, with a path from local improvement to shared app work.         |
+| **Notes**      | Markdown notes that render as you type, with checklists and durable local storage.                                           |
+| **News**       | A daily AI-curated digest. A background job runs the agent with web search and writes the morning's report.                  |
+| **Memory**     | A browsable graph of what Möbius has learned over time, the lessons worth keeping, and the connections between them.         |
+| **Reflection** | Overnight, the agent reviews the day's work and leaves a one-page morning brief, so it starts the next day a little sharper. |
+| **Editor**     | Browse and edit files on your Möbius, with an agent-aware path into changing the system itself.                              |
 
 </div>
 
