@@ -2596,6 +2596,16 @@ LAYOUT = """
       min-width: 92px;
       gap: 7px;
     }
+    .recovery-link {
+      min-width: 112px;
+      color: color-mix(in srgb, var(--accent) 82%, white 12%);
+      border-color: rgba(139, 108, 247, 0.32);
+      background: rgba(139, 108, 247, 0.12);
+    }
+    .recovery-link:hover {
+      color: #fff;
+      background: rgba(139, 108, 247, 0.18);
+    }
     .railway-link {
       min-width: 82px;
     }
@@ -2794,21 +2804,6 @@ LAYOUT = """
       font-size: 12px;
       overflow-x: auto;
       white-space: nowrap;
-    }
-    .command-row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 40px;
-      gap: 8px;
-      align-items: stretch;
-      margin-top: 10px;
-    }
-    .advanced-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      justify-content: flex-start;
-      flex-wrap: wrap;
-      margin-top: 10px;
     }
     .notice {
       border: 1px solid rgba(242, 195, 107, 0.28);
@@ -3188,6 +3183,7 @@ LAYOUT = """
       justify-content: flex-end;
       flex-wrap: wrap;
     }
+    .container-actions form { margin: 0; }
     .container-actions .button:not(.icon) { min-height: 38px; }
     .home-insights {
       display: grid;
@@ -3354,6 +3350,7 @@ LAYOUT = """
       .hero-panel { padding: 20px; }
       .launch-head, .container-top, .deploy-inline, .control-row { grid-template-columns: 1fr; }
       .container-actions { justify-content: flex-start; }
+      .container-actions form:last-child { margin-left: auto; }
       .deploy-composer {
         grid-template-columns: 1fr;
         padding: 8px;
@@ -3573,12 +3570,6 @@ def index():
     instances = list_instances(user["id"])
     rows = []
     for inst in instances:
-        project_id = inst["railway_project_id"] or "<pending>"
-        ssh = (
-            "railway ssh "
-            f"--project {project_id} "
-            f"--service {MOBIUS_SERVICE_NAME} --environment {MOBIUS_DEPLOY_ENVIRONMENT}"
-        )
         status = inst["status"] or "queued"
         pill_class = "ok" if status == "ready" else "err" if status in {"error", "delete_failed"} else "warn"
         status_label = status.replace("_", " ").title()
@@ -3613,9 +3604,12 @@ def index():
             if railway_url
             else ""
         )
+        recovery_url = inst["recovery_url"] or (
+            f"{inst['public_url'].rstrip('/')}/recover" if inst["public_url"] else ""
+        )
         recovery_action = (
-            f"""<a class="button subtle icon" href="{h(inst['recovery_url'])}" target="_blank" rel="noreferrer" title="Open recovery page" aria-label="Open recovery page">{icon('key')}</a>"""
-            if inst["recovery_url"]
+            f"""<a class="button subtle recovery-link" href="{h(recovery_url)}" target="_blank" rel="noreferrer" title="Open Möbius recovery">{icon('key')}<span>Recovery</span></a>"""
+            if recovery_url and status not in {"deleted"}
             else ""
         )
         delete_action = f"""<form method="post" action="{path('/instances/' + inst['id'] + '/delete')}" onsubmit="return confirm('Delete this Möbius and its Railway project? This cannot be undone.');">
@@ -3628,9 +3622,6 @@ def index():
             if status in {"error", "delete_failed"}
             else ""
         )
-        delete_in_main = status in {"error", "delete_failed"}
-        main_delete_action = f"{retry_action}{delete_action}" if delete_in_main else ""
-        advanced_delete_action = "" if delete_in_main else delete_action
         cpu_cap = inst["cpu"] or ""
         memory_cap = inst["memory_mb"] or ""
         if cpu_cap or memory_cap:
@@ -3705,28 +3696,14 @@ def index():
                 </div>
                 <div class="container-actions">
                   {open_action}
+                  {recovery_action}
                   {railway_project_action}
-                  {main_delete_action}
+                  {retry_action}
+                  {delete_action}
                 </div>
               </div>
               {progress_markup}
               {metrics_markup}
-              <details>
-                <summary>Advanced</summary>
-                <div class="meta">
-                  <span class="pill">{h(inst['handle'])}</span>
-                  <span class="pill">created {h(short_date(inst['created_at']))}</span>
-                  <span class="pill">{h(inst['source_kind'] or source_kind)}:{h(inst['source_ref'] or inst['image_ref'])}</span>
-                </div>
-                <div class="command-row">
-                  <div class="command">{h(ssh)}</div>
-                  <button class="icon" type="button" data-copy="{h(ssh)}" title="Copy SSH command" aria-label="Copy SSH command">{icon('copy')}</button>
-                </div>
-                <div class="advanced-actions">
-                  {recovery_action}
-                  {advanced_delete_action}
-                </div>
-                  </details>
                 </article>
             """
         )
