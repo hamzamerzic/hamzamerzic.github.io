@@ -1637,6 +1637,18 @@ DEPLOY_STATUS_OK = {"SUCCESS", "SLEEPING"}
 DEPLOY_STATUS_BAD = {"FAILED", "CRASHED", "REMOVED", "REMOVING", "SKIPPED"}
 
 
+def mobius_app_healthy(public_url, timeout=4):
+    if not public_url:
+        return False
+    url = public_url.rstrip("/") + "/api/health"
+    req = urllib.request.Request(url, headers={"User-Agent": "MobiusLaunch/1.0"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            return resp.status == 200
+    except (urllib.error.HTTPError, urllib.error.URLError, TimeoutError, ValueError, OSError):
+        return False
+
+
 def can_recover_public_link(instance):
     return bool(
         instance
@@ -1684,7 +1696,10 @@ def recover_public_link(conn, instance, access_token=None):
     )
     deployment_status = (deployment.get("status") or "").upper()
     if deployment_status in DEPLOY_STATUS_OK:
-        status, step, error = "ready", "Ready", ""
+        if mobius_app_healthy(instance["public_url"]):
+            status, step, error = "ready", "Ready", ""
+        else:
+            status, step, error = "deploying", "Recovery online; Möbius is still starting", ""
     elif deployment_status in DEPLOY_STATUS_BAD:
         status, step, error = (
             "error",
@@ -2227,8 +2242,13 @@ def provision_instance(instance_id, token):
             public_url = f"https://{domain['domain']}"
             deployment = latest_deployment(access_token, project_id, service_id, environment_id)
             deployment_status = (deployment.get("status") or "").upper()
-            final_status = "ready" if deployment_status in DEPLOY_STATUS_OK else "deploying"
-            final_step = "Ready" if final_status == "ready" else "Railway is building Möbius"
+            app_ready = deployment_status in DEPLOY_STATUS_OK and mobius_app_healthy(public_url)
+            final_status = "ready" if app_ready else "deploying"
+            final_step = "Ready" if app_ready else (
+                "Recovery online; Möbius is still starting"
+                if deployment_status in DEPLOY_STATUS_OK
+                else "Railway is building Möbius"
+            )
             update_instance(
                 conn,
                 instance_id,
@@ -2321,8 +2341,11 @@ def reconcile_deployment_status(conn, instance):
         )
         status = (node.get("status") or "").upper()
         if status in DEPLOY_STATUS_OK:
-            fields.update(status="ready", current_step="Ready")
-            add_instance_event(conn, instance["id"], "info", "Möbius is live")
+            if mobius_app_healthy(instance["public_url"]):
+                fields.update(status="ready", current_step="Ready")
+                add_instance_event(conn, instance["id"], "info", "Möbius is live")
+            else:
+                fields.update(current_step="Recovery online; Möbius is still starting")
         elif status in DEPLOY_STATUS_BAD:
             fields.update(
                 status="error",
