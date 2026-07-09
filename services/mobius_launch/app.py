@@ -602,17 +602,17 @@ PLAN_LIMITS = {
         "volume_options_gb": [0.5],
     },
     "hobby": {
-        "max_cpu": 48,
-        "max_memory_mb": 49152,
+        "max_cpu": 8,
+        "max_memory_mb": 8192,
         "max_volume_gb": 5,
-        "memory_options_mb": [512, 1024, 2048, 4096, 8192, 16384, 32768, 49152],
+        "memory_options_mb": [512, 1024, 2048, 4096, 8192],
         "volume_options_gb": [0.5, 1, 2, 5],
     },
     "pro": {
-        "max_cpu": 1000,
-        "max_memory_mb": 1048576,
+        "max_cpu": 24,
+        "max_memory_mb": 24576,
         "max_volume_gb": 1000,
-        "memory_options_mb": [1024, 2048, 4096, 8192, 16384, 32768, 65536, 131072],
+        "memory_options_mb": [1024, 2048, 4096, 8192, 16384, 24576],
         "volume_options_gb": [2, 5, 10, 20, 50, 100, 250, 500, 1000],
     },
     "enterprise": {
@@ -623,10 +623,10 @@ PLAN_LIMITS = {
         "volume_options_gb": [5, 20, 50, 100, 250, 500, 1000, 5000],
     },
     "unknown": {
-        "max_cpu": 48,
-        "max_memory_mb": 49152,
+        "max_cpu": 8,
+        "max_memory_mb": 8192,
         "max_volume_gb": 5,
-        "memory_options_mb": [512, 1024, 2048, 4096, 8192, 16384],
+        "memory_options_mb": [512, 1024, 2048, 4096, 8192],
         "volume_options_gb": [0.5, 1, 2, 5],
     },
 }
@@ -665,6 +665,13 @@ def plan_title(label):
     return label.title() if label in PLAN_LIMITS and label != "unknown" else "Unknown"
 
 
+def plan_cap_label(label):
+    limits = plan_limits(label)
+    cpu = format_cpu_label(limits["max_cpu"])
+    memory = memory_mb_label(limits["max_memory_mb"])
+    return f"{cpu} / {memory} RAM"
+
+
 def plan_volume_select_options(label, selected=None):
     selected_size = format_volume_gb(selected or plan_default_volume_gb(label))
     return "\n".join(
@@ -674,7 +681,7 @@ def plan_volume_select_options(label, selected=None):
 
 
 def plan_memory_select_options(label):
-    options = ["""<option value="" selected>Uncapped</option>"""]
+    options = ["""<option value="" selected>Plan maximum</option>"""]
     options.extend(
         f"""<option value="{size}">{memory_mb_label(size)}</option>"""
         for size in plan_limits(label)["memory_options_mb"]
@@ -909,11 +916,14 @@ def railway_plan_label(access_token, workspace_id):
         return "unknown"
     try:
         data = railway_graphql(
-            "query($id: String!) { workspace(workspaceId: $id) { plan } projects(workspaceId: $id, first: 1) { edges { node { subscriptionType expiredAt } } } }",
+            "query($id: String!) { workspace(workspaceId: $id) { plan customer { isTrialing } } projects(workspaceId: $id, first: 1) { edges { node { subscriptionType expiredAt } } } }",
             access_token,
             {"id": workspace_id},
         )
         workspace = data.get("workspace") or {}
+        customer = workspace.get("customer") or {}
+        if customer.get("isTrialing") is True:
+            return "trial"
         label = normalize_plan_label(workspace.get("plan"))
         if label != "unknown":
             return label
@@ -2953,12 +2963,6 @@ LAYOUT = """
       min-height: 40px;
       box-shadow: none !important;
     }
-    .deploy-note {
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.45;
-      text-align: center;
-    }
     .control-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -3016,22 +3020,30 @@ LAYOUT = """
       padding: 8px 10px;
       width: 100%;
     }
-    .compact-details summary::after {
-      content: "Automatic";
+    .compact-details summary small {
       color: var(--muted);
       font-size: 12px;
       font-weight: 650;
+      text-align: right;
     }
     .compact-details[open] summary {
       border-bottom: 1px solid var(--border);
       margin-bottom: 0;
     }
-    .compact-details[open] summary::after { content: "Custom"; color: var(--accent); }
+    .compact-details[open] summary small { color: var(--accent); }
     .compact-details .control-row {
       margin-top: 0 !important;
       padding: 12px;
     }
     .compact-details .limit-grid { margin-top: 0 !important; }
+    .limits-note {
+      border-top: 1px solid var(--border-light);
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      margin: 0;
+      padding: 0 10px 10px;
+    }
     .create-panel {
       background: color-mix(in srgb, var(--surface) 72%, transparent);
       box-shadow: none;
@@ -3614,17 +3626,22 @@ def index():
         )
         cpu_cap = inst["cpu"] or ""
         memory_cap = inst["memory_mb"] or ""
-        if cpu_cap or memory_cap:
-            cpu_label = h(cpu_cap) if cpu_cap else "&mdash;"
-            memory_label = memory_mb_label(memory_cap)
-            memory_label = h(memory_label) if memory_label else "&mdash;"
-            caps_pill = f"""<span>Limit {cpu_label} vCPU / {memory_label}</span>"""
-        else:
-            caps_pill = """<span>Uncapped</span>"""
         inst_plan = inst["plan_label"] or ""
+        display_plan = plan_label if plan_label != "unknown" else inst_plan
+        if cpu_cap or memory_cap:
+            cap_parts = []
+            if cpu_cap:
+                cap_parts.append(f"{h(cpu_cap)} vCPU")
+            if memory_cap:
+                memory_label = memory_mb_label(memory_cap)
+                if memory_label:
+                    cap_parts.append(h(memory_label))
+            caps_pill = f"""<span>Custom cap {' / '.join(cap_parts)}</span>"""
+        else:
+            caps_pill = f"""<span>Plan cap {h(plan_cap_label(display_plan))}</span>"""
         plan_pill = (
-            f"""<span>{h(plan_title(inst_plan))} plan</span>"""
-            if inst_plan
+            f"""<span>{h(plan_title(display_plan))} plan</span>"""
+            if display_plan
             else ""
         )
         poll_flag = "1" if status in {"queued", "creating", "deploying"} else "0"
@@ -3732,6 +3749,7 @@ def index():
         """
     memory_options = plan_memory_select_options(plan_label)
     volume_options = plan_volume_select_options(plan_label, plan_default_volume_gb(plan_label))
+    plan_cap_copy = plan_cap_label(plan_label)
     if deploy_blocked:
         deploy_control = f"""
           <div class="notice">
@@ -3753,11 +3771,11 @@ def index():
               <button class="primary deploy-button" type="submit">Deploy</button>
             </div>
             <details class="compact-details">
-              <summary>Limits</summary>
+              <summary><span>Limits</span><small>{h(plan_cap_copy)}</small></summary>
               <div class="limit-grid">
                 <label class="input-shell">
                   <span>CPU cap</span>
-                  <input name="custom_cpu" type="number" inputmode="decimal" min="1" max="{limits['max_cpu']}" autocomplete="off" placeholder="No cap">
+                  <input name="custom_cpu" type="number" inputmode="decimal" min="1" max="{limits['max_cpu']}" autocomplete="off" placeholder="Plan max">
                 </label>
                 <label class="input-shell">
                   <span>Memory</span>
@@ -3772,8 +3790,8 @@ def index():
                   </select>
                 </label>
               </div>
+              <p class="limits-note">Railway bills actual usage. These caps limit CPU/RAM; workspace hard limits stop spend.</p>
             </details>
-            <div class="deploy-note">Railway builds it in your workspace; this page keeps checking status.</div>
           </form>
         """
 
