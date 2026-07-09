@@ -2023,7 +2023,7 @@ def railway_metrics_snapshot(access_token, connection, instance):
     deployment_status = (deployment.get("status") or instance["status"] or "").lower()
     used_cost = usage_cost(usage)
     estimated_cost = usage_cost(estimated_usage, value_key="estimatedValue")
-    cost_reference = estimated_cost or used_cost
+    cost_reference = used_cost if usage else estimated_cost
     network_spark = spark_percentages(metrics, "NETWORK_TX_GB")
 
     return {
@@ -2082,7 +2082,7 @@ def railway_metrics_snapshot(access_token, connection, instance):
             "estimated_label": format_usd(estimated_cost),
             "allowance_label": format_usd(RAILWAY_TRIAL_ALLOWANCE_USD),
             "percent": percent_label(cost_reference, RAILWAY_TRIAL_ALLOWANCE_USD),
-            "note": "Estimated; Railway is the billing source.",
+            "note": "Current usage to date; projected spend is an estimate.",
         },
     }
 
@@ -3670,13 +3670,13 @@ def index():
                 <div class="home-insights" data-metrics-url="{path('/instances/' + inst['id'] + '/metrics')}">
                   <div class="budget-card">
                     <div class="budget-copy">
-                      <span class="metric-label">Estimated spend</span>
-                      <strong data-metric="cost-estimate">--</strong>
-                      <p data-metric="cost-note">Estimated; Railway is the billing source.</p>
+                      <span class="metric-label">Current spend</span>
+                      <strong data-metric="cost-current">--</strong>
+                      <p data-metric="cost-note">Current usage to date; projected spend is an estimate.</p>
                     </div>
                     <div class="budget-meter">
                       <div class="metric-bar"><span data-meter="cost"></span></div>
-                      <div class="budget-pair"><span data-metric="cost-used">used --</span><strong data-metric="cost-cap">$5</strong></div>
+                      <div class="budget-pair"><span data-metric="cost-secondary">projected --</span><strong data-metric="cost-cap">$5</strong></div>
                     </div>
                   </div>
                   <div class="resource-grid">
@@ -3918,8 +3918,8 @@ def index():
                 setSpark(el, 'network', d.network.spark);
               }
               if (d.cost) {
-                setText(el, '[data-metric="cost-estimate"]', d.cost.label);
-                setText(el, '[data-metric="cost-used"]', 'used ' + (d.cost.used_label || '--'));
+                setText(el, '[data-metric="cost-current"]', d.cost.label);
+                setText(el, '[data-metric="cost-secondary"]', 'projected ' + (d.cost.estimated_label || '--'));
                 setText(el, '[data-metric="cost-cap"]', d.cost.allowance_label || '$5');
                 setText(el, '[data-metric="cost-note"]', d.cost.note);
                 setMeter(el, '[data-meter="cost"]', d.cost.percent);
