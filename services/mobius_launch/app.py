@@ -2528,7 +2528,7 @@ LAYOUT = """
     }
     .deploy-card {
       display: grid;
-      gap: 14px;
+      gap: 10px;
     }
     .actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
     .actions.left { justify-content: flex-start; }
@@ -2560,6 +2560,16 @@ LAYOUT = """
       color: #ffffff;
       box-shadow: 0 10px 26px rgba(139, 108, 247, 0.25);
     }
+    .button.danger, button.danger {
+      color: var(--danger);
+      border-color: rgba(248, 113, 113, 0.28);
+      background: var(--danger-soft);
+    }
+    .button.danger:hover, button.danger:hover {
+      color: #fecaca;
+      border-color: rgba(248, 113, 113, 0.48);
+      background: rgba(248, 113, 113, 0.18);
+    }
     .button.icon, button.icon {
       width: 40px;
       min-width: 40px;
@@ -2575,6 +2585,11 @@ LAYOUT = """
     .button:hover, button:hover { border-color: var(--accent); text-decoration: none; }
     .button.primary:hover, button.primary:hover { background: var(--accent-hover); }
     .button:active, button:active { transform: scale(0.97); }
+    .button.copied, button.copied {
+      color: var(--ok);
+      border-color: rgba(16, 185, 129, 0.32);
+      background: var(--ok-soft);
+    }
     .open-app {
       min-width: 92px;
       gap: 7px;
@@ -2585,6 +2600,17 @@ LAYOUT = """
     .topbar .button, .topbar button {
       min-height: 36px;
       padding: 7px 11px;
+    }
+    .icon-svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex: none;
     }
     .workspace-pill {
       min-height: 36px;
@@ -2756,16 +2782,31 @@ LAYOUT = """
       animation: sweep 1.4s ease-in-out infinite;
     }
     .command {
-      margin-top: 8px;
       border-radius: 8px;
       border: 1px solid var(--border);
       background: #0a0a0a;
       color: #e8e3ff;
-      padding: 10px 11px;
+      min-height: 38px;
+      padding: 9px 10px;
       font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
       font-size: 12px;
       overflow-x: auto;
       white-space: nowrap;
+    }
+    .command-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 40px;
+      gap: 8px;
+      align-items: stretch;
+      margin-top: 10px;
+    }
+    .advanced-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      margin-top: 10px;
     }
     .notice {
       border: 1px solid rgba(242, 195, 107, 0.28);
@@ -2889,19 +2930,31 @@ LAYOUT = """
     .deploy-inline {
       display: grid;
       grid-template-columns: minmax(220px, 1fr) auto;
-      gap: 10px;
+      gap: 8px;
       align-items: end;
+    }
+    .deploy-button { min-width: 132px; }
+    .deploy-note {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.45;
     }
     .control-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 10px;
     }
+    .limit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px;
+    }
     .input-shell {
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--bg);
-      padding: 8px 10px 10px;
+      padding: 6px 9px 8px;
       transition: border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
     }
     .input-shell:focus-within {
@@ -2912,16 +2965,17 @@ LAYOUT = """
     .input-shell span {
       display: block;
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
       font-weight: 700;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
     }
     .input-shell input, .input-shell select {
       border: 0;
-      min-height: 30px;
+      min-height: 26px;
       padding: 0;
       background: transparent;
       border-radius: 0;
+      font-size: 14px;
     }
     .input-shell input:focus-visible, .input-shell select:focus-visible { outline: 0; }
     .compact-details {
@@ -2938,8 +2992,8 @@ LAYOUT = """
       gap: 10px;
       justify-content: space-between;
       font-weight: 700;
-      min-height: 44px;
-      padding: 10px 12px;
+      min-height: 38px;
+      padding: 8px 10px;
       width: 100%;
     }
     .compact-details summary::after {
@@ -2957,6 +3011,7 @@ LAYOUT = """
       margin-top: 0 !important;
       padding: 12px;
     }
+    .compact-details .limit-grid { margin-top: 0 !important; }
     .create-panel {
       background: color-mix(in srgb, var(--surface) 72%, transparent);
       box-shadow: none;
@@ -2972,7 +3027,7 @@ LAYOUT = """
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 15px 17px;
+      padding: 13px 15px;
       color: var(--text);
     }
     .create-drawer summary::-webkit-details-marker { display: none; }
@@ -2990,23 +3045,28 @@ LAYOUT = """
       font-weight: 500;
     }
     .create-plus {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 999px;
       display: inline-grid;
       place-items: center;
       background: var(--surface2);
       color: var(--muted);
-      font-size: 18px;
-      line-height: 1;
       flex: none;
       transition: transform 180ms var(--spring), background 180ms ease, color 180ms ease;
     }
     .create-drawer[open] .create-plus { transform: rotate(45deg); background: var(--accent-dim); color: var(--accent); }
+    .create-drawer[open] summary {
+      border-bottom: 1px solid var(--border-light);
+      margin-bottom: 0;
+    }
     .create-body {
       display: grid;
-      gap: 14px;
-      padding: 0 17px 17px;
+      gap: 10px;
+      padding: 10px 15px 15px;
+    }
+    .create-body-inner {
+      padding: 0;
     }
     .home-section {
       display: grid;
@@ -3244,6 +3304,8 @@ LAYOUT = """
       .hero-panel { padding: 20px; }
       .launch-head, .container-top, .deploy-inline, .control-row { grid-template-columns: 1fr; }
       .container-actions { justify-content: flex-start; }
+      .deploy-button { width: 100%; }
+      .limit-grid { grid-template-columns: 1fr; }
       .budget-card { grid-template-columns: 1fr; }
       .budget-copy strong { font-size: 30px; }
       .resource-grid { grid-template-columns: 1fr; }
@@ -3267,9 +3329,19 @@ LAYOUT = """
       if (!button) return;
       const text = button.getAttribute("data-copy");
       navigator.clipboard.writeText(text).then(() => {
-        const old = button.textContent;
-        button.textContent = "Copied";
-        setTimeout(() => { button.textContent = old; }, 1200);
+        const oldText = button.textContent;
+        const oldTitle = button.getAttribute("title");
+        const oldLabel = button.getAttribute("aria-label");
+        button.classList.add("copied");
+        button.setAttribute("title", "Copied");
+        button.setAttribute("aria-label", "Copied");
+        if (!button.classList.contains("icon")) button.textContent = "Copied";
+        setTimeout(() => {
+          button.classList.remove("copied");
+          if (!button.classList.contains("icon")) button.textContent = oldText;
+          if (oldTitle) button.setAttribute("title", oldTitle);
+          if (oldLabel) button.setAttribute("aria-label", oldLabel);
+        }, 1200);
       });
     });
   </script>
@@ -3280,6 +3352,20 @@ LAYOUT = """
 
 def render(body):
     return render_template_string(LAYOUT, body=body, favicon_url=logo_url())
+
+
+ICONS = {
+    "copy": """<rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>""",
+    "external": """<path d="M15 3h6v6"></path><path d="M10 14 21 3"></path><path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"></path>""",
+    "key": """<circle cx="7.5" cy="14.5" r="4.5"></circle><path d="m11 11 10-10"></path><path d="m17 5 2 2"></path>""",
+    "plus": """<path d="M12 5v14"></path><path d="M5 12h14"></path>""",
+    "refresh": """<path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"></path><path d="M3 21v-5h5"></path><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M16 8h5V3"></path>""",
+    "trash": """<path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><path d="M10 11v6"></path><path d="M14 11v6"></path>""",
+}
+
+
+def icon(name):
+    return f"""<svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">{ICONS[name]}</svg>"""
 
 
 def brand():
@@ -3449,9 +3535,9 @@ def index():
             else """<span class="pill" data-step style="display: none;"></span>"""
         )
         open_action = (
-            f"""<a class="button primary open-app" href="{h(inst['public_url'])}" target="_blank" rel="noreferrer" title="Open Möbius"><span aria-hidden="true">↗</span><span>Open</span></a>"""
+            f"""<a class="button primary open-app" href="{h(inst['public_url'])}" target="_blank" rel="noreferrer" title="Open Möbius">{icon('external')}<span>Open</span></a>"""
             if inst["public_url"] and status not in {"error", "delete_failed", "deleted"}
-            else """<button class="icon" type="button" disabled title="Möbius is not ready yet" aria-label="Möbius is not ready yet">↗</button>"""
+            else f"""<button class="icon" type="button" disabled title="Möbius is not ready yet" aria-label="Möbius is not ready yet">{icon('external')}</button>"""
         )
         railway_url = (
             f"https://railway.com/project/{inst['railway_project_id']}"
@@ -3469,21 +3555,21 @@ def index():
             else ""
         )
         railway_project_action = (
-            f"""<a class="button subtle railway-link" href="{h(railway_url)}" target="_blank" rel="noreferrer" title="Open Railway project">Railway ↗</a>"""
+            f"""<a class="button subtle railway-link" href="{h(railway_url)}" target="_blank" rel="noreferrer" title="Open Railway project">Railway {icon('external')}</a>"""
             if railway_url
             else ""
         )
         recovery_action = (
-            f"""<a class="button subtle icon" href="{h(inst['recovery_url'])}" target="_blank" rel="noreferrer" title="Open recovery console" aria-label="Open recovery console">↺</a>"""
+            f"""<a class="button subtle icon" href="{h(inst['recovery_url'])}" target="_blank" rel="noreferrer" title="Open recovery page" aria-label="Open recovery page">{icon('key')}</a>"""
             if inst["recovery_url"]
             else ""
         )
         delete_action = f"""<form method="post" action="{path('/instances/' + inst['id'] + '/delete')}" onsubmit="return confirm('Delete this Möbius and its Railway project? This cannot be undone.');">
-                    <button class="subtle icon" type="submit" title="Delete deployment" aria-label="Delete deployment">×</button>
+                    <button class="danger icon" type="submit" title="Delete deployment" aria-label="Delete deployment">{icon('trash')}</button>
                   </form>"""
         retry_action = (
             f"""<form method="post" action="{path('/instances/' + inst['id'] + '/retry')}">
-                    <button class="subtle icon" type="submit" title="Retry deployment" aria-label="Retry deployment">↻</button>
+                    <button class="subtle icon" type="submit" title="Retry deployment" aria-label="Retry deployment">{icon('refresh')}</button>
                   </form>"""
             if status in {"error", "delete_failed"}
             else ""
@@ -3578,12 +3664,14 @@ def index():
                   <span class="pill">created {h(short_date(inst['created_at']))}</span>
                   <span class="pill">{h(inst['source_kind'] or source_kind)}:{h(inst['source_ref'] or inst['image_ref'])}</span>
                 </div>
-                <div class="command">{h(ssh)}</div>
-                <div class="actions left" style="margin-top: 10px;">
-                      <button class="icon" type="button" data-copy="{h(ssh)}" title="Copy SSH command" aria-label="Copy SSH command">⌘</button>
-                      {recovery_action}
-                      {advanced_delete_action}
-                    </div>
+                <div class="command-row">
+                  <div class="command">{h(ssh)}</div>
+                  <button class="icon" type="button" data-copy="{h(ssh)}" title="Copy SSH command" aria-label="Copy SSH command">{icon('copy')}</button>
+                </div>
+                <div class="advanced-actions">
+                  {recovery_action}
+                  {advanced_delete_action}
+                </div>
                   </details>
                 </article>
             """
@@ -3622,6 +3710,7 @@ def index():
           <div class="notice">Railway did not return an authorized workspace. Reconnect Railway and select a workspace during OAuth.</div>
         """
     memory_options = plan_memory_select_options(plan_label)
+    volume_options = plan_volume_select_options(plan_label, plan_default_volume_gb(plan_label))
     if deploy_blocked:
         deploy_control = f"""
           <div class="notice">
@@ -3640,23 +3729,30 @@ def index():
                 <span>Name</span>
                 <input name="display_name" value="My Möbius" maxlength="80" autocomplete="off" required>
               </label>
-              <button class="primary large" type="submit">Deploy Möbius</button>
+              <button class="primary deploy-button" type="submit">Deploy</button>
             </div>
             <details class="compact-details">
               <summary>Limits</summary>
-              <div class="control-row" style="margin-top: 10px;">
+              <div class="limit-grid">
                 <label class="input-shell">
                   <span>CPU cap</span>
                   <input name="custom_cpu" type="number" inputmode="decimal" min="1" max="{limits['max_cpu']}" autocomplete="off" placeholder="No cap">
                 </label>
                 <label class="input-shell">
-                  <span>Memory cap</span>
+                  <span>Memory</span>
                   <select name="memory_mb">
                     {memory_options}
                   </select>
                 </label>
+                <label class="input-shell">
+                  <span>Storage</span>
+                  <select name="volume_gb">
+                    {volume_options}
+                  </select>
+                </label>
               </div>
             </details>
+            <div class="deploy-note">Railway builds it in your workspace; this page keeps checking status.</div>
           </form>
         """
 
@@ -3669,13 +3765,14 @@ def index():
                 <strong>New Möbius</strong>
                 <span>{h(workspace or 'Railway workspace')} · {h(plan_copy)}</span>
               </span>
-              <span class="create-plus" aria-hidden="true">+</span>
+              <span class="create-plus" aria-hidden="true">{icon('plus')}</span>
             </summary>
             <div class="create-body">
               {connection_notice}
               {workspace_picker}
-              {deploy_control}
-              <p class="muted-line">First build takes a few minutes. You can come back here while Railway finishes.</p>
+              <div class="create-body-inner">
+                {deploy_control}
+              </div>
             </div>
           </details>
         </section>
@@ -3700,8 +3797,9 @@ def index():
             </div>
             {connection_notice}
             {workspace_picker}
-            {deploy_control}
-              <p class="muted-line">First build takes a few minutes. This page keeps checking Railway.</p>
+            <div class="create-body-inner">
+              {deploy_control}
+            </div>
           </div>
         </section>
         """
@@ -3810,7 +3908,6 @@ def index():
     <section class="home-section">
       <div class="section-title">
         <h2>Your Möbius</h2>
-        <span class="pill">{len(instances)}</span>
       </div>
       <div class="container-list">{instance_markup}</div>
     </section>
