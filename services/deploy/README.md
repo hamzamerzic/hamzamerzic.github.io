@@ -10,13 +10,17 @@ it does not build or serve the launcher.
 
 On the shared VPS, this Caddy process also imports the org-owned
 `mobius.Caddyfile` fragment so `mobius.you` and `mobius.page` keep working
-without duplicating launcher routing in this repo.
+without duplicating launcher routing in this repo. The launcher itself runs from
+the `mobius-os/mobius-os.github.io` repo in a separate `mobius-launch` Compose
+project on the external `mobius_edge` Docker network.
 
 ## Prerequisites
 
 - Hetzner VPS with Docker and Docker Compose installed
 - Domain `api.hamzamerzic.info` pointing to the VPS IP
 - SSH access to the VPS
+- Org-owned `mobius-os/mobius-os.github.io` checkout available on the same VPS,
+  unless `MOBIUS_EDGE_FRAGMENT` points somewhere else
 
 ## Initial Server Setup
 
@@ -52,6 +56,7 @@ cp .env.example .env
 # Edit .env with your actual email and allowed origin.
 
 # 3. Build and start
+docker network inspect mobius_edge >/dev/null
 docker compose up -d --build
 
 # 4. Check logs
@@ -83,8 +88,14 @@ Add an **A record** in Cloudflare:
 ```bash
 cd hamzamerzic.github.io/services/deploy
 git pull
+docker network inspect mobius_edge >/dev/null
 docker compose up -d --build
 ```
+
+Do not define or build Möbius Launch from this repo. On the shared VPS, update
+that service from `mobius-os.github.io/services/deploy` with
+`./deploy-shared-vps.sh`, then recreate or reload this Caddy service if the
+imported `mobius.Caddyfile` changed.
 
 ## Monitoring
 

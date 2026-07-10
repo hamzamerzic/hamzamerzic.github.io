@@ -10,9 +10,12 @@ services:
       - "443:443/udp" # HTTP/3
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - ../../../mobius-os/mobius-os.github.io/services/deploy/mobius.Caddyfile:/etc/caddy/mobius.Caddyfile:ro
+      - ${MOBIUS_EDGE_FRAGMENT:-../../../mobius-os/mobius-os.github.io/services/deploy/mobius.Caddyfile}:/etc/caddy/mobius.Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
+    networks:
+      - default
+      - mobius_edge
     depends_on:
       - ikfast
       - robot-link-info
@@ -48,3 +51,8 @@ services:
 volumes:
   caddy_data:
   caddy_config:
+
+networks:
+  mobius_edge:
+    name: mobius_edge
+    external: true
