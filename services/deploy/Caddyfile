@@ -3,6 +3,8 @@
 	email {$ACME_EMAIL:your-email@example.com}
 }
 
+import /etc/caddy/mobius.Caddyfile
+
 api.hamzamerzic.info {
 	# --- Global settings ---
 

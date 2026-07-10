@@ -8,6 +8,10 @@ Möbius Launch moved to the org-owned
 `https://api.hamzamerzic.info/mobius-launch` redirect to `https://mobius.you/`;
 it does not build or serve the launcher.
 
+On the shared VPS, this Caddy process also imports the org-owned
+`mobius.Caddyfile` fragment so `mobius.you` and `mobius.page` keep working
+without duplicating launcher routing in this repo.
+
 ## Prerequisites
 
 - Hetzner VPS with Docker and Docker Compose installed

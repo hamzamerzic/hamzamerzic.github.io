@@ -10,6 +10,7 @@ services:
       - "443:443/udp" # HTTP/3
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ../../../mobius-os/mobius-os.github.io/services/deploy/mobius.Caddyfile:/etc/caddy/mobius.Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
