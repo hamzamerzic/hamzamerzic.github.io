@@ -115,6 +115,20 @@ mobius.hamzamerzic.info {
 	}
 }
 
+# Möbius shared service gateway: ONE isolated browser origin for all
+# owner-trusted full web services (Tandoor, ...), served by the Möbius
+# backend at /services/<slug> paths. DNS: services.mobius CNAME -> mobius.
+# Deliberately a bare proxy: the backend enforces per-slug opt-in
+# (public_surface in local-services.json) and 404s every other path on this
+# hostname, and it owns the frame policy (strips upstream XFO, sets exact
+# frame-ancestors) — do NOT inject X-Frame-Options or CSP here, and no
+# /recover route: the recovery floor stays on the shell origin only.
+# Setup runbook: services/deploy/README.md "Möbius service gateway".
+services.mobius.hamzamerzic.info {
+	encode gzip
+	reverse_proxy mobius:8000
+}
+
 :8443 {
 	encode gzip
 	reverse_proxy mobius-test:8000

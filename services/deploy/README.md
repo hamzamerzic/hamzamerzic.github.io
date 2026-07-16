@@ -97,6 +97,36 @@ that service from `mobius-os.github.io/services/deploy` with
 `./deploy-shared-vps.sh`, then recreate or reload this Caddy service if the
 imported `mobius.Caddyfile` changed.
 
+## Möbius service gateway (`services.mobius.hamzamerzic.info`)
+
+Owner-trusted full web services (Tandoor, Paperless, …) run behind Möbius on
+ONE shared browser origin, isolated from the Möbius shell. Each service is a
+path (`/services/<slug>`) on this single hostname, so adding a service after
+the first needs **no DNS or Caddy change** — only a registry opt-in inside
+Möbius.
+
+One-time setup (done 2026-07-16; repeat only on a rebuild from scratch):
+
+1. **DNS** — CNAME `services.mobius` → `mobius.hamzamerzic.info`
+   (Cloudflare, DNS only / grey cloud).
+2. **Möbius env** — in the mobius checkout's `.env` (the compose env source):
+   `MOBIUS_SERVICE_GATEWAY_ORIGIN=https://services.mobius.hamzamerzic.info`,
+   then recreate the app container (`scripts/deploy-prod.sh --skip-build`
+   from the mobius repo — a plain restart does not re-read compose env).
+3. **This Caddy** — the `services.mobius.hamzamerzic.info` site block in
+   `Caddyfile` (bare `reverse_proxy mobius:8000`; no header injection — the
+   backend owns frame policy and fails closed on non-service paths), then
+   `docker compose exec caddy caddy reload --config /etc/caddy/Caddyfile`.
+4. **Per service, inside Möbius** — set `"public_surface": true` on the
+   service's entry in `/data/local-services.json` and run the actual service
+   bound to loopback inside the app container's network namespace. The
+   in-product agent does this step.
+
+Verify: `curl https://services.mobius.hamzamerzic.info/api/health` → 404
+(fail-closed: the gateway hostname never serves shell/API/recovery), and an
+enabled service responds under
+`https://services.mobius.hamzamerzic.info/services/<slug>/`.
+
 ## Monitoring
 
 ```bash
