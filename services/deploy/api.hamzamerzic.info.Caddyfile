@@ -1,0 +1,94 @@
+# Edge fragment for the personal-site API services. Installed into the
+# shared edge proxy by deploy.sh (`edgectl install personal <this file>`);
+# backends resolve by alias on the external edge-personal network.
+api.hamzamerzic.info {
+	# Max request body: 256MB (removes the old 32MB Cloud Run limit)
+	request_body {
+		max_size 256MB
+	}
+
+	# 100 requests per minute per IP (matches the old GCP quota)
+	rate_limit {
+		zone api_zone {
+			key {remote_host}
+			events 100
+			window 1m
+		}
+	}
+
+	# Legacy redirect for the old personal-site launcher path. The launcher
+	# service itself is owned by mobius-os/mobius-os.github.io.
+	handle /mobius-launch* {
+		redir https://mobius.you/ 308
+	}
+
+	# --- CORS ---
+	@cors_preflight {
+		method OPTIONS
+		header Origin https://hamzamerzic.info
+	}
+	handle @cors_preflight {
+		header Access-Control-Allow-Origin "https://hamzamerzic.info"
+		header Access-Control-Allow-Methods "GET, POST, OPTIONS"
+		header Access-Control-Allow-Headers "Content-Type"
+		header Access-Control-Max-Age "86400"
+		respond 204
+	}
+
+	# --- Origin check (replaces API key + referrer restriction) ---
+	# Block requests from other websites (but allow no-Origin requests like curl)
+	@cross_site_api {
+		path /generate_solver /robot_link_info /upload /download/*
+		header Origin *
+		not header Origin https://hamzamerzic.info
+	}
+	handle @cross_site_api {
+		respond "Forbidden" 403
+	}
+
+	# --- Routes ---
+
+	handle /generate_solver {
+		reverse_proxy ikfast:8080 {
+			flush_interval -1
+			header_down Access-Control-Allow-Origin "https://hamzamerzic.info"
+			header_down -Access-Control-Allow-Credentials
+		}
+	}
+
+	handle /robot_link_info {
+		reverse_proxy robot-link-info:8080 {
+			header_down Access-Control-Allow-Origin "https://hamzamerzic.info"
+			header_down -Access-Control-Allow-Credentials
+		}
+	}
+
+	handle /upload {
+		reverse_proxy mesh-cleaner:8080 {
+			header_down Access-Control-Allow-Origin "https://hamzamerzic.info"
+			header_down -Access-Control-Allow-Credentials
+		}
+	}
+
+	handle /download/* {
+		reverse_proxy mesh-cleaner:8080 {
+			header_down Access-Control-Allow-Origin "https://hamzamerzic.info"
+			header_down -Access-Control-Allow-Credentials
+		}
+	}
+
+	# Health check
+	handle /health {
+		respond "OK" 200
+	}
+
+	# Catch-all
+	handle {
+		respond "Not Found" 404
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}
