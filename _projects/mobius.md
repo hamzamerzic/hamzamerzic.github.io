@@ -2,7 +2,7 @@
 layout: page
 title: Möbius
 description: A personalized AI agent you self-host, which builds the tools you need and the interface they sit in
-img: assets/img/moebius.png
+img: assets/img/moebius.svg
 permalink: /mobius/
 importance: 1
 category: software
