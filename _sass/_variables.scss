@@ -6,12 +6,10 @@
 @use "sass:color";
 
 // === Custom Theme Colors ===
-// The site shares its visual language with Möbius (the self-hosted
-// agent project): true charcoal surfaces, one restrained accent, a
-// mono face for code and metadata. The accent is a deep forest green,
-// green-700 #15803d on light and a forest #1f9d54 on dark. It is tuned
-// to read confident and grounded rather than fluorescent, the green
-// analogue of Möbius's purple. Both clear AA on their background
+// True charcoal surfaces, one restrained accent, a mono face for code
+// and metadata. The accent is a deep forest green, green-700 #15803d on
+// light and a forest #1f9d54 on dark, tuned to read confident and
+// grounded rather than fluorescent. Both clear AA on their background
 // (#15803d ~5.0:1 on white cards, #1f9d54 ~5.6:1 on #0d0d0d); hover
 // states shift to an adjacent green in each mode.
 
@@ -35,7 +33,7 @@ $theme-dark-accent: #1f9d54; // forest green — calmer than grass, ~5.6:1 on #0
 $theme-dark-accent-bright: #25b061; // forest for hover/links (not neon green-500)
 $theme-dark-secondary: #25b061;
 
-// Shared type stacks (match Möbius: Inter + JetBrains Mono)
+// Shared type stacks: Inter + JetBrains Mono
 $font-sans:
   "Inter",
   system-ui,

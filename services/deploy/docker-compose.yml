@@ -1,30 +1,20 @@
-services:
-  caddy:
-    build:
-      context: .
-      dockerfile: Dockerfile.caddy
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-      - "443:443/udp" # HTTP/3
-    volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile:ro
-      - caddy_data:/data
-      - caddy_config:/config
-    depends_on:
-      - ikfast
-      - robot-link-info
-      - mesh-cleaner
-    environment:
-      - ALLOWED_ORIGIN=${ALLOWED_ORIGIN:-https://hamzamerzic.info}
+# Personal-site API services only. TLS + routing live in the host's shared
+# edge proxy (the `edge` repo), which serves api.hamzamerzic.info from the
+# fragment installed by deploy.sh. These containers expose nothing on the
+# host; the edge reaches them by alias on the external edge-personal network.
+name: personal-api
 
+services:
   ikfast:
     build:
       context: ../ikfast
     restart: unless-stopped
     expose:
       - "8080"
+    networks:
+      edge-personal:
+        aliases:
+          - ikfast
 
   robot-link-info:
     build:
@@ -32,6 +22,10 @@ services:
     restart: unless-stopped
     expose:
       - "8080"
+    networks:
+      edge-personal:
+        aliases:
+          - robot-link-info
 
   mesh-cleaner:
     build:
@@ -42,7 +36,12 @@ services:
     tmpfs:
       - /tmp/uploads:size=512M
       - /tmp/results:size=512M
+    networks:
+      edge-personal:
+        aliases:
+          - mesh-cleaner
 
-volumes:
-  caddy_data:
-  caddy_config:
+networks:
+  edge-personal:
+    name: edge-personal
+    external: true

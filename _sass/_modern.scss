@@ -1,0 +1,485 @@
+/*******************************************************************************
+ * Site modernization layer.
+ *
+ * Additive polish on top of the al-folio base: translucent hairline nav,
+ * rounded surfaces with subtle borders, code rendered as chips/cards, a
+ * mono "terminal" register for metadata, and an emerald selection. Kept in
+ * its own partial so the whole modernization is one reviewable/revertible
+ * unit. Everything below reads from the --global-* custom properties set in
+ * _themes.scss, so it follows light/dark automatically.
+ ******************************************************************************/
+
+/* Emerald text selection. */
+::selection {
+  background: var(--global-accent-tint);
+  color: var(--global-text-color);
+}
+
+/* Sticky nav: translucent charcoal/cream with a blur and a hairline rule —
+   the single biggest "modern product, not academic template" cue. */
+#navbar.navbar,
+nav.navbar {
+  border-bottom: 1px solid var(--global-border-color);
+  background-color: color-mix(in srgb, var(--global-bg-color) 82%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+}
+
+/* Brand wordmark: first name bold, surname light — owner preference, and
+   robust against PurgeCSS stripping the Bootstrap utility classes the
+   header markup relies on. The header wraps first_name in `.font-weight-bold`
+   and leaves last_name on the `.font-weight-lighter` anchor. */
+.navbar-brand.title {
+  font-weight: 300;
+  .font-weight-bold {
+    font-weight: 700;
+  }
+}
+
+/* Post header: heavier, tighter title; muted description in the body face. */
+.post .post-header {
+  .post-title {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
+  }
+  .post-description {
+    color: var(--global-text-color-light);
+    font-size: 1.05rem;
+    line-height: 1.5;
+    font-weight: 400;
+  }
+  /* post-meta + tags already pick up JetBrains Mono from _base; make them
+     read as quiet terminal metadata. */
+  .post-meta,
+  .post-tags {
+    font-size: 0.8rem;
+    letter-spacing: 0.01em;
+    color: var(--global-text-color-light);
+  }
+}
+
+/* Lead paragraph on project/landing pages. */
+.lead {
+  color: var(--global-text-color);
+  font-size: 1.15rem;
+  line-height: 1.65;
+}
+
+/* Inline code → a tinted chip with a hairline border (scoped to post body
+   so it doesn't touch nav/UI code spans). */
+#markdown-content {
+  code {
+    color: var(--global-theme-color-bright, var(--global-theme-color));
+    background: var(--global-accent-tint);
+    border: 1px solid var(--global-border-color);
+    border-radius: 0.35rem;
+    padding: 0.1rem 0.35rem;
+    font-size: 0.85em;
+  }
+
+  /* Code blocks → a flat card: no inner chip styling, a hairline frame,
+     room to breathe. */
+  pre {
+    background: var(--global-code-bg-color);
+    border: 1px solid var(--global-border-color);
+    border-radius: 0.6rem;
+    padding: 0.9rem 1.1rem;
+    overflow-x: auto;
+    line-height: 1.55;
+
+    code {
+      background: transparent;
+      border: 0;
+      padding: 0;
+      font-size: 0.875rem;
+    }
+  }
+
+  /* Content links: emerald with an underline that fills in on hover. */
+  a:not(.action-btn):not(.no-underline) {
+    text-decoration: none;
+    background-image: linear-gradient(var(--global-theme-color), var(--global-theme-color));
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1.5px;
+    transition: background-size 0.2s ease;
+    &:hover {
+      background-size: 100% 1.5px;
+    }
+  }
+
+  blockquote {
+    border-radius: 0.5rem;
+  }
+
+  /* Images and videos in posts get soft-rounded corners. */
+  img,
+  video {
+    border-radius: 0.6rem;
+  }
+}
+
+/* Cards (projects, blog grid): hairline border, soft radius, gentle lift. */
+.card {
+  border: 1px solid var(--global-border-color);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  background-color: var(--global-card-bg-color);
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.22s ease,
+    border-color 0.18s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--global-theme-color);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+  }
+
+  .card-title {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Blog card grid. The /blog/ index (_pages/blog.md) renders each post through
+   _includes/blog-card.liquid into this grid. Scoped to .blog-card* so tag and
+   category archives are untouched. */
+.blog-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr));
+  gap: 1.35rem;
+  margin: 1.75rem 0 2.5rem;
+  padding: 0;
+}
+
+.blog-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--global-card-bg-color);
+  border: 1px solid var(--global-border-color);
+  border-radius: 0.75rem;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.22s ease,
+    border-color 0.18s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    border-color: var(--global-theme-color);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--global-bg-color) 70%, transparent);
+  }
+}
+
+.blog-card__media {
+  display: block;
+  width: 100%;
+  aspect-ratio: 40 / 21;
+  overflow: hidden;
+  border-bottom: 1px solid var(--global-border-color);
+  background: linear-gradient(135deg, var(--global-accent-tint), transparent), var(--global-surface-elevated);
+}
+
+.blog-card__media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0 !important;
+  box-shadow: none;
+}
+
+.blog-card__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  padding: 1.1rem 1.15rem 1.2rem;
+}
+
+.blog-card__date {
+  margin: 0;
+  font-family: var(--global-font-mono);
+  font-size: 0.76rem;
+  line-height: 1.45;
+  color: var(--global-text-color-light);
+  font-variant-numeric: tabular-nums;
+}
+
+.blog-card__title {
+  margin: 0.45rem 0 0.6rem;
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.22;
+  overflow-wrap: break-word;
+
+  a {
+    color: var(--global-text-color);
+    text-decoration: none;
+    &:hover {
+      color: var(--global-theme-color);
+    }
+  }
+}
+
+.blog-card__description {
+  margin: 0;
+  color: var(--global-text-color-light);
+  display: block;
+  overflow: visible;
+  font-size: 0.94rem;
+  line-height: 1.58;
+  overflow-wrap: break-word;
+}
+
+/* Buttons that already exist in post/page CSS get a consistent emerald
+   primary when they opt into .btn-primary (Bootstrap). */
+.btn-primary {
+  --bs-btn-bg: var(--global-theme-color);
+  --bs-btn-border-color: var(--global-theme-color);
+  --bs-btn-hover-bg: var(--global-hover-color);
+  --bs-btn-hover-border-color: var(--global-hover-color);
+  --bs-btn-active-bg: var(--global-hover-color);
+}
+
+/* Reusable post components. */
+
+/* Collapsible TL;DR. <details class="tldr"><summary><strong>TL;DR.</strong> …*/
+details.tldr {
+  margin: 1.5rem 0 2rem;
+  padding: 0.75rem 1.1rem;
+  background: var(--global-card-bg-color);
+  border: 1px solid var(--global-border-color);
+  border-left: 3px solid var(--global-theme-color);
+  border-radius: 0.5rem;
+
+  summary {
+    cursor: pointer;
+    list-style: none;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--global-text-color);
+    &::-webkit-details-marker {
+      display: none;
+    }
+    &::before {
+      content: "▸";
+      color: var(--global-theme-color);
+      display: inline-block;
+      margin-right: 0.5rem;
+      transition: transform 0.2s ease;
+    }
+  }
+  &[open] > summary {
+    margin-bottom: 0.85rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid var(--global-border-color);
+    &::before {
+      transform: rotate(90deg);
+    }
+  }
+  ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    li {
+      margin: 0.4rem 0;
+      line-height: 1.55;
+    }
+  }
+}
+
+/*============================================================================
+ * Diagram kit — themed HTML diagrams for posts, in place of ASCII art or
+ * stock images. Pure CSS, no SVG, reads from --global-* so it follows
+ * light/dark. The building blocks:
+ *   .mb-diagram            wrapper <figure>
+ *   .mb-flow               a row of nodes joined by connectors (wraps to a
+ *                          column on mobile; connectors rotate)
+ *   .mb-node               a labelled card; .accent = emerald highlight,
+ *                          .ghost = dashed "optional / not built"
+ *   .mb-node__tag          a mono micro-label inside a node
+ *   .mb-arrow              a standalone connector with a glyph
+ *==========================================================================*/
+.mb-diagram {
+  margin: 2rem auto;
+  padding: 1.4rem 1.2rem;
+  background: var(--global-card-bg-color);
+  border: 1px solid var(--global-border-color);
+  border-radius: 0.85rem;
+  font-size: 0.9rem;
+
+  figcaption {
+    margin-top: 1rem;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    color: var(--global-text-color-light);
+    text-align: center;
+  }
+}
+
+.mb-flow {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+
+  /* The arrow glyphs sit between nodes and point along the flow. */
+  .mb-arrow {
+    align-self: center;
+  }
+}
+
+.mb-node {
+  flex: 1 1 0;
+  min-width: 130px;
+  max-width: 240px;
+  padding: 0.85rem 0.9rem;
+  background: var(--global-surface-elevated);
+  border: 1px solid var(--global-border-color);
+  border-radius: 0.6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+
+  .mb-node__title {
+    font-weight: 600;
+    font-size: 0.92rem;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  .mb-node__sub {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: var(--global-text-color-light);
+  }
+
+  &.accent {
+    border-color: var(--global-theme-color);
+    background: var(--global-accent-tint);
+    .mb-node__title {
+      color: var(--global-theme-color);
+    }
+  }
+
+  &.ghost {
+    border-style: dashed;
+    background: transparent;
+    opacity: 0.92;
+  }
+}
+
+.mb-node__tag {
+  align-self: flex-start;
+  font-family: var(--global-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+  padding: 0.08rem 0.4rem;
+  border-radius: 0.3rem;
+  background: var(--global-accent-tint);
+  color: var(--global-theme-color);
+  border: 1px solid var(--global-border-color);
+}
+
+.mb-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--global-theme-color);
+  font-weight: 700;
+  font-size: 1.15rem;
+  flex: 0 0 auto;
+  padding: 0 0.1rem;
+
+  .mb-arrow__label {
+    font-family: var(--global-font-mono);
+    font-size: 0.66rem;
+    font-weight: 500;
+    color: var(--global-text-color-light);
+    margin-left: 0.25rem;
+  }
+}
+
+/* On narrow screens flows stack vertically and the inline arrows point
+   down instead of across. */
+@media (max-width: 575px) {
+  .mb-flow {
+    flex-direction: column;
+    align-items: stretch;
+    .mb-node {
+      max-width: none;
+    }
+    .mb-arrow {
+      transform: rotate(90deg);
+
+      /* The arrow span rotates so its glyph points down between stacked nodes,
+         but that also turns any text label vertical and spills it across the
+         cards. Counter-rotate the label back to horizontal. */
+      .mb-arrow__label {
+        display: inline-block;
+        transform: rotate(-90deg);
+        transform-origin: center;
+        white-space: nowrap;
+        margin-left: 0;
+      }
+    }
+  }
+}
+
+/* Screenshot rows: phone shots set side by side, optionally joined by arrows
+   to read as a sequence (ask -> answer -> result). Replaces the swipers where
+   a flow reads better than a carousel. Stacks vertically on narrow screens. */
+.shot-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+  margin: 1.8rem auto;
+
+  .shot {
+    flex: 1 1 0;
+    min-width: 130px;
+    max-width: 230px;
+    text-align: center;
+
+    img,
+    video {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 0.6rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.18);
+    }
+    .shot__label {
+      display: block;
+      margin-top: 0.55rem;
+      font-family: var(--global-font-mono);
+      font-size: 0.72rem;
+      line-height: 1.3;
+      color: var(--global-text-color-light);
+    }
+  }
+
+  .shot-arrow {
+    flex: 0 0 auto;
+    align-self: center;
+    color: var(--global-theme-color);
+    font-weight: 700;
+    font-size: 1.6rem;
+    line-height: 1;
+  }
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+    .shot {
+      max-width: 300px;
+    }
+    .shot-arrow {
+      transform: rotate(90deg);
+    }
+  }
+}
