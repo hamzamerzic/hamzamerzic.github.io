@@ -1,0 +1,269 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <link rel="dns-prefetch" href="https://cdn.jsdelivr.net"> <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin> <link rel="dns-prefetch" href="https://fonts.googleapis.com"> <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin> <link rel="dns-prefetch" href="https://fonts.gstatic.com"> <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> <link rel="preload" href="/assets/libs/google_fonts/google-fonts.css" as="style" onload="this.rel='stylesheet'" crossorigin="anonymous"> <noscript> <link rel="stylesheet" href="/assets/libs/google_fonts/google-fonts.css" crossorigin="anonymous"> </noscript> <style>.navbar-nav.ml-auto.flex-nowrap{display:flex;flex-wrap:nowrap;justify-content:flex-end;min-width:340px}</style> <meta name="google-site-verification" content="cTa1KE5Ts-Th8HPJAnH4HyDMZJfYqTsl7b9kfSi-a7o"> <meta http-equiv="Permissions-Policy" content="interest-cohort=()"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> Model Viewer | Hamza Merzić </title> <meta name="author" content="Hamza Merzić"> <meta name="description" content="Visualize 3D models and robots directly in your browser"> <meta property="og:site_name" content="Hamza Merzić"> <meta property="og:type" content="website"> <meta property="og:title" content="Model Viewer | Hamza Merzić"> <meta property="og:url" content="https://hamzamerzic.info/3d-viz/"> <meta property="og:description" content="Visualize 3D models and robots directly in your browser"> <meta property="og:image" content="https://hamzamerzic.info/assets/img/prof_pic.jpg"> <meta property="og:locale" content="en"> <meta name="twitter:card" content="summary"> <meta name="twitter:title" content="Model Viewer | Hamza Merzić"> <meta name="twitter:description" content="Visualize 3D models and robots directly in your browser"> <meta name="twitter:image" content="https://hamzamerzic.info/assets/img/prof_pic.jpg"> <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "url": "https://hamzamerzic.info/3d-viz/",
+        "name": "Hamza Merzić",
+        
+        "headline": "Model Viewer",
+        "description": "Visualize 3D models and robots directly in your browser",
+        
+        "author":
+        {
+            "@type": "Person",
+            "name": "Hamza Merzić",
+            "url": "https://hamzamerzic.info",
+            "sameAs": ["https://scholar.google.com/citations?user=6QDwijAAAAAJ", "https://github.com/hamzamerzic", "https://www.linkedin.com/in/hamzamerzic"]
+        }
+        
+    }
+  </script> <link rel="alternate" type="application/rss+xml" title="Hamza Merzić" href="https://hamzamerzic.info/feed.xml"> <link rel="stylesheet" href="/assets/css/bootstrap.min.css?a4b3f509e79c54a512b890d73235ef04"> <link rel="stylesheet" href="/assets/libs/mdb/mdb.min.css" integrity="sha256-jpjYvU3G3N6nrrBwXJoVEYI/0zw8htfFnhT9ljN3JJw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="/assets/css/academicons.min.css?12de91c427b9f7c3b71da46fd3214347"> <link defer rel="stylesheet" href="/assets/css/scholar-icons.css?62b2ac103a88034e6882a5be5f3e2772"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="/assets/img/favicon.png?7e18091fb100d644a1775d681e0c7943"> <link rel="stylesheet" href="/assets/css/main.css?d41d8cd98f00b204e9800998ecf8427e"> <link rel="canonical" href="https://hamzamerzic.info/3d-viz/"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script src="/assets/js/theme.js?d9394a1959d908d3290419dade4d8802"></script> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Hamza</span> Merzić </a> <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar top-bar"></span> <span class="icon-bar middle-bar"></span> <span class="icon-bar bottom-bar"></span> </button> <div class="collapse navbar-collapse text-right" id="navbarNav"> <ul class="navbar-nav ml-auto flex-nowrap"> <li class="nav-item "> <a class="nav-link" href="/">about </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/">publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/projects/">projects </a> </li> <li class="nav-item "> <a class="nav-link" href="/blog/">blog </a> </li> <li class="nav-item"> <button id="search-toggle" title="Search" onclick="openSearchModal()"> <span class="nav-link"> <svg class="nav-svg-icon" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"> <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"></path> <path d="M21 21l-6 -6"></path> </svg> </span> </button> </li> <li class="toggle-container"> <button id="light-toggle" title="Change theme"> <svg class="nav-svg-icon" id="light-toggle-dark" viewbox="0 0 24 24" fill="currentColor" aria-hidden="true"> <path d="M12 1.992a10 10 0 1 0 9.236 13.838c.341 -.82 -.476 -1.644 -1.298 -1.31a6.5 6.5 0 0 1 -6.864 -10.787l.077 -.08c.551 -.63 .113 -1.653 -.758 -1.653h-.266l-.068 -.006l-.06 -.002z"></path> </svg> <svg class="nav-svg-icon" id="light-toggle-light" viewbox="0 0 24 24" fill="currentColor" aria-hidden="true"> <path d="M12 19a1 1 0 0 1 .993 .883l.007 .117v1a1 1 0 0 1 -1.993 .117l-.007 -.117v-1a1 1 0 0 1 1 -1z"></path> <path d="M18.313 16.91l.094 .083l.7 .7a1 1 0 0 1 -1.32 1.497l-.094 -.083l-.7 -.7a1 1 0 0 1 1.218 -1.567l.102 .07z"></path> <path d="M7.007 16.993a1 1 0 0 1 .083 1.32l-.083 .094l-.7 .7a1 1 0 0 1 -1.497 -1.32l.083 -.094l.7 -.7a1 1 0 0 1 1.414 0z"></path> <path d="M4 11a1 1 0 0 1 .117 1.993l-.117 .007h-1a1 1 0 0 1 -.117 -1.993l.117 -.007h1z"></path> <path d="M21 11a1 1 0 0 1 .117 1.993l-.117 .007h-1a1 1 0 0 1 -.117 -1.993l.117 -.007h1z"></path> <path d="M6.213 4.81l.094 .083l.7 .7a1 1 0 0 1 -1.32 1.497l-.094 -.083l-.7 -.7a1 1 0 0 1 1.217 -1.567l.102 .07z"></path> <path d="M19.107 4.893a1 1 0 0 1 .083 1.32l-.083 .094l-.7 .7a1 1 0 0 1 -1.497 -1.32l.083 -.094l.7 -.7a1 1 0 0 1 1.414 0z"></path> <path d="M12 2a1 1 0 0 1 .993 .883l.007 .117v1a1 1 0 0 1 -1.993 .117l-.007 -.117v-1a1 1 0 0 1 1 -1z"></path> <path d="M12 7a5 5 0 1 1 -4.995 5.217l-.005 -.217l.005 -.217a5 5 0 0 1 4.995 -4.783z"></path> </svg> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container main-content-area" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">Model Viewer</h1> <p class="post-description">Visualize 3D models and robots directly in your browser</p> </header> <article> <p>Upload a 3D model file (<code>.dae</code>, <code>.obj</code>, <code>.stl</code>) to visualize it, or drag and drop it into the viewer below.</p> <script>
+  const EXAMPLE_MODEL_URL = "/assets/3d/abb_irb52_7_120.dae";
+</script> <div id="container" style="height: 60vh; position: relative; border: 2px dashed #ccc; border-radius: 10px; display: flex; align-items: center; justify-content: center;"> <button id="resetViewer" style="position: absolute; top: 10px; right: 10px; z-index: 3; border: none; padding: 0.4em 0.8em; border-radius: 4px; cursor: pointer;">Reset</button> <div id="fileDropOverlay" style="position: absolute; width: 100%; height: 100%; z-index: 2; cursor: pointer;"></div> <input type="file" id="fileUpload" accept=".dae,.obj,.stl" style="display: none;"> <div id="loading" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; text-align: center;"> <div class="loader"></div> <div>Loading...</div> </div> <div id="uploadPrompt" style="pointer-events: none; color: #888; text-align: center; font-size: 1em; z-index: 1; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);"> <p>Click or drop a 3D model file here</p> </div> </div> <div style="margin-top: 1em;"> <p>Don’t have a file?</p> <div style="display: flex; gap: 1em; flex-wrap: wrap;"> <a href="/assets/3d/abb_irb52_7_120.dae" download=""> <button type="button" class="action-btn">⬇️ Download Example</button> </a> <button type="button" id="loadExample" class="action-btn">👁️ Preview Example</button> </div> </div> <script src="/assets/js/three.min.js"></script> <script src="/assets/js/OrbitControls.js"></script> <script src="/assets/js/ColladaLoader.js"></script> <script src="/assets/js/OBJLoader.js"></script> <script src="/assets/js/STLLoader.js"></script> <script>
+document.addEventListener("DOMContentLoaded", () => {
+  if (!window.WebGLRenderingContext) return alert("Your browser does not support WebGL. Please upgrade.");
+
+  const container = document.getElementById("container");
+  const loadingElem = document.getElementById("loading");
+  const uploadPrompt = document.getElementById("uploadPrompt");
+  const fileInput = document.getElementById("fileUpload");
+  const overlay = document.getElementById("fileDropOverlay");
+  const resetBtn = document.getElementById("resetViewer");
+  let camera, renderer, controls, boundingBox, obj, grid;
+  const scene = new THREE.Scene();
+
+  overlay.onclick = () => fileInput.click();
+
+  const fileUrl = new URLSearchParams(window.location.search).get("file");
+  if (fileUrl) {
+    hidePrompt();
+    const ext = fileUrl.split('.').pop().toLowerCase();
+    loadingElem.style.display = "block";
+    fetch(fileUrl)
+      .then(res => ext === 'stl' ? res.arrayBuffer() : res.text())
+      .then(data => loadModel(data, ext))
+      .catch(() => loadingElem.textContent = "Error loading model from URL.");
+  }
+
+  fileInput.onchange = e => e.target.files[0] && handleFile(e.target.files[0]);
+
+  container.ondragover = e => {
+    e.preventDefault();
+    container.classList.add("dragover");
+  };
+  container.ondragleave = () => container.classList.remove("dragover");
+  container.ondrop = e => {
+    e.preventDefault();
+    container.classList.remove("dragover");
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  };
+
+  function handleFile(file) {
+    hidePrompt();
+    const ext = file.name.split('.').pop().toLowerCase();
+    if (!['dae', 'obj', 'stl'].includes(ext)) return alert("Unsupported file type.");
+    const reader = new FileReader();
+    reader.onload = e => loadModel(e.target.result, ext);
+    ext === 'stl' ? reader.readAsArrayBuffer(file) : reader.readAsText(file);
+  }
+
+  document.getElementById("loadExample").onclick = () => {
+    hidePrompt();
+    loadingElem.style.display = "block";
+    fetch(EXAMPLE_MODEL_URL)
+      .then(res => res.text())
+      .then(data => loadModel(data, "dae"))
+      .catch(() => loadingElem.textContent = "Failed to load example model.");
+  };
+
+  resetBtn.onclick = () => {
+    if (obj) scene.remove(obj);
+    if (grid) scene.remove(grid);
+    obj = null;
+    grid = null;
+    renderer?.renderLists?.dispose?.();
+    uploadPrompt.style.display = "block";
+    overlay.style.display = "block";
+  };
+
+  function hidePrompt() {
+    uploadPrompt.style.display = "none";
+    overlay.style.display = "none";
+  }
+
+  function loadModel(data, type) {
+    loadingElem.style.display = "block";
+    if (obj) scene.remove(obj);
+    if (grid) scene.remove(grid);
+
+    const loaderMap = {
+      dae: () => new THREE.ColladaLoader().parse(data).scene,
+      obj: () => new THREE.OBJLoader().parse(data),
+      stl: () => new THREE.Mesh(new THREE.STLLoader().parse(data), new THREE.MeshStandardMaterial({ color: 0x666666 }))
+    };
+
+    try {
+      const loaded = loaderMap[type]();
+      loaded.traverse?.(child => {
+        if (child instanceof THREE.Mesh) Object.assign(child.material, { flatShading: true });
+        child.castShadow = child.receiveShadow = true;
+      });
+
+      obj = new THREE.Object3D();
+      obj.add(loaded);
+      scene.add(obj);
+
+      boundingBox = new THREE.Box3().setFromObject(obj);
+      setupScene();
+    } catch (err) {
+      console.error("Load error:", err);
+      loadingElem.textContent = "Error loading model.";
+    } finally {
+      loadingElem.style.display = "none";
+    }
+  }
+
+  function setupScene() {
+    if (renderer) container.removeChild(renderer.domElement);
+
+    camera = new THREE.PerspectiveCamera(25, container.clientWidth / container.clientHeight, 0.1, 2000);
+    const width = boundingBox.max.z - boundingBox.min.z;
+    const height = boundingBox.max.y - boundingBox.min.y;
+    camera.position.set(
+      Math.max(width, height) / Math.tan(Math.PI * camera.fov / 360),
+      (boundingBox.min.y + boundingBox.max.y) / 2,
+      (boundingBox.min.z + boundingBox.max.z) / 2
+    );
+
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setClearColor(0xffffff);
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
+
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.target.copy(boundingBox.getCenter(new THREE.Vector3()));
+    controls.update();
+
+    scene.clear();
+    scene.add(obj);
+
+    scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight.position.set(3, 3, 3);
+    dirLight.castShadow = true;
+    scene.add(dirLight);
+
+    const size = Math.max(
+      boundingBox.max.x - boundingBox.min.x,
+      boundingBox.max.z - boundingBox.min.z
+    ) * 4;
+    grid = new THREE.GridHelper(size, 30);
+    scene.add(grid);
+
+    let resizeTimeout;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        camera.aspect = container.clientWidth / container.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container.clientWidth, container.clientHeight);
+      }, 150);
+    });
+
+    applyThemeBackground();
+    watchThemeChange();
+    render();
+  }
+
+  function applyThemeBackground() {
+    const bg = getComputedStyle(document.documentElement).getPropertyValue("--global-bg-color").trim();
+    if (bg) renderer.setClearColor(new THREE.Color(bg));
+  }
+
+  function watchThemeChange() {
+    new MutationObserver(applyThemeBackground).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+  }
+
+  function render() {
+    renderer.render(scene, camera);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    render();
+  }
+  animate();
+});
+</script> <style>#loadExample:hover{background-color:#0e8d5d}#container.dragover{border-color:#12b075;background-color:#f0fff7}.loader{border:4px solid #f3f3f3;border-top:4px solid #12b075;border-radius:50%;width:24px;height:24px;animation:spin 1s linear infinite;margin:0 auto .5em}.action-btn{background-color:#12b075;color:white;border:0;border-radius:5px;padding:.6em 1.2em;cursor:pointer}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}</style> </article> </div> </div> <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.css" integrity="sha256-ygRrixsQlBByBZiOcJamh7JByO9fP+/l5UPtKNJmRsE=" crossorigin="anonymous"> <script defer src="https://cdn.jsdelivr.net/gh/orestbida/cookieconsent@3.0.1/dist/cookieconsent.umd.js" integrity="sha256-Emf9M/zzq0BDp8xizJJZosZvg59pUhb3c37Te3s+YuY=" crossorigin="anonymous"></script> <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      CookieConsent.run({
+        categories: {
+          necessary: { enabled: true, readOnly: true },
+          analytics: {},
+        },
+        language: {
+          default: 'en',
+          translations: {
+            en: {
+              consentModal: {
+                title: 'Cookie Consent',
+                description:
+                  'This website uses cookies for analytics to understand how visitors interact with the site. You can choose to accept or decline analytics cookies.',
+                acceptAllBtn: 'Accept all',
+                acceptNecessaryBtn: 'Reject all',
+                showPreferencesBtn: 'Manage preferences',
+              },
+              preferencesModal: {
+                title: 'Cookie Preferences',
+                acceptAllBtn: 'Accept all',
+                acceptNecessaryBtn: 'Reject all',
+                savePreferencesBtn: 'Save preferences',
+                sections: [
+                  {
+                    title: 'Necessary Cookies',
+                    description: 'These cookies are essential for the website to function properly.',
+                    linkedCategory: 'necessary',
+                  },
+                  {
+                    title: 'Analytics Cookies',
+                    description: 'These cookies help understand how visitors interact with the website by collecting anonymous information.',
+                    linkedCategory: 'analytics',
+                  },
+                ],
+              },
+            },
+          },
+        },
+        onConsent: function () {
+          if (CookieConsent.acceptedCategory('analytics')) {
+            loadGoogleAnalytics();
+          }
+        },
+        onChange: function () {
+          if (CookieConsent.acceptedCategory('analytics')) {
+            loadGoogleAnalytics();
+          }
+        },
+      });
+    });
+
+    var gaLoaded = false;
+    function loadGoogleAnalytics() {
+      if (gaLoaded) return;
+      gaLoaded = true;
+      var s = document.createElement('script');
+      s.async = true;
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=G-30DP7V8S5V';
+      document.head.appendChild(s);
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-30DP7V8S5V');
+    }
+  </script> <script defer src="/assets/libs/jquery/jquery.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script> <script defer src="/assets/js/bootstrap.bundle.min.js"></script> <script defer src="/assets/libs/mdb/mdb.min.js" integrity="sha256-NdbiivsvWt7VYCt6hYNT3h/th9vSTL4EDWeGs5SN3DA=" crossorigin="anonymous"></script> <script defer src="/assets/libs/masonry/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="/assets/libs/imagesloaded/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?a0db7e5d5c70cc3252b3138b0c91dcaf" type="text/javascript"></script> <script defer src="/assets/libs/medium_zoom/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/js/zoom.js?85ddb88934d28b74e78031fd54cf8308"></script> <script defer src="/assets/js/init_tables.js?2781658a0a2b13ed609542042a859126"></script> <script defer src="/assets/js/common.js?e0514a05c5c95ac1a93a8dfd5249b92e"></script> <script defer src="/assets/js/copy_code.js?c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?d9f17b6adc2311cbabd747f4538bb15f"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="/assets/js/google-analytics-setup.js"></script> <script defer src="/assets/js/progress-bar.js?7478b276e118e830f83bcb44ca349d2e" type="text/javascript"></script> <script src="/assets/js/vanilla-back-to-top.min.js?f40d453793ff4f64e238e420181a1d17"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/js/search/ninja-keys.min.js?a3446f084dcaecc5f75aa1757d087dcf"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/js/search-setup.js?6c304f7b1992d4b60f7a07956e52f04a"></script> <script src="/assets/js/search-data.js"></script> </body> </html>
