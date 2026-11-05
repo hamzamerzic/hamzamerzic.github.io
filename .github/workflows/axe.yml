@@ -22,7 +22,7 @@ env:
 jobs:
   check:
     # available images: https://github.com/actions/runner-images#available-images
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04 # setup-ruby has no Ruby 3.4.4 build for ubuntu-latest (26.04) yet
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v4
